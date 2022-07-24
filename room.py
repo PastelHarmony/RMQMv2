@@ -38,3 +38,11 @@ class Room:
          print("That area hasn't been developed yet!")
  def add_connection(self, direction, room):
      self.connects[direction] = room
+ def getitem(self, ex):
+     if ex in self.items:
+         item = self.items[ex]
+     elif ex in self.items_hide:
+         item = self.items_hide[ex]
+     else:
+         return None
+     return item

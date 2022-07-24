@@ -1,8 +1,20 @@
+from item import Item
+
 class Player:
  def __init__(self):
-     self.sect = "Hongling Sheng"
-     self.sectcolors = "crimson"
-     self.sectsym = "flame"
+     self.sect = ""
+     self.sectcolors = ""
+     self.sectsym = ""
+     self.inv = {}
+     self.onplayer = {}
+ def getitem(self, ex):
+     if ex in self.inv:
+         item = self.inv[ex]
+     elif ex in self.onplayer:
+         item = self.onplayer[ex]
+     else:
+         return None
+     return item
  def setsect(self, sect):
      self.sect = sect
      if self.sect == "Yandi Zhan":
