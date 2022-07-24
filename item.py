@@ -13,14 +13,13 @@ class Item:
          description = self.getcontainerdescription(player)
      return description
  def getitemdescription(self, player):
-     description = ""
-     if self.type == "qk pouch":
+     if self.itemname == "Qiankun pouch":
         description = "A small " + player.sectcolors + " bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate " + player.sectsym + "s. It can hold an unlimited amount of objects."
-     elif self.type == "calligraphy brush":
-        decription = f'A sleek calligraphy brush with a {player.sectsym}-engraved wooden handle and long, dark bristles.'
-     elif self.type == "inkstone":
+     elif self.itemname == "calligraphy brush":
+        description = f'A sleek calligraphy brush with a {player.sectsym}-engraved wooden handle and long, dark bristles.'
+     elif self.itemname == "inkstone":
         description = f'A simple {player.sectcolors} porcelain inkstone with {player.sectsym} engravings.'
-     elif self.type == "inkstick":
+     elif self.itemname == "inkstick":
         description = f'A plain black inkstick carved into a {player.sectsym} at the end.'
      else:
         description = self.itemdesc
@@ -30,7 +29,7 @@ class Item:
      if self.isLocked == False:
          if len(self.contents) != 0:
              sep = ", a "
-             description += " " + self.inoron.capitalize() + "side it is a " + sep.join(self.contents)
+             description += " " + self.inoron.capitalize() + "side it is a " + sep.join(self.contents) + "."
          else:
              description += " There is nothing " + self.inoron + " the " + self.itemname + "."
      else:
