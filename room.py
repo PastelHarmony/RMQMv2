@@ -28,3 +28,13 @@ class Room:
          return self.raindesc
      elif time == "snow":
          return self.snowdesc
+ def enter_room(oldroom, time, direction):
+     try:
+         newroom = oldroom.connects[direction]
+         print(newroom.getdescription(time))
+         # playloc -> newroom
+         return newroom
+     except:
+         print("That area hasn't been developed yet!")
+ def add_connection(self, direction, room):
+     self.connects[direction] = room

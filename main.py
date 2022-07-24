@@ -1,9 +1,13 @@
 from player import Player
 from room import Room
+from item import Item
 
 player = Player()
 
-start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.", "Silver moonlight gently brushes along the walls.", "The pattering of the rain echoes loudly through the dim room.", "Snow twirls outside the window, blowing wildly in the wind.", "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.", {}, {}, {})
+brick = Item("brick", "misc", False, None)
+qk_pouch = Item("Qiankun pouch", "container", True, {})
+
+start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.", "Silver moonlight gently brushes along the walls.", "The pattering of the rain echoes loudly through the dim room.", "Snow twirls outside the window, blowing wildly in the wind.", "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.", {brick.itemname:brick, qk_pouch.itemname:qk_pouch}, {}, {})
 
 time = "day"
 
