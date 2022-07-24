@@ -1,31 +1,13 @@
 from player import Player
 from room import Room
 from item import Item
-
-def runact(action):
- if "examine" == action[:7]:
-  itemname = action[8:]
-  examine(itemname)
- else:
-  print("What are you trying to do?")
- runact(input(""))
-
-def examine(itemname):
- item = None
- if itemname in playloc.items or itemname in playloc.hidden_items:
-  item = playloc.getitem(itemname)
- elif itemname in player.inv or itemname in player.onplayer:
-  item = player.getitem(itemname)
- if item is None:
-  print("What are you trying to examine?")
- else:
-  print(item.examineitem(player))
+from util import Util
 
 player = Player()
 
 qk_pouch = Item("Qiankun pouch", f'A small {player.sectcolors} bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate {player.sectsym}s. It can hold an unlimited amount of objects.', "container", True, {}, False, "in")
 
-start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.", "Silver moonlight gently brushes along the walls.", "The pattering of the rain echoes loudly through the dim room.", "Snow twirls outside the window, blowing wildly in the wind.", "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.", {brick.itemname:brick, qk_pouch.itemname:qk_pouch}, {}, {})
+start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.", "Silver moonlight gently brushes along the walls.", "The pattering of the rain echoes loudly through the dim room.", "Snow twirls outside the window, blowing wildly in the wind.", "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.", {qk_pouch.itemname:qk_pouch}, {}, {})
 playloc = start_room
 
 time = "day"
@@ -48,4 +30,4 @@ Liangzi Min - The Min sect is a scholarly sect of intermediate size with rolling
 Qiaoxue Wu - The Wu sect is on the smaller side, but it is one of the oldest that still exists. It has magnificent cave systems and shadowy forests. It is also heavily shrouded in mystery; Despite this, it is known for producing great works of art. It is located to the south of the Jingnong Yong and to the east of the Yandi Zhan.
 (Please reply with full sect name. Capitalization is important): """)
 player.setsect(playersect)
-runact(input(""))
+Util.runact(input(""))
