@@ -40,8 +40,6 @@ class Util():
 
     @staticmethod
     def examine(player, playloc, qk_pouch, itemname, containername):
-        item = None
-        container = None
         if containername != None:
             container = Util.getitemfromcontainer(player, playloc, None, containername)[0]
             item = Util.getitemfromcontainer(player, playloc, container, itemname)[0]

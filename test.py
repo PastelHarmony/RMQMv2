@@ -33,7 +33,7 @@ class TestItem(TestPlayer):
         self.player.hasPouch = True
         # print(Util.examine(self.player, start_room, "pouch"))
         print(Util.getlistdescription(self.player, start_room, pouch, ["apple", "pear", "fish"]))
-        print(Util.runact(self.player, start_room, pouch, "examine apple"))
-        print(Util.runact(self.player, start_room, pouch, "take apple"))
-        print(Util.runact(self.player, start_room, pouch, "examine apple in pouch"))
-        print(Util.runact(self.player, start_room, pouch, "examine pouch"))
+        Util.runact(self.player, start_room, pouch, "examine apple")
+        Util.runact(self.player, start_room, pouch, "take apple")
+        Util.runact(self.player, start_room, pouch, "examine apple in pouch")
+        Util.runact(self.player, start_room, pouch, "examine pouch")
