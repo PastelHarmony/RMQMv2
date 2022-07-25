@@ -1,14 +1,17 @@
 from util import Util
 
 class Item:
- def __init__(self, itemname, itemdesc, type, isContainer, contents, isLocked, inoron):
+ def __init__(self, itemname, itemdesc, type, canTake, isRegenerative, isContainer, contents, isLocked, inoron, amount):
      self.itemname = itemname
      self.itemdesc = itemdesc
+     self.canTake = True
+     self.isRegenerative = False
      self.isContainer = isContainer
      self.contents = contents
      self.type = type
      self.isLocked = isLocked
      self.inoron = inoron
+     self.amount = amount
  def examineitem(self, player):
      description = self.getitemdescription(player)
      if self.type == "container":

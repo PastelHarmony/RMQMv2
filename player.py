@@ -5,11 +5,11 @@ class Player:
      self.sect = ""
      self.sectcolors = ""
      self.sectsym = ""
-     self.inv = {}
+     self.hasPouch = False
      self.onplayer = {}
- def getitem(self, ex):
-     if ex in self.inv:
-         item = self.inv[ex]
+ def getitem(self, qk_pouch, ex):
+     if ex in qk_pouch.contents:
+         item = qk_pouch.contents[ex]
      elif ex in self.onplayer:
          item = self.onplayer[ex]
      else:
@@ -35,3 +35,25 @@ class Player:
      elif self.sect == "Black Sect":
          self.sectcolors = "midnight black"
          self.sectsym = "raven"
+ def takeitem(self, playloc, qk_pouch, item):
+     if item == qk_pouch:
+         del playloc.items[item.itemname]
+         self.hasPouch = True
+         return "You take the Qiankun pouch."
+     elif self.hasPouch == False:
+         return "You don't have anything to hold that item in."
+     else:
+         if item.canTake == False:
+             return "You can't take that!"
+         else:
+             qk_pouch.contents[item.itemname] = item
+             if item.isRegenerative == False:
+                 item.amount[playloc] = item.amount[playloc] - 1
+                 if item.amount[playloc] == 0:
+                    del item.amount[playloc]
+                    del playloc.items[item.itemname]
+     try:
+         item.amount[qk_pouch] = item.amount[qk_pouch] + 1
+     except:
+         item.amount[qk_pouch] = 1
+     return f'You take the {item.itemname}.'

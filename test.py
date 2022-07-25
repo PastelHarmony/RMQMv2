@@ -14,16 +14,23 @@ class TestPlayer(TestCase):
 
 class TestItem(TestPlayer):
     def test_examine(self):
-        brick = Item("brick", "A red brick", "misc", False, None, None, None)
-        apple = Item("apple", "A red apple", "food", False, None, None, None)
-        pear = Item("pear", "A yellow pear", "food", False, None, None, None)
-        fish = Item("fish", "A blue fish", "food", False, None, None, None)
-        pouch = Item("pouch", "A purple pouch.", "container", True, {apple.itemname:apple, pear.itemname:pear, fish.itemname:fish}, False, "in")
+        brick = Item("brick", "A red brick", "misc", True, False, False, None, None, None, {})
+        apple = Item("apple", "A red apple", "food", True, False, False, None, None, None, {})
+        pear = Item("pear", "A yellow pear", "food", True, False, False, None, None, None, {})
+        fish = Item("fish", "A blue fish", "food", True, False, False, None, None, None, {})
+        pouch = Item("pouch", "A purple pouch.", "container", True, True, False, {apple.itemname:apple, pear.itemname:pear, fish.itemname:fish}, False, "in", {})
         start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.",
                           "Silver moonlight gently brushes along the walls.",
                           "The pattering of the rain echoes loudly through the dim room.",
                           "Snow twirls outside the window, blowing wildly in the wind.",
                           "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.",
-                          {pouch.itemname:pouch}, {}, {})
+                          {pouch.itemname:pouch, apple.itemname:apple}, {}, {})
+        apple.amount[pouch] = 1
+        apple.amount[start_room] = 1
+        pear.amount[pouch] = 1
+        fish.amount[pouch] = 1
+        self.player.hasPouch = True
         # print(Util.examine(self.player, start_room, "pouch"))
         print(Util.getlistdescription(["apple", "pear", "fish"]))
+        print(Util.take(self.player, start_room, pouch, "apple"))
+        print(apple.amount[pouch])
