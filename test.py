@@ -14,10 +14,10 @@ class TestPlayer(TestCase):
 
 class TestItem(TestPlayer):
     def test_examine(self):
-        brick = Item("brick", "A red brick", "misc", True, False, False, None, None, None, {})
-        apple = Item("apple", "A red apple", "food", True, False, False, None, None, None, {})
-        pear = Item("pear", "A yellow pear", "food", True, False, False, None, None, None, {})
-        fish = Item("fish", "A blue fish", "food", True, False, False, None, None, None, {})
+        brick = Item("brick", "A red brick.", "misc", True, False, False, None, None, None, {})
+        apple = Item("apple", "A red apple.", "food", True, False, False, None, None, None, {})
+        pear = Item("pear", "A yellow pear.", "food", True, False, False, None, None, None, {})
+        fish = Item("fish", "A blue fish.", "food", True, False, False, None, None, None, {})
         pouch = Item("pouch", "A purple pouch.", "container", True, True, False, {apple.itemname:apple, pear.itemname:pear, fish.itemname:fish}, False, "in", {})
         start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.",
                           "Silver moonlight gently brushes along the walls.",
@@ -29,8 +29,11 @@ class TestItem(TestPlayer):
         apple.amount[start_room] = 1
         pear.amount[pouch] = 1
         fish.amount[pouch] = 1
+        pouch.amount[start_room] = 1
         self.player.hasPouch = True
         # print(Util.examine(self.player, start_room, "pouch"))
-        print(Util.getlistdescription(["apple", "pear", "fish"]))
-        print(Util.take(self.player, start_room, pouch, "apple"))
-        print(apple.amount[pouch])
+        print(Util.getlistdescription(self.player, start_room, pouch, ["apple", "pear", "fish"]))
+        print(Util.runact(self.player, start_room, pouch, "examine apple"))
+        print(Util.runact(self.player, start_room, pouch, "take apple"))
+        print(Util.runact(self.player, start_room, pouch, "examine apple in pouch"))
+        print(Util.runact(self.player, start_room, pouch, "examine pouch"))

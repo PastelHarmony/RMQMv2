@@ -12,10 +12,11 @@ class Item:
      self.isLocked = isLocked
      self.inoron = inoron
      self.amount = amount
- def examineitem(self, player):
+ def examineitem(self, player, playloc, qk_pouch, location):
      description = self.getitemdescription(player)
      if self.type == "container":
-         description = self.getcontainerdescription(player)
+         description = self.getcontainerdescription(player, playloc, qk_pouch)
+     description += Util.numberofitems(player, playloc, qk_pouch, self, location)
      return description
  def getitemdescription(self, player):
      if self.itemname == "Qiankun pouch":
@@ -29,12 +30,12 @@ class Item:
      else:
         description = self.itemdesc
      return description
- def getcontainerdescription(self, player):
+ def getcontainerdescription(self, player, playloc, qk_pouch):
      description = self.getitemdescription(player)
      if self.isLocked == False:
          if len(self.contents) != 0:
              sep = ", a "
-             description += " " + self.inoron.capitalize() + " it is" + Util.getlistdescription(self.contents.keys()) + "."
+             description += " " + self.inoron.capitalize() + " it is" + Util.getlistdescription(player, playloc, qk_pouch, list(self.contents.keys())) + "."
          else:
              description += " There is nothing " + self.inoron + " the " + self.itemname + "."
      else:

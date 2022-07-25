@@ -35,7 +35,7 @@ class Player:
      elif self.sect == "Black Sect":
          self.sectcolors = "midnight black"
          self.sectsym = "raven"
- def takeitem(self, playloc, qk_pouch, item):
+ def takeitem(self, playloc, qk_pouch, item, container):
      if item == qk_pouch:
          del playloc.items[item.itemname]
          self.hasPouch = True
@@ -48,10 +48,10 @@ class Player:
          else:
              qk_pouch.contents[item.itemname] = item
              if item.isRegenerative == False:
-                 item.amount[playloc] = item.amount[playloc] - 1
-                 if item.amount[playloc] == 0:
-                    del item.amount[playloc]
-                    del playloc.items[item.itemname]
+                 item.amount[container] = item.amount[container] - 1
+                 if item.amount[container] == 0:
+                    del item.amount[container]
+                    del container.items[item.itemname]
      try:
          item.amount[qk_pouch] = item.amount[qk_pouch] + 1
      except:

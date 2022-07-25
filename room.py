@@ -41,8 +41,8 @@ class Room:
  def getitem(self, ex):
      if ex in self.items:
          item = self.items[ex]
-     elif ex in self.items_hide:
-         item = self.items_hide[ex]
+     elif ex in self.hidden_items:
+         item = self.hidden_items[ex]
      else:
          return None
      return item

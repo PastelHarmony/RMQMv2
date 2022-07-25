@@ -1,6 +1,6 @@
 class Util():
     @staticmethod
-    def getlistdescription(listofitems):
+    def getlistdescription(player, playloc, qk_pouch, listofitems):
         list = ""
         for i in range(len(listofitems)):
             word = listofitems[i]
@@ -12,71 +12,115 @@ class Util():
                 list += f' an {word}'
             else:
                 list += f' a {word}'
-        # word = listofitems[len(listofitems)-1]
-        # if word[0].lower() == "a" or "e" or "i" or "o" or "u":
-            # list += f' and an {word}'
-        # else:
-            # list += f' and a {word}'
         return list
 
     @staticmethod
-    def runact(player, playloc, action):
+    def runact(player, playloc, qk_pouch, action):
         if "examine" == action[:7]:
             itemname = action[8:]
-            print(Util.examine(player, playloc, itemname))
+            if " in " in action:
+                arr = itemname.split(" in ")
+                itemname = arr[0]
+                containername = arr[1]
+            else:
+                containername = None
+            print(Util.examine(player, playloc, qk_pouch, itemname, containername))
         elif "take" == action[:4]:
-            item = action[5:]
-            print(Util.take())
+            itemname = action[5:]
+            if " from " in itemname:
+                arr = itemname.split(" from ")
+                itemname = arr[0]
+                containername = arr[1]
+            else:
+                containername = None
+            print(Util.take(player, playloc, qk_pouch, itemname, containername))
         else:
             print("What are you trying to do?")
-        Util.runact(player, playloc, input(""))
+        # Util.runact(player, playloc, qk_pouch, input(""))
 
     @staticmethod
-    def examine(player, playloc, itemname):
+    def examine(player, playloc, qk_pouch, itemname, containername):
         item = None
-        if itemname in playloc.items or itemname in playloc.hidden_items:
-            item = playloc.getitem(itemname)
-        elif itemname in player.inv or itemname in player.onplayer:
-            item = player.getitem(itemname)
-        if item is None:
-            return "What are you trying to examine?"
+        container = None
+        if containername != None:
+            container = Util.getitemfromcontainer(player, playloc, None, containername)[0]
+            item = Util.getitemfromcontainer(player, playloc, container, itemname)[0]
         else:
-            return item.examineitem(player)
+            if itemname in playloc.items or itemname in playloc.hidden_items:
+                container = playloc
+                item = playloc.getitem(itemname)
+            elif itemname in qk_pouch.contents:
+                container = qk_pouch
+                item = qk_pouch.contents[itemname]
+            elif itemname in player.onplayer:
+                container = player
+                item = player.onplayer[itemname]
+            else:
+                return "What are you trying to examine?"
+        return item.examineitem(player, playloc, qk_pouch, container)
 
     @staticmethod
-    def take(player, playloc, qk_pouch, itemname):
+    def take(player, playloc, qk_pouch, itemname, containername):
         item = None
-        if itemname in playloc.items or itemname in playloc.hidden_items:
-            item = playloc.getitem(itemname)
-        elif itemname in qk_pouch.contents or itemname in player.onplayer:
-            return "You're already carrying that item!"
+        container = None
+        if containername != None:
+            list = Util.getitemfromcontainer(player, playloc, None, containername)
+            container = list[0]
         else:
-            item = Util.getitemfromcontainer(player, playloc, None, itemname)
-        if item is None:
-            return "What are you trying to take?"
-        else:
-            return player.takeitem(playloc, qk_pouch, item)
+            if itemname in playloc.items or itemname in playloc.hidden_items:
+                container = playloc
+                item = playloc.getitem(itemname)
+            elif itemname in qk_pouch.contents or itemname in player.onplayer:
+                return "You already have that item!"
+            else:
+                return "What are you trying to examine?"
+        return player.takeitem(playloc, qk_pouch, item, container)
 
     @staticmethod
     def getitemfromcontainer(player, playloc, container, itemname):
         item = None
         if container is not None:
-            for thing in container.contents:
+            for thing in container.contents.values():
                 if thing.itemname == itemname:
                     item = thing
                 elif thing.type == "container":
                     Util.getitemfromcontainer(player, playloc, thing, itemname)
         else:
-            for thing in playloc.items:
+            for thing in playloc.items.values():
                 if thing.itemname == itemname:
                     item = thing
                 elif thing.type == "container":
                     Util.getitemfromcontainer(player, playloc, thing, itemname)
-                return item
-            for thing in playloc.hidden_items:
+                return [item, container]
+            for thing in playloc.hidden_items.values():
                 if thing.itemname == itemname:
                     item = thing
                 elif thing.type == "container":
                     Util.getitemfromcontainer(player, playloc, thing, itemname)
-                return item
-        return item
+                return [item, container]
+        return [item, container]
+
+    @staticmethod
+    def numberofitems(player, playloc, qk_pouch, item, location):
+        description = " "
+        if location == player:
+            description += f'You have {str(item.amount[qk_pouch])} {item.itemname}'
+            if item.amount[qk_pouch] != 1:
+                description += "s"
+        else:
+            description += "There "
+            if item.amount[location] == 1:
+                description += f'is '
+            else:
+                description += f'are '
+            description += f'{str(item.amount[location])} {item.itemname}'
+            if item.amount[location] != 1:
+                description += "s"
+            if location == playloc:
+                description += " in the room"
+            elif location == None:
+                return None
+            else:
+                description += f' {location.inoron} this {location.itemname}'
+        description += f'.'
+        return description
