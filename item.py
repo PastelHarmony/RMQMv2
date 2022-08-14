@@ -35,7 +35,7 @@ class Item:
      if self.isLocked == False:
          if len(self.contents) != 0:
              sep = ", a "
-             description += " " + self.inoron.capitalize() + " it is" + Util.getlistdescription(player, playloc, qk_pouch, list(self.contents.keys())) + "."
+             description += " " + self.inoron.capitalize() + " it is" + Util.getlistdescription(list(self.contents.keys())) + "."
          else:
              description += " There is nothing " + self.inoron + " the " + self.itemname + "."
      else:

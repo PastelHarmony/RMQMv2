@@ -1,6 +1,6 @@
 class Util():
     @staticmethod
-    def getlistdescription(player, playloc, qk_pouch, listofitems):
+    def getlistdescription(listofitems):
         list = ""
         for i in range(len(listofitems)):
             word = listofitems[i]
@@ -15,7 +15,7 @@ class Util():
         return list
 
     @staticmethod
-    def runact(player, playloc, qk_pouch, action):
+    def runact(player, playloc, qk_pouch, action, time):
         if "examine" == action[:7]:
             itemname = action[8:]
             if " in " in action:
@@ -24,7 +24,7 @@ class Util():
                 containername = arr[1]
             else:
                 containername = None
-            print(Util.examine(player, playloc, qk_pouch, itemname, containername))
+            print(Util.examine(player, playloc, qk_pouch, itemname, containername, time))
         elif "take" == action[:4]:
             itemname = action[5:]
             if " from " in itemname:
@@ -36,14 +36,18 @@ class Util():
             print(Util.take(player, playloc, qk_pouch, itemname, containername))
         else:
             print("What are you trying to do?")
-        # Util.runact(player, playloc, qk_pouch, input(""))
+        Util.runact(player, playloc, qk_pouch, input(""), time)
 
     @staticmethod
-    def examine(player, playloc, qk_pouch, itemname, containername):
+    def examine(player, playloc, qk_pouch, itemname, containername, time):
         if containername != None:
             container = Util.getitemfromcontainer(player, playloc, None, containername)[0]
             item = Util.getitemfromcontainer(player, playloc, container, itemname)[0]
         else:
+            if itemname == "room":
+                return playloc.getdescription(time)
+            if itemname == "self" or itemname == "me":
+                return player.getdescription(qk_pouch)
             if itemname in playloc.items or itemname in playloc.hidden_items:
                 container = playloc
                 item = playloc.getitem(itemname)
