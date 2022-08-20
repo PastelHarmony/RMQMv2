@@ -25,6 +25,24 @@ class Util():
             else:
                 containername = None
             print(Util.examine(player, playloc, qk_pouch, itemname, containername, time))
+        elif "use" == action[:3]:
+            item = action[4:]
+            if " with " in item:
+                arr = item.split(" with ")
+                a = arr[0]
+                b = arr[1]
+            elif " on " in item:
+                arr = item.split(" on ")
+                a = arr[0]
+                b = arr[1]
+            elif " and " in item:
+                arr = item.split(" and ")
+                a = arr[0]
+                b = arr[1]
+            else:
+                a = item
+                b = ""
+            print(Util.useitem(a, b))
         elif "take" == action[:4]:
             itemname = action[5:]
             if " from " in itemname:
@@ -126,3 +144,14 @@ class Util():
                 description += f' {location.inoron} this {location.itemname}'
         description += f'.'
         return description
+
+    @staticmethod
+    def useitem(itema, itemb):
+        try:
+            reaction = itema.uses[itemb]
+        except:
+            return "Those items don't do anything together."
+        if reaction == "special":
+            return itema.use(itemb)
+        else:
+            return reaction
