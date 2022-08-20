@@ -3,6 +3,17 @@ from room import Room
 from item import Item
 from util import Util
 
+# TODO (functions)
+# go
+# inv
+# push
+# wear
+# undress
+# talk
+# give
+# put
+# quest
+
 player = Player()
 
 qk_pouch = Item("Qiankun pouch", f'A small {player.sectcolors} bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate {player.sectsym}s. It can hold an unlimited amount of objects.', "container",
