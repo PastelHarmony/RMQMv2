@@ -127,3 +127,11 @@ class Player:
              description += f'Inside it is {Util.getlistdescription(list(qk_pouch.contents.keys()))}. '
      description += f'You are wearing {Util.getlistdescription(list(self.onplayer.keys()))}.'
      return description
+ def eat(self, item):
+     return f'You eat the {item.itemname}.'
+ def go(self, oldroom, time, direction):
+     try:
+         newroom = oldroom.connects[direction]
+         return [newroom.getdescription(time), newroom]
+     except:
+         return ["That area hasn't been developed yet!", oldroom]

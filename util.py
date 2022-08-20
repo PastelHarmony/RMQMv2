@@ -50,7 +50,11 @@ class Util():
                 b = ""
             itema = Util.getitem(player, playloc, qk_pouch, a)[1]
             itemb = Util.getitem(player, playloc, qk_pouch, b)[1]
-            print(Util.useitem(itema, itemb))
+            print(Util.useitem(player, itema, itemb))
+        elif "go" == action[:2]:
+            arr = player.go(playloc, time, action[3:])
+            print(arr[0])
+            playloc = arr[1]
         elif "take" == action[:4]:
             itemname = action[5:]
             if " from " in itemname:
@@ -166,9 +170,11 @@ class Util():
         return description
 
     @staticmethod
-    def useitem(itema, itemb):
+    def useitem(player, itema, itemb):
         if isinstance(itema, str):
             return "You don't have that item."
+        if itema.type == "food":
+            player.eat(itema)
         try:
             reaction = itema.uses[itemb]
         except:

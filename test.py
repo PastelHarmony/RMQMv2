@@ -40,6 +40,4 @@ class TestItem(TestPlayer):
         Util.runact(self.player, start_room, pouch, "examine pouch", time)
         Util.runact(self.player, start_room, pouch, "take pouch", time)
         Util.runact(self.player, start_room, pouch, "examine room", time)
-        print(apple.uses[pear])
-        print(pear.uses[apple])
         Util.runact(self.player, start_room, pouch, "use apple and pear", time)
