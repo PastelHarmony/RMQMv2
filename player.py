@@ -124,8 +124,8 @@ class Player:
          if qk_pouch.contents == {}:
              description += "There is nothing in the Qiankun pouch. "
          else:
-             description += f'Inside it is {Util.getlistdescription(list(qk_pouch.contents.keys()))}. '
-     description += f'You are wearing {Util.getlistdescription(list(self.onplayer.keys()))}.'
+             description += f'Inside it is {Util.getlistdescription(list(qk_pouch.contents.values()), qk_pouch)}. '
+     description += f'You are wearing {Util.getlistdescription(list(self.onplayer.values()), qk_pouch)}.'
      return description
  def eat(self, item):
      return f'You eat the {item.itemname}.'

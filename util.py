@@ -55,6 +55,8 @@ class Util():
             arr = player.go(playloc, time, action[3:])
             print(arr[0])
             playloc = arr[1]
+        elif "inv" == action:
+            print(Util.examine(player, playloc, qk_pouch, "self", None, time))
         elif "take" == action[:4]:
             itemname = action[5:]
             if " from " in itemname:
