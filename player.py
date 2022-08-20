@@ -128,11 +128,15 @@ class Player:
              description += f'Inside it is {Util.getlistdescription(list(qk_pouch.contents.values()), qk_pouch)}. '
      description += f'You are wearing {Util.getlistdescription(list(self.onplayer.values()), qk_pouch)}.'
      return description
- def eat(self, item):
+ def eat(self, qk_pouch, item):
+     item.amount[qk_pouch] -= 1
+     if item.amount[qk_pouch] == 0:
+         del item.amount[qk_pouch]
+         del qk_pouch.contents[item.itemname]
      return f'You eat the {item.itemname}.'
- def go(self, oldroom, time, direction):
+ def go(self, time, direction):
      try:
-         newroom = oldroom.connects[direction]
+         newroom = self.playloc.connects[direction]
          return [newroom.getdescription(time), newroom]
      except:
-         return ["That area hasn't been developed yet!", oldroom]
+         return ["That area hasn't been developed yet!", self.playloc]

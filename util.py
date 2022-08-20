@@ -66,6 +66,20 @@ class Util():
             else:
                 containername = None
             print(Util.take(player, qk_pouch, itemname, containername))
+        elif "eat" == action[:3]:
+            arr = action[4:].split(" in ")
+            itemname = arr[0]
+            containername = arr[1]
+            if containername != qk_pouch.itemname:
+                Util.take(player, qk_pouch, itemname, containername)
+            item = qk_pouch.contents[itemname]
+            try:
+                if item.type == "food":
+                    print(player.eat(qk_pouch, item))
+                else:
+                    print("You can't eat that.")
+            except:
+                print("What are you trying to eat?")
         else:
             print("What are you trying to do?")
         # Util.runact(player, qk_pouch, input(""), time)
@@ -84,15 +98,13 @@ class Util():
         elif itemname in player.onplayer:
             container = player
             item = player.onplayer[itemname]
-        else:
-            return ["", ""]
         return [container, item]
 
     @staticmethod
     def examine(player, qk_pouch, itemname, containername, time):
         if containername != None:
-            container = Util.getitemfromcontainer(player, player.playloc, None, containername)[0]
-            item = Util.getitemfromcontainer(player, player.playloc, container, itemname)[0]
+            container = Util.getitemfromcontainer(player, None, containername)[0]
+            item = Util.getitemfromcontainer(player, container, itemname)[0]
         else:
             if itemname == "room":
                 return player.playloc.getdescription(time)
@@ -175,8 +187,6 @@ class Util():
     def useitem(player, itema, itemb):
         if isinstance(itema, str):
             return "You don't have that item."
-        if itema.type == "food":
-            player.eat(itema)
         try:
             reaction = itema.uses[itemb]
         except:

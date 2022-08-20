@@ -17,8 +17,8 @@ class Room:
      description = self.loc + " > " + self.subloc + "\n\n" + self.get_timedesc(time) + " " + self.gendesc
      if len(self.items) != 0:
          description += "\nIn this room, you can see " + Util.getlistdescription(list(self.items.values()), self) + "."
-     if len(self.npcs) != 0:
-         description += "\nThere is a" + sep.join(self.npcs)
+     if self.npcs != {}:
+         description += "\nThere is a " + sep.join(self.npcs)
      return description
  def get_timedesc(self, time):
      if time == "day":
@@ -29,8 +29,6 @@ class Room:
          return self.raindesc
      elif time == "snow":
          return self.snowdesc
- def add_connection(self, direction, room):
-     self.connects[direction] = room
  def getitem(self, ex):
      if ex in self.items:
          item = self.items[ex]

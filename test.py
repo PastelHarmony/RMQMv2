@@ -27,6 +27,12 @@ class TestItem(TestPlayer):
                           "Snow twirls outside the window, blowing wildly in the wind.",
                           "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.",
                           {pouch.itemname:pouch, apple.itemname:apple}, {}, {})
+        ll_hall_1 = Room("Laolu Inn", "Hall", "Sunshine bathes the hall in bright rays.",
+                            "The hall is dark except for twinkling speckles of starlight.", "", "",
+                            "It is slightly narrow, and the walls are worn with old stains and scuffs. To the west is a wide window. Another room lies down the hall to your east. Your room is to your north. There are uneven stairs leading down to the first floor.",
+                            {}, {}, {})
+        ll_hall_1.connects["north"] = start_room
+        start_room.connects["south"] = ll_hall_1
         self.player.playloc = start_room
         apple.amount[pouch] = 1
         apple.amount[start_room] = 1
@@ -42,3 +48,6 @@ class TestItem(TestPlayer):
         Util.runact(self.player, pouch, "take pouch", time)
         Util.runact(self.player, pouch, "examine room", time)
         Util.runact(self.player, pouch, "use apple and pear", time)
+        Util.runact(self.player, pouch, "go south", time)
+        Util.runact(self.player, pouch, "eat apple in pouch", time)
+        Util.runact(self.player, pouch, "eat pear in pouch", time)
