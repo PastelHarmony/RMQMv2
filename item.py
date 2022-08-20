@@ -15,9 +15,10 @@ class Item:
      self.amount = amount
  def use(itema, itemb):
      reaction = ""
+     match itema and itemb:
+         case "" | "s":
+             return "hi"
      return reaction
-     # match itema and itemb:
-         # case
  def examineitem(self, player, playloc, qk_pouch, location):
      description = self.getitemdescription(player)
      if self.type == "container":
@@ -41,7 +42,7 @@ class Item:
      if self.isLocked == False:
          if len(self.contents) != 0:
              sep = ", a "
-             description += " " + self.inoron.capitalize() + " it is" + Util.getlistdescription(list(self.contents.keys())) + "."
+             description += " " + self.inoron.capitalize() + " it is" + Util.getlistdescription(list(self.contents.values()), self) + "."
          else:
              description += " There is nothing " + self.inoron + " the " + self.itemname + "."
      else:

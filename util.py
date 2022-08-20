@@ -1,14 +1,16 @@
 class Util():
     @staticmethod
-    def getlistdescription(listofitems):
+    def getlistdescription(listofitems, location):
         list = ""
         for i in range(len(listofitems)):
-            word = listofitems[i]
+            word = listofitems[i].itemname
             if i != 0:
                 list += ","
             if i == len(listofitems)-1:
                 list += " and"
-            if word[0].lower() == "a" or word[0].lower() == "e" or word[0].lower() == "i" or word[0].lower() == "o" or word[0].lower() == "u":
+            if listofitems[i].amount[location] > 1:
+                list += f' {listofitems[i].amount[location]} {word}s'
+            elif word[0].lower() == "a" or word[0].lower() == "e" or word[0].lower() == "i" or word[0].lower() == "o" or word[0].lower() == "u":
                 list += f' an {word}'
             else:
                 list += f' a {word}'
@@ -20,6 +22,10 @@ class Util():
             itemname = action[8:]
             if " in " in action:
                 arr = itemname.split(" in ")
+                itemname = arr[0]
+                containername = arr[1]
+            if " from " in action:
+                arr = itemname.split(" from ")
                 itemname = arr[0]
                 containername = arr[1]
             else:
@@ -54,7 +60,8 @@ class Util():
             print(Util.take(player, playloc, qk_pouch, itemname, containername))
         else:
             print("What are you trying to do?")
-        Util.runact(player, playloc, qk_pouch, input(""), time)
+        # Util.runact(player, playloc, qk_pouch, input(""), time)
+        return
 
     @staticmethod
     def examine(player, playloc, qk_pouch, itemname, containername, time):
@@ -93,7 +100,7 @@ class Util():
             elif itemname in qk_pouch.contents or itemname in player.onplayer:
                 return "You already have that item!"
             else:
-                return "What are you trying to examine?"
+                return "What are you trying to take?"
         return player.takeitem(playloc, qk_pouch, item, container)
 
     @staticmethod
