@@ -5,7 +5,6 @@ from util import Util
 
 # TODO (functions)
 # go
-# inv
 # push
 # wear
 # undress
@@ -21,7 +20,7 @@ qk_pouch = Item("Qiankun pouch", f'A small {player.sectcolors} bag made of thick
 
 start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.", "Silver moonlight gently brushes along the walls.", "The pattering of the rain echoes loudly through the dim room.", "Snow twirls outside the window, blowing wildly in the wind.", "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.", {qk_pouch.itemname:qk_pouch}, {}, {})
 qk_pouch.amount[start_room] = 1
-playloc = start_room
+player.playloc = start_room
 
 time = "day"
 
@@ -51,4 +50,4 @@ Qiaoxue Wu - The Wu sect is on the smaller side, but it is one of the oldest tha
 (Please reply with full sect name. Capitalization is important): """)
 player.setsect(playersect)
 print(f'Your name is {player.surname} {player.birthname}, courtesy {player.courtname}. Your pronouns are {player.pronouns["subjprn"]}/{player.pronouns["objprn"]}/{player.pronouns["posadj"]}/{player.pronouns["posprn"]}/{player.pronouns["refprn"]}. Your elders may refer to you as {player.meiordi}{player.meiordi}. Your juniors may refer to you as {player.jieorge}{player.jieorge}. You are a twenty-one-year-old cultivator from the {player.sect} sect, and your sword is named {swordname}. You are in your room at Laolu inn in Baiping village on a mission to exorcise a vengeful ghost.')
-Util.runact(player, playloc, qk_pouch, input(""), time)
+Util.runact(player, qk_pouch, input(""), time)

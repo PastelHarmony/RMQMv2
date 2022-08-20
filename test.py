@@ -27,17 +27,18 @@ class TestItem(TestPlayer):
                           "Snow twirls outside the window, blowing wildly in the wind.",
                           "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.",
                           {pouch.itemname:pouch, apple.itemname:apple}, {}, {})
+        self.player.playloc = start_room
         apple.amount[pouch] = 1
         apple.amount[start_room] = 1
         pear.amount[pouch] = 1
         fish.amount[pouch] = 1
         pouch.amount[start_room] = 1
         self.player.hasPouch = True
-        Util.runact(self.player, start_room, pouch, "examine room", time)
-        Util.runact(self.player, start_room, pouch, "examine apple", time)
-        Util.runact(self.player, start_room, pouch, "take apple", time)
-        Util.runact(self.player, start_room, pouch, "examine apple in pouch", time)
-        Util.runact(self.player, start_room, pouch, "examine pouch", time)
-        Util.runact(self.player, start_room, pouch, "take pouch", time)
-        Util.runact(self.player, start_room, pouch, "examine room", time)
-        Util.runact(self.player, start_room, pouch, "use apple and pear", time)
+        Util.runact(self.player, pouch, "examine room", time)
+        Util.runact(self.player, pouch, "examine apple", time)
+        Util.runact(self.player, pouch, "take apple", time)
+        Util.runact(self.player, pouch, "examine apple in pouch", time)
+        Util.runact(self.player, pouch, "examine pouch", time)
+        Util.runact(self.player, pouch, "take pouch", time)
+        Util.runact(self.player, pouch, "examine room", time)
+        Util.runact(self.player, pouch, "use apple and pear", time)

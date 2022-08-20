@@ -3,6 +3,7 @@ from util import Util
 
 class Player:
  def __init__(self):
+     self.playloc = None
      self.surname = ""
      self.birthname = ""
      self.courtname = ""
@@ -90,9 +91,9 @@ class Player:
      elif self.sect == "Black Sect":
          self.sectcolors = "midnight black"
          self.sectsym = "raven"
- def takeitem(self, playloc, qk_pouch, item, container):
+ def takeitem(self, qk_pouch, item, container):
      if item == qk_pouch:
-         del playloc.items[item.itemname]
+         del self.playloc.items[item.itemname]
          self.hasPouch = True
          return "You take the Qiankun pouch."
      elif self.hasPouch == False:

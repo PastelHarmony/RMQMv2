@@ -19,11 +19,11 @@ class Item:
          case "apple" | "pear":
              return "hi"
      return reaction
- def examineitem(self, player, playloc, qk_pouch, location):
+ def examineitem(self, player, qk_pouch, location):
      description = self.getitemdescription(player)
      if self.type == "container":
-         description = self.getcontainerdescription(player, playloc, qk_pouch)
-     description += Util.numberofitems(player, playloc, qk_pouch, self, location)
+         description = self.getcontainerdescription(player,  qk_pouch)
+     description += Util.numberofitems(player, qk_pouch, self, location)
      return description
  def getitemdescription(self, player):
      if self.itemname == "Qiankun pouch":
@@ -37,7 +37,7 @@ class Item:
      else:
         description = self.itemdesc
      return description
- def getcontainerdescription(self, player, playloc, qk_pouch):
+ def getcontainerdescription(self, player, qk_pouch):
      description = self.getitemdescription(player)
      if self.isLocked == False:
          if len(self.contents) != 0:
