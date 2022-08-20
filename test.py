@@ -17,7 +17,8 @@ class TestItem(TestPlayer):
         time = "day"
         brick = Item("brick", "A red brick.", "misc", {}, True, False, False, None, None, None, {})
         apple = Item("apple", "A red apple.", "food", {}, True, False, False, None, None, None, {})
-        pear = Item("pear", "A yellow pear.", "food", {}, True, False, False, None, None, None, {})
+        pear = Item("pear", "A yellow pear.", "food", {apple:"special"}, True, False, False, None, None, None, {})
+        apple.uses[pear] = "special"
         fish = Item("fish", "A blue fish.", "food", {}, True, False, False, None, None, None, {})
         pouch = Item("pouch", "A purple pouch.", "container", {}, True, True, False, {apple.itemname:apple, pear.itemname:pear, fish.itemname:fish}, False, "in", {})
         start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.",
@@ -39,3 +40,6 @@ class TestItem(TestPlayer):
         Util.runact(self.player, start_room, pouch, "examine pouch", time)
         Util.runact(self.player, start_room, pouch, "take pouch", time)
         Util.runact(self.player, start_room, pouch, "examine room", time)
+        print(apple.uses[pear])
+        print(pear.uses[apple])
+        Util.runact(self.player, start_room, pouch, "use apple and pear", time)

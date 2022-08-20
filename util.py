@@ -48,7 +48,9 @@ class Util():
             else:
                 a = item
                 b = ""
-            print(Util.useitem(a, b))
+            itema = Util.getitem(player, playloc, qk_pouch, a)[1]
+            itemb = Util.getitem(player, playloc, qk_pouch, b)[1]
+            print(Util.useitem(itema, itemb))
         elif "take" == action[:4]:
             itemname = action[5:]
             if " from " in itemname:
@@ -64,6 +66,23 @@ class Util():
         return
 
     @staticmethod
+    def getitem(player, playloc, qk_pouch, itemname):
+        container = ""
+        item = ""
+        if itemname in playloc.items or itemname in playloc.hidden_items:
+            container = playloc
+            item = playloc.getitem(itemname)
+        elif itemname in qk_pouch.contents:
+            container = qk_pouch
+            item = qk_pouch.contents[itemname]
+        elif itemname in player.onplayer:
+            container = player
+            item = player.onplayer[itemname]
+        else:
+            return ["", ""]
+        return [container, item]
+
+    @staticmethod
     def examine(player, playloc, qk_pouch, itemname, containername, time):
         if containername != None:
             container = Util.getitemfromcontainer(player, playloc, None, containername)[0]
@@ -73,16 +92,10 @@ class Util():
                 return playloc.getdescription(time)
             if itemname == "self" or itemname == "me":
                 return player.getdescription(qk_pouch)
-            if itemname in playloc.items or itemname in playloc.hidden_items:
-                container = playloc
-                item = playloc.getitem(itemname)
-            elif itemname in qk_pouch.contents:
-                container = qk_pouch
-                item = qk_pouch.contents[itemname]
-            elif itemname in player.onplayer:
-                container = player
-                item = player.onplayer[itemname]
-            else:
+            arr = Util.getitem(player, playloc, qk_pouch, itemname)
+            container = arr[0]
+            item = arr[1]
+            if arr == [None, None]:
                 return "What are you trying to examine?"
         return item.examineitem(player, playloc, qk_pouch, container)
 
@@ -154,6 +167,8 @@ class Util():
 
     @staticmethod
     def useitem(itema, itemb):
+        if isinstance(itema, str):
+            return "You don't have that item."
         try:
             reaction = itema.uses[itemb]
         except:

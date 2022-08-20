@@ -15,8 +15,8 @@ class Item:
      self.amount = amount
  def use(itema, itemb):
      reaction = ""
-     match itema and itemb:
-         case "" | "s":
+     match itema.itemname and itemb.itemname:
+         case "apple" | "pear":
              return "hi"
      return reaction
  def examineitem(self, player, playloc, qk_pouch, location):
