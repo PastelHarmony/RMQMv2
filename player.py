@@ -140,3 +140,33 @@ class Player:
          return [newroom.getdescription(time), newroom]
      except:
          return ["That area hasn't been developed yet!", self.playloc]
+ def put(self, qk_pouch, itemname, where):
+     try:
+         item = qk_pouch.contents[itemname]
+     except:
+         return "You don't have that item. (Tip: The item needs to be in your pouch)"
+     if where == "down":
+         try:
+             item.amount[self.playloc] += 1
+         except:
+             self.playloc.items[itemname] = item
+             item.amount[self.playloc] = 1
+         item.amount[qk_pouch] -= 1
+         if item.amount[qk_pouch] == 0:
+            del qk_pouch.contents[item.itemname]
+            del item.amount[qk_pouch]
+         return f'You put down 1 {item.itemname}.'
+     else:
+         container = Util.getitemfromcontainer(self, None, where)[0]
+         if container == None:
+             return "Where do you want to put that?"
+         try:
+             item.amount[container] += 1
+         except:
+             container.contents[itemname] = item
+             item.amount[container] = 1
+         item.amount[qk_pouch] -= 1
+         if item.amount[qk_pouch] == 0:
+             del qk_pouch.contents[item.itemname]
+             del item.amount[qk_pouch]
+         return f'You put 1 {item.itemname} {container.inoron} the {container.itemname}.'

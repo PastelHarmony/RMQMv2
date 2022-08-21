@@ -4,7 +4,6 @@ from item import Item
 from util import Util
 
 # TODO (functions)
-# go
 # push
 # wear
 # undress

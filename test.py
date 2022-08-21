@@ -21,6 +21,8 @@ class TestItem(TestPlayer):
         apple.uses[pear] = "special"
         fish = Item("fish", "A blue fish.", "food", {}, True, False, False, None, None, None, {})
         pouch = Item("pouch", "A purple pouch.", "container", {}, True, True, False, {apple.itemname:apple, pear.itemname:pear, fish.itemname:fish}, False, "in", {})
+        chest = Item("chest", "A wooden chest.", "container", {}, True, True, False,
+                     {}, False, "in", {})
         start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.",
                           "Silver moonlight gently brushes along the walls.",
                           "The pattering of the rain echoes loudly through the dim room.",
@@ -30,7 +32,8 @@ class TestItem(TestPlayer):
         ll_hall_1 = Room("Laolu Inn", "Hall", "Sunshine bathes the hall in bright rays.",
                             "The hall is dark except for twinkling speckles of starlight.", "", "",
                             "It is slightly narrow, and the walls are worn with old stains and scuffs. To the west is a wide window. Another room lies down the hall to your east. Your room is to your north. There are uneven stairs leading down to the first floor.",
-                            {}, {}, {})
+                            {chest.itemname:chest}, {}, {})
+        chest.amount[ll_hall_1] = 1
         ll_hall_1.connects["north"] = start_room
         start_room.connects["south"] = ll_hall_1
         self.player.playloc = start_room
@@ -43,11 +46,19 @@ class TestItem(TestPlayer):
         Util.runact(self.player, pouch, "examine room", time)
         Util.runact(self.player, pouch, "examine apple", time)
         Util.runact(self.player, pouch, "take apple", time)
-        Util.runact(self.player, pouch, "examine apple in pouch", time)
+        Util.runact(self.player, pouch, "examine apple", time)
         Util.runact(self.player, pouch, "examine pouch", time)
         Util.runact(self.player, pouch, "take pouch", time)
+        Util.runact(self.player, pouch, "examine pouch", time)
         Util.runact(self.player, pouch, "examine room", time)
         Util.runact(self.player, pouch, "use apple and pear", time)
         Util.runact(self.player, pouch, "go south", time)
-        Util.runact(self.player, pouch, "eat apple in pouch", time)
-        Util.runact(self.player, pouch, "eat pear in pouch", time)
+        Util.runact(self.player, pouch, "eat pear", time)
+        Util.runact(self.player, pouch, "put apple down", time)
+        Util.runact(self.player, pouch, "examine room", time)
+        Util.runact(self.player, pouch, "put fish in chest", time)
+        Util.runact(self.player, pouch, "examine pouch", time)
+        Util.runact(self.player, pouch, "examine chest", time)
+        Util.runact(self.player, pouch, "put apple down", time)
+        Util.runact(self.player, pouch, "examine pouch", time)
+        Util.runact(self.player, pouch, "examine room", time)

@@ -22,7 +22,7 @@ class Item:
  def examineitem(self, player, qk_pouch, location):
      description = self.getitemdescription(player)
      if self.type == "container":
-         description = self.getcontainerdescription(player,  qk_pouch)
+         description = self.getcontainerdescription(player)
      description += Util.numberofitems(player, qk_pouch, self, location)
      return description
  def getitemdescription(self, player):
@@ -37,7 +37,7 @@ class Item:
      else:
         description = self.itemdesc
      return description
- def getcontainerdescription(self, player, qk_pouch):
+ def getcontainerdescription(self, player):
      description = self.getitemdescription(player)
      if self.isLocked == False:
          if len(self.contents) != 0:

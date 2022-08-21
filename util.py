@@ -2,9 +2,16 @@ class Util():
     @staticmethod
     def getlistdescription(listofitems, location):
         list = ""
+        if len(listofitems) == 1:
+            word = listofitems[0].itemname
+            if word[0].lower() == "a" or word[0].lower() == "e" or word[0].lower() == "i" or word[0].lower() == "o" or word[0].lower() == "u":
+                list += f' an {word}'
+            else:
+                list += f' a {word}'
+            return list
         for i in range(len(listofitems)):
             word = listofitems[i].itemname
-            if i != 0:
+            if i != 0 and len(listofitems) > 2:
                 list += ","
             if i == len(listofitems)-1:
                 list += " and"
@@ -67,11 +74,16 @@ class Util():
                 containername = None
             print(Util.take(player, qk_pouch, itemname, containername))
         elif "eat" == action[:3]:
-            arr = action[4:].split(" in ")
-            itemname = arr[0]
-            containername = arr[1]
-            if containername != qk_pouch.itemname:
+            try:
+                arr = action[4:].split(" in ")
+                itemname = arr[0]
+                containername = arr[1]
                 Util.take(player, qk_pouch, itemname, containername)
+            except:
+                try:
+                    item = qk_pouch.contents[itemname]
+                except:
+                    item = player.playloc.items[itemname]
             item = qk_pouch.contents[itemname]
             try:
                 if item.type == "food":
@@ -80,6 +92,26 @@ class Util():
                     print("You can't eat that.")
             except:
                 print("What are you trying to eat?")
+        elif "put" == action[:3]:
+            if "down" in action[4:]:
+                arr = action[4:].split(" ")
+                itemname = arr[0]
+                containername = "down"
+                print(player.put(qk_pouch, itemname, containername))
+            else:
+                try:
+                    arr = action[4:].split(" in ")
+                    itemname = arr[0]
+                    containername = arr[1]
+                    print(player.put(qk_pouch, itemname, containername))
+                except:
+                    try:
+                        arr = action[4:].split(" on ")
+                        itemname = arr[0]
+                        containername = arr[1]
+                        print(player.put(qk_pouch, itemname, containername))
+                    except:
+                        print("Where are you trying to put that?")
         else:
             print("What are you trying to do?")
         # Util.runact(player, qk_pouch, input(""), time)
@@ -110,11 +142,22 @@ class Util():
                 return player.playloc.getdescription(time)
             if itemname == "self" or itemname == "me":
                 return player.getdescription(qk_pouch)
-            arr = Util.getitem(player, qk_pouch, itemname)
-            container = arr[0]
-            item = arr[1]
-            if arr == [None, None]:
-                return "What are you trying to examine?"
+            if itemname == qk_pouch.itemname:
+                return qk_pouch.getcontainerdescription(player)
+            try:
+                item = player.playloc.items[itemname]
+                container = player.playloc
+            except:
+                try:
+                    item = qk_pouch.contents[itemname]
+                    container = player
+                except:
+                    try:
+                        item = player.onplayer[itemname]
+                        container = player
+                    except:
+                        return "What are you trying to examine?"
+
         return item.examineitem(player, qk_pouch, container)
 
     @staticmethod
@@ -141,18 +184,21 @@ class Util():
             for thing in container.contents.values():
                 if thing.itemname == itemname:
                     item = thing
+                    break
                 elif thing.type == "container":
                     Util.getitemfromcontainer(player, thing, itemname)
         else:
             for thing in player.playloc.items.values():
                 if thing.itemname == itemname:
                     item = thing
+                    break
                 elif thing.type == "container":
                     Util.getitemfromcontainer(player, thing, itemname)
                 return [item, container]
             for thing in player.playloc.hidden_items.values():
                 if thing.itemname == itemname:
                     item = thing
+                    break
                 elif thing.type == "container":
                     Util.getitemfromcontainer(player, thing, itemname)
                 return [item, container]

@@ -16,9 +16,9 @@ class Room:
      sep = ", a "
      description = self.loc + " > " + self.subloc + "\n\n" + self.get_timedesc(time) + " " + self.gendesc
      if len(self.items) != 0:
-         description += "\nIn this room, you can see " + Util.getlistdescription(list(self.items.values()), self) + "."
+         description += "\nIn this room, you can see" + Util.getlistdescription(list(self.items.values()), self) + "."
      if self.npcs != {}:
-         description += "\nThere is a " + sep.join(self.npcs)
+         description += "\nThere is a" + sep.join(self.npcs)
      return description
  def get_timedesc(self, time):
      if time == "day":
