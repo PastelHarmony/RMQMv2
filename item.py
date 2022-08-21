@@ -1,12 +1,13 @@
 from util import Util
 
 class Item:
- def __init__(self, itemname, itemdesc, type, uses, canTake, isRegenerative, isContainer, contents, isLocked, inoron, amount):
+ def __init__(self, itemname, itemdesc, type, uses, canTake, canPush, isRegenerative, isContainer, contents, isLocked, inoron, amount):
      self.itemname = itemname
      self.itemdesc = itemdesc
      self.uses = uses
-     self.canTake = True
-     self.isRegenerative = False
+     self.canTake = canTake
+     self.canPush = canPush
+     self.isRegenerative = isRegenerative
      self.isContainer = isContainer
      self.contents = contents
      self.type = type

@@ -4,12 +4,10 @@ from item import Item
 from util import Util
 
 # TODO (functions)
-# push
 # wear
 # undress
 # talk
 # give
-# put
 # quest
 
 player = Player()

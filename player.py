@@ -157,7 +157,7 @@ class Player:
             del item.amount[qk_pouch]
          return f'You put down 1 {item.itemname}.'
      else:
-         container = Util.getitemfromcontainer(self, None, where)[0]
+         container = Util.getitemfromunknown(self, None, where)[0]
          if container == None:
              return "Where do you want to put that?"
          try:
@@ -170,3 +170,11 @@ class Player:
              del qk_pouch.contents[item.itemname]
              del item.amount[qk_pouch]
          return f'You put 1 {item.itemname} {container.inoron} the {container.itemname}.'
+ def push(self, item):
+     if item.canPush == False:
+         return f'You try to push the {item.itemname} but it doesn\'t budge.'
+     match item:
+         case 0:
+             return "hi"
+         case other:
+            return f'You push the {item.itemname} around. It doesn\'t do much.'

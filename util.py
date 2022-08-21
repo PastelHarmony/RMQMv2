@@ -55,8 +55,8 @@ class Util():
             else:
                 a = item
                 b = ""
-            itema = Util.getitem(player, qk_pouch, a)[1]
-            itemb = Util.getitem(player, qk_pouch, b)[1]
+            itema = Util.getitemfromfree(player, qk_pouch, a)[1]
+            itemb = Util.getitemfromfree(player, qk_pouch, b)[1]
             print(Util.useitem(player, itema, itemb))
         elif "go" == action[:2]:
             arr = player.go(time, action[3:])
@@ -80,6 +80,7 @@ class Util():
                 containername = arr[1]
                 Util.take(player, qk_pouch, itemname, containername)
             except:
+                itemname = action[4:]
                 try:
                     item = qk_pouch.contents[itemname]
                 except:
@@ -112,13 +113,16 @@ class Util():
                         print(player.put(qk_pouch, itemname, containername))
                     except:
                         print("Where are you trying to put that?")
+        elif "push" == action[:4]:
+            item = Util.getitemfromunknown(player, None, action[5:])[0]
+            print(player.push(item))
         else:
             print("What are you trying to do?")
         # Util.runact(player, qk_pouch, input(""), time)
         return
 
     @staticmethod
-    def getitem(player, qk_pouch, itemname):
+    def getitemfromfree(player, qk_pouch, itemname):
         container = ""
         item = ""
         if itemname in player.playloc.items or itemname in player.playloc.hidden_items:
@@ -135,8 +139,8 @@ class Util():
     @staticmethod
     def examine(player, qk_pouch, itemname, containername, time):
         if containername != None:
-            container = Util.getitemfromcontainer(player, None, containername)[0]
-            item = Util.getitemfromcontainer(player, container, itemname)[0]
+            container = Util.getitemfromunknown(player, None, containername)[0]
+            item = Util.getitemfromunknown(player, container, itemname)[0]
         else:
             if itemname == "room":
                 return player.playloc.getdescription(time)
@@ -165,7 +169,7 @@ class Util():
         item = None
         container = None
         if containername != None:
-            list = Util.getitemfromcontainer(player, None, containername)
+            list = Util.getitemfromunknown(player, None, containername)
             container = list[0]
         else:
             if itemname in player.playloc.items or itemname in player.playloc.hidden_items:
@@ -178,31 +182,37 @@ class Util():
         return player.takeitem(qk_pouch, item, container)
 
     @staticmethod
-    def getitemfromcontainer(player, container, itemname):
+    def getitemfromunknown(player, container, itemname):
         item = None
-        if container is not None:
-            for thing in container.contents.values():
-                if thing.itemname == itemname:
-                    item = thing
-                    break
-                elif thing.type == "container":
-                    Util.getitemfromcontainer(player, thing, itemname)
-        else:
-            for thing in player.playloc.items.values():
-                if thing.itemname == itemname:
-                    item = thing
-                    break
-                elif thing.type == "container":
-                    Util.getitemfromcontainer(player, thing, itemname)
+        for thing in player.playloc.items.values():
+            if thing.itemname == itemname:
+                item = thing
                 return [item, container]
-            for thing in player.playloc.hidden_items.values():
-                if thing.itemname == itemname:
-                    item = thing
-                    break
-                elif thing.type == "container":
-                    Util.getitemfromcontainer(player, thing, itemname)
+            elif thing.type == "container":
+                arr = Util.getitemfromcontainer(player, thing, itemname)
+                if arr != [None, None]:
+                    item = arr[0]
+                    container = arr[1]
+        for thing in player.playloc.hidden_items.values():
+            if thing.itemname == itemname:
+                item = thing
                 return [item, container]
+            elif thing.type == "container":
+                arr = Util.getitemfromcontainer(player, thing, itemname)
+                if arr != [None, None]:
+                    item = arr[0]
+                    container = arr[1]
         return [item, container]
+
+    @staticmethod
+    def getitemfromcontainer(player, container, itemname):
+        for thing in container.contents.values():
+            if thing.itemname == itemname:
+                item = thing
+                return [item, container]
+            elif thing.type == "container":
+                Util.getitemfromcontainer(player, thing, itemname)
+        return [None, None]
 
     @staticmethod
     def numberofitems(player, qk_pouch, item, location):

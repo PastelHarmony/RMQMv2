@@ -15,13 +15,12 @@ class TestPlayer(TestCase):
 class TestItem(TestPlayer):
     def test_examine(self):
         time = "day"
-        brick = Item("brick", "A red brick.", "misc", {}, True, False, False, None, None, None, {})
-        apple = Item("apple", "A red apple.", "food", {}, True, False, False, None, None, None, {})
-        pear = Item("pear", "A yellow pear.", "food", {apple:"special"}, True, False, False, None, None, None, {})
+        apple = Item("apple", "A red apple.", "food", {}, True, True, False, False, None, None, None, {})
+        pear = Item("pear", "A yellow pear.", "food", {apple:"special"}, True, True, False, False, None, None, None, {})
         apple.uses[pear] = "special"
-        fish = Item("fish", "A blue fish.", "food", {}, True, False, False, None, None, None, {})
-        pouch = Item("pouch", "A purple pouch.", "container", {}, True, True, False, {apple.itemname:apple, pear.itemname:pear, fish.itemname:fish}, False, "in", {})
-        chest = Item("chest", "A wooden chest.", "container", {}, True, True, False,
+        fish = Item("fish", "A blue fish.", "food", {}, True, True, False, False, None, None, None, {})
+        pouch = Item("pouch", "A purple pouch.", "container", {}, True, True, True, False, {apple.itemname:apple, pear.itemname:pear, fish.itemname:fish}, False, "in", {})
+        chest = Item("chest", "A wooden chest.", "container", {}, True, False, True, False,
                      {}, False, "in", {})
         start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.",
                           "Silver moonlight gently brushes along the walls.",
@@ -62,3 +61,5 @@ class TestItem(TestPlayer):
         Util.runact(self.player, pouch, "put apple down", time)
         Util.runact(self.player, pouch, "examine pouch", time)
         Util.runact(self.player, pouch, "examine room", time)
+        Util.runact(self.player, pouch, "push apple", time)
+        Util.runact(self.player, pouch, "push chest", time)
