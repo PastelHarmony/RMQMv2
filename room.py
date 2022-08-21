@@ -1,4 +1,7 @@
 from util import Util
+from npc import NPC
+from npc import Creature
+from npc import Character
 
 class Room:
  def __init__(self, loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs):
@@ -15,12 +18,25 @@ class Room:
      self.hidden_npcs = hiddennpcs
      self.connects = {}
  def getdescription(self, time):
-     sep = ", a "
-     description = self.loc + " > " + self.subloc + "\n\n" + self.get_timedesc(time) + " " + self.gendesc
+     description = f'{self.loc} > {self.subloc} \n\n {self.get_timedesc(time)} {self.gendesc}'
      if len(self.items) != 0:
-         description += "\nIn this room, you can see" + Util.getlistdescription(list(self.items.values()), self) + "."
+         description += f'\nIn this room, you can see {Util.getlistdescription(list(self.items.values()), self)}'
      if self.npcs != {}:
-         description += "\nThere is a" + sep.join(self.npcs)
+         description += "\nIn this room "
+         creatures = []
+         people = []
+         for npc in self.npcs.values():
+             if isinstance(npc, Character):
+                people.append(npc.name)
+             else:
+                 creatures.append(npc.name)
+         if creatures != []:
+             description += f'is{Util.getlistdescription(creatures, self)}'
+             if people!= []:
+                 description += f'.{Util.basiclistdescription(people)} are also here'
+         elif people != []:
+             description += f'are{Util.basiclistdescription(people)}'
+         description += "."
      return description
  def get_timedesc(self, time):
      if time == "day":
