@@ -1,4 +1,3 @@
-from item import Item
 from util import Util
 
 class Player:
@@ -19,6 +18,25 @@ class Player:
      self.sectsym = ""
      self.hasPouch = False
      self.onplayer = {}
+     self.earslots = 8
+     self.neckslots = 5
+     self.weaponslots = 2
+     self.instrumentslots = 3
+     self.ringslots = 10
+     self.hairslots = 5
+     self.wristslots = 8
+     self.vambraces = None
+     self.veil = None
+     self.robe = None
+     self.coat = None
+     self.armor = None
+     self.earrings = {}
+     self.necklaces = {}
+     self.weapons = {}
+     self.instruments = {}
+     self.rings = {}
+     self.hairpins = {}
+     self.bracelets = {}
  def getitem(self, qk_pouch, ex):
      if ex in qk_pouch.contents:
          item = qk_pouch.contents[ex]
@@ -114,6 +132,7 @@ class Player:
          item.amount[qk_pouch] = 1
      return f'You take the {item.itemname}.'
  def getdescription(self, qk_pouch):
+     sep = ", "
      description = f'Your given name is {self.surname} {self.birthname}. Your courtesy name is {self.surname} {self.courtname}. '
      if self.title != None:
          description += f'Your title is {self.title}. '
@@ -125,8 +144,61 @@ class Player:
          if qk_pouch.contents == {}:
              description += "There is nothing in the Qiankun pouch. "
          else:
-             description += f'Inside it is {Util.getlistdescription(list(qk_pouch.contents.values()), qk_pouch)}. '
-     description += f'You are wearing {Util.getlistdescription(list(self.onplayer.values()), qk_pouch)}.'
+             description += f'Inside it is{Util.getlistdescription(list(qk_pouch.contents.values()), qk_pouch)}. '
+     description += f'You are wearing a {self.robe.itemname}.'
+     if self.coat != None:
+         description -= f'.'
+         description += f' and a {self.coat.itemname}.'
+     if self.coat != None:
+         description += f' Covering your face is a {self.veil.itemname}.'
+     if self.armor != None:
+         description += f' Protecting you is a set of {self.armor.itemname}.'
+     if self.vambraces != None:
+         description += f' Over your robe is a pair of {self.vambraces.itemname}.'
+     if self.earrings != {}:
+         description += f' There are {Util.basiclistdescription(list(self.earrings.keys()))} on your ears.'
+     if self.necklaces != {}:
+         description += f' On your neck '
+         if len(list(self.necklaces.keys())) == 1:
+             description += f'is'
+         else:
+             description += f'are'
+         description += f' {Util.basiclistdescription(list(self.necklaces.keys()))}.'
+     if self.weapons != {}:
+         description += f' Strapped to your side '
+         if len(list(self.weapons.keys())) == 1:
+             description += f'is'
+         else:
+             description += f'are'
+         description += f' {Util.basiclistdescription(list(self.weapons.keys()))}.'
+     if self.instruments != {}:
+         description += f' Bound to your back '
+         if len(list(self.instruments.keys())) == 1:
+             description += f'is'
+         else:
+             description += f'are'
+         description += f' {Util.basiclistdescription(list(self.instruments.keys()))}.'
+     if self.rings != {}:
+         description += f' On your hand'
+         if len(list(self.rings.keys())) == 1:
+             description += f' is'
+         else:
+             description += f's are'
+         description += f' {Util.basiclistdescription(list(self.rings.keys()))}.'
+     if self.hairpins != {}:
+         description += f' In your hair '
+         if len(list(self.hairpins.keys())) == 1:
+             description += f'is'
+         else:
+             description += f'are'
+         description += f' {Util.basiclistdescription(list(self.hairpins.keys()))}.'
+     if self.bracelets != {}:
+         description += f' Around your wrist'
+         if len(list(self.necklaces.keys())) == 1:
+             description += f' is'
+         else:
+             description += f's are'
+         description += f' {Util.basiclistdescription(list(self.necklaces.keys()))}.'
      return description
  def eat(self, qk_pouch, item):
      item.amount[qk_pouch] -= 1
@@ -178,3 +250,157 @@ class Player:
              return "hi"
          case other:
             return f'You push the {item.itemname} around. It doesn\'t do much.'
+ def wear(self, qk_pouch, item):
+     reaction = ""
+     if item in self.onplayer.values():
+         return "You're already wearing that!"
+     if item in qk_pouch.contents.values():
+         match item.type:
+             case "robe":
+                 reaction = f'You slip out of your {self.robe} and into your {item.itemname}.'
+                 qk_pouch.contents[self.robe.itemname] = self.robe
+                 del self.onplayer[self.robe.itemname]
+                 self.onplayer[item.itemname] = item
+                 self.robe = item
+             case "coat":
+                 reaction = f'You shrug off your {self.coat} and put on your {item.itemname}.'
+                 qk_pouch.contents[self.coat.itemname] = self.coat
+                 del self.onplayer[self.coat.itemname]
+                 self.onplayer[item.itemname] = item
+                 self.coat = item
+             case "veil":
+                 reaction = f'You untie your {self.veil} and drape your {item.itemname} over your face.'
+                 qk_pouch.contents[self.veil.itemname] = self.veil
+                 del self.onplayer[self.veil.itemname]
+                 self.onplayer[item.itemname] = item
+                 self.veil = item
+             case "armor":
+                 reaction = f'You unattach your {self.armor} and heft on your {item.itemname}.'
+                 qk_pouch.contents[self.armor.itemname] = self.armor
+                 del self.onplayer[self.armor.itemname]
+                 self.onplayer[item.itemname] = item
+                 self.armor = item
+             case "vambrace":
+                 reaction = f'You take off your {self.vambraces} and strap on your {item.itemname}.'
+                 qk_pouch.contents[self.vambraces.itemname] = self.vambraces
+                 del self.onplayer[self.vambraces.itemname]
+                 self.onplayer[item.itemname] = item
+                 self.vambraces = item
+             case "earring":
+                 if self.earslots == 0:
+                     reaction = "You don't have enough open piercings to wear that."
+                 else:
+                    reaction = f' You carefully fasten on your {item.itemname}.'
+                    self.earslots -= 1
+                    self.onplayer[item.itemname] = item
+                    self.earrings[item.itemname] = item
+             case "ring":
+                 if self.ringslots == 0:
+                     reaction = "You don't have enough space to wear that."
+                 else:
+                     reaction = f' You slide your {item.itemname} onto one of your fingers.'
+                     self.ringslots -= 1
+                     self.onplayer[item.itemname] = item
+                     self.rings[item.itemname] = item
+             case "bracelet":
+                 if self.wristslots == 0:
+                     reaction = "You don't have enough space to wear that."
+                 else:
+                     reaction = f' You slide your {item.itemname} around one of your wrists.'
+                     self.wristslots -= 1
+                     self.onplayer[item.itemname] = item
+                     self.bracelets[item.itemname] = item
+             case "hairpin":
+                 if self.hairslots == 0:
+                     reaction = "You don't have enough space to wear that."
+                 else:
+                     reaction = f' You slide your {item.itemname} into your hair.'
+                     self.hairslots -= 1
+                     self.onplayer[item.itemname] = item
+                     self.hairpins[item.itemname] = item
+             case "weapon":
+                 if self.weaponslots == 0:
+                     reaction = "You don't have enough space to wear that."
+                 else:
+                     reaction = f' You strap your {item.itemname} onto your side.'
+                     self.weaponslots -= 1
+                     self.onplayer[item.itemname] = item
+                     self.weapons[item.itemname] = item
+             case "instrument":
+                 if self.instrumentslots == 0:
+                     reaction = "You don't have enough space to wear that."
+                 else:
+                     reaction = f' You bind your {item.itemname} onto your back.'
+                     self.instrumentslots -= 1
+                     self.onplayer[item.itemname] = item
+                     self.instruments[item.itemname] = item
+             case other:
+                 reaction = "You can't wear that!"
+     else:
+         reaction = "What are you trying to wear?"
+     return reaction
+ def undress(self, qk_pouch, item):
+     reaction = ""
+     if item in self.onplayer.values():
+         match item.type:
+             case "robe":
+                 reaction = "You can't take that off."
+             case "coat":
+                 reaction = f'You shrug off your {self.coat}.'
+                 qk_pouch.contents[self.coat.itemname] = self.coat
+                 del self.onplayer[self.coat.itemname]
+                 self.coat = None
+             case "veil":
+                 reaction = f'You untie your {self.veil}.'
+                 qk_pouch.contents[self.veil.itemname] = self.veil
+                 del self.onplayer[self.veil.itemname]
+                 self.veil = None
+             case "armor":
+                 reaction = f'You unattach your {self.armor}.'
+                 qk_pouch.contents[self.armor.itemname] = self.armor
+                 del self.onplayer[self.armor.itemname]
+                 self.armor = None
+             case "vambrace":
+                 reaction = f'You take off your {self.vambraces}.'
+                 qk_pouch.contents[self.vambraces.itemname] = self.vambraces
+                 del self.onplayer[self.vambraces.itemname]
+                 self.vambraces = None
+             case "earring":
+                 reaction = f' You carefully unfasten your {item.itemname}.'
+                 self.earslots += 1
+                 qk_pouch.contents[item.itemname] = item
+                 del self.onplayer[item.itemname]
+                 del self.earrings[item.itemname]
+             case "ring":
+                 reaction = f' You slide your {item.itemname} off your finger.'
+                 self.ringslots += 1
+                 qk_pouch.contents[item.itemname] = item
+                 del self.onplayer[item.itemname]
+                 del self.rings[item.itemname]
+             case "bracelet":
+                 reaction = f' You slide your {item.itemname} off your wrist.'
+                 self.wristslots += 1
+                 qk_pouch.contents[item.itemname] = item
+                 del self.onplayer[item.itemname]
+                 del self.bracelets[item.itemname]
+             case "hairpin":
+                 reaction = f' You slide your {item.itemname} out of your hair.'
+                 self.hairslots += 1
+                 qk_pouch.contents[item.itemname] = item
+                 del self.onplayer[item.itemname]
+                 del self.hairpins[item.itemname]
+             case "weapon":
+                 reaction = f' You take your {item.itemname} off your side.'
+                 self.weaponslots += 1
+                 qk_pouch.contents[item.itemname] = item
+                 del self.onplayer[item.itemname]
+                 del self.weapons[item.itemname]
+             case "instrument":
+                 reaction = f' You take your {item.itemname} off your back.'
+                 self.instrumentslots += 1
+                 qk_pouch.contents[item.itemname] = item
+                 del self.onplayer[item.itemname]
+                 del self.instruments[item.itemname]
+     else:
+         reaction = "What are you trying to take off?"
+     return reaction

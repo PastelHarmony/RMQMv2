@@ -19,6 +19,8 @@ class TestItem(TestPlayer):
         pear = Item("pear", "A yellow pear.", "food", {apple:"special"}, True, True, False, False, None, None, None, {})
         apple.uses[pear] = "special"
         fish = Item("fish", "A blue fish.", "food", {}, True, True, False, False, None, None, None, {})
+        robe = Item("robe", "A white fish.", "robe", {}, True, True, False, False, None, None, None, {self.player:1})
+        self.player.onplayer[robe.itemname] = robe
         pouch = Item("pouch", "A purple pouch.", "container", {}, True, True, True, False, {apple.itemname:apple, pear.itemname:pear, fish.itemname:fish}, False, "in", {})
         chest = Item("chest", "A wooden chest.", "container", {}, True, False, True, False,
                      {}, False, "in", {})

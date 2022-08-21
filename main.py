@@ -13,11 +13,13 @@ from util import Util
 player = Player()
 
 qk_pouch = Item("Qiankun pouch", f'A small {player.sectcolors} bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate {player.sectsym}s. It can hold an unlimited amount of objects.', "container",
-                {}, True, True, False, {}, False, "in", {})
+                {}, True, True, False, True, {}, False, "in", {})
 
 start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.", "Silver moonlight gently brushes along the walls.", "The pattering of the rain echoes loudly through the dim room.", "Snow twirls outside the window, blowing wildly in the wind.", "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.", {qk_pouch.itemname:qk_pouch}, {}, {})
 qk_pouch.amount[start_room] = 1
 player.playloc = start_room
+robe = Item("robe", "A white fish.", "robe", {}, True, True, False, False, None, None, None, {player:1})
+player.onplayer[robe.itemname] = robe
 
 time = "day"
 

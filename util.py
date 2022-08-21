@@ -22,6 +22,17 @@ class Util():
             else:
                 list += f' a {word}'
         return list
+    @staticmethod
+    def basiclistdescription(listofitems):
+        list = ""
+        for i in range(len(listofitems)):
+            word = listofitems[i].itemname
+            if i != 0 and len(listofitems) > 2:
+                list += ","
+            if i == len(listofitems) - 1:
+                list += " and"
+            list += f' {word}'
+        return list
 
     @staticmethod
     def runact(player, qk_pouch, action, time):
@@ -116,6 +127,12 @@ class Util():
         elif "push" == action[:4]:
             item = Util.getitemfromunknown(player, None, action[5:])[0]
             print(player.push(item))
+        elif "wear" == action[:4]:
+            item = Util.getitemfromunknown(player, None, action[5:])[0]
+            print(player.wear(qk_pouch, item))
+        elif "undress" == action[:7]:
+            item = player.onplayer[action[8:]]
+            print(player.undress(qk_pouch, item))
         else:
             print("What are you trying to do?")
         # Util.runact(player, qk_pouch, input(""), time)
