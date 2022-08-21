@@ -37,6 +37,7 @@ class Player:
      self.rings = {}
      self.hairpins = {}
      self.bracelets = {}
+     self.sectstatus = "disciple"
  def getitem(self, qk_pouch, ex):
      if ex in qk_pouch.contents:
          item = qk_pouch.contents[ex]
@@ -45,70 +46,100 @@ class Player:
      else:
          return None
      return item
- def setcourtname(self):
-     self.courtname = self.courtname1 + self.courtname2.lower()
- def setprn(self, prn, honorifics):
-     if prn == "she/her":
-         self.pronouns["subjprn"] = "she"
-         self.pronouns["objprn"] = "her"
-         self.pronouns["posadj"] = "her"
-         self.pronouns["posprn"] = "hers"
-         self.pronouns["refprn"] = "herself"
-         self.isorare = "is"
-     elif prn == "he/him":
-         self.pronouns["subjprn"] = "he"
-         self.pronouns["objprn"] = "him"
-         self.pronouns["posadj"] = "his"
-         self.pronouns["posprn"] = "his"
-         self.pronouns["refprn"] = "himself"
-         self.isorare = "is"
-     elif prn == "they/them":
-         self.pronouns["subjprn"] = "they"
-         self.pronouns["objprn"] = "them"
-         self.pronouns["posadj"] = "their"
-         self.pronouns["posprn"] = "theirs"
-         self.pronouns["refprn"] = "themselves"
-         self.isorare = "are"
-     elif prn == "it/its":
-         self.pronouns["subjprn"] = "it"
-         self.pronouns["objprn"] = "it"
-         self.pronouns["posadj"] = "its"
-         self.pronouns["posprn"] = "its"
-         self.pronouns["refprn"] = "itself"
-         self.isorare = "is"
-     elif prn == "other":
-         self.pronouns["subjprn"] = input("What are your subjective pronouns?")
-         self.pronouns["objprn"] = input("What are your objective pronouns")
-         self.pronouns["posadj"] = input("What are your possessive adjectives?")
-         self.pronouns["posprn"] = input("What are your posessive pronouns?")
-         self.pronouns["refprn"] = input("What are your reflexive pronouns?")
-         self.isorare = input("Do your pronouns refer to yourself as 'is' or 'are'? (Ex: 'She is' vs. 'They are'): ")
+ def setprn(self, prn):
+     match prn:
+         case "she/her":
+             self.pronouns["subjprn"] = "she"
+             self.pronouns["objprn"] = "her"
+             self.pronouns["posadj"] = "her"
+             self.pronouns["posprn"] = "hers"
+             self.pronouns["refprn"] = "herself"
+             self.isorare = "is"
+         case "he/him":
+             self.pronouns["subjprn"] = "he"
+             self.pronouns["objprn"] = "him"
+             self.pronouns["posadj"] = "his"
+             self.pronouns["posprn"] = "his"
+             self.pronouns["refprn"] = "himself"
+             self.isorare = "is"
+         case "they/them":
+             self.pronouns["subjprn"] = "they"
+             self.pronouns["objprn"] = "them"
+             self.pronouns["posadj"] = "their"
+             self.pronouns["posprn"] = "theirs"
+             self.pronouns["refprn"] = "themselves"
+             self.isorare = "are"
+         case "it/its":
+             self.pronouns["subjprn"] = "it"
+             self.pronouns["objprn"] = "it"
+             self.pronouns["posadj"] = "its"
+             self.pronouns["posprn"] = "its"
+             self.pronouns["refprn"] = "itself"
+             self.isorare = "is"
+         case "other":
+             self.pronouns["subjprn"] = input("What are your subjective pronouns?")
+             self.pronouns["objprn"] = input("What are your objective pronouns")
+             self.pronouns["posadj"] = input("What are your possessive adjectives?")
+             self.pronouns["posprn"] = input("What are your posessive pronouns?")
+             self.pronouns["refprn"] = input("What are your reflexive pronouns?")
+             self.isorare = input("Do your pronouns refer to yourself as 'is' or 'are'? (Ex: 'She is' vs. 'They are'): ")
+         case other:
+             self.setprn(input("Please input a valid pronoun set. "))
+ def sethonorific(self, honorifics):
      if honorifics == "1":
          self.meiordi = "mei"
          self.jieorge = "jie"
      elif honorifics == "2":
          self.meiordi = "di"
          self.jieorge = "ge"
- def setsect(self, sect):
+     else:
+         self.sethonorific(input("Please input a valid number (1 or 2). "))
+
+ def setsect(self, sect, swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe):
      self.sect = sect
-     if self.sect == "Yandi Zhan":
-         self.sectcolors = "crimson"
-         self.sectsym = "flame"
-     elif self.sect == "Huangling Sheng":
-         self.sectcolors = "golden"
-         self.sectsym = "koi"
-     elif self.sect == "Antian Yi":
-         self.sectcolors = "sapphire"
-         self.sectsym = "star"
-     elif self.sect == "Jingnong Yong":
-         self.sectcolors = "viridian"
-         self.sectsym = "willow"
-     elif self.sect == "Liangzi Min":
-         self.sectcolors = "lilac"
-         self.sectsym = "rose"
-     elif self.sect == "Black Sect":
-         self.sectcolors = "midnight black"
-         self.sectsym = "raven"
+     match sect:
+         case "Yandi Zhan":
+             self.sectcolors = "crimson"
+             self.sectsym = "flame"
+             self.weapons[swordname] = zhanmadao
+             self.onplayer[zhanrobe.itemname] = zhanrobe
+             self.robe = zhanrobe
+         case "Huangling Sheng":
+             self.sectcolors = "golden"
+             self.sectsym = "koi"
+             self.weapons[swordname] = hudiedao
+             self.onplayer[shengrobe.itemname] = shengrobe
+             self.robe = shengrobe
+         case "Antian Yi":
+             self.sectcolors = "sapphire"
+             self.sectsym = "star"
+             self.weapons[swordname] = taijijian
+             self.onplayer[yirobe.itemname] = yirobe
+             self.robe = yirobe
+         case "Jingnong Yong":
+             self.sectcolors = "viridian"
+             self.sectsym = "willow"
+             self.weapons[swordname] = dadao
+             self.onplayer[yongrobe.itemname] = yongrobe
+             self.robe = yongrobe
+         case "Liangzi Min":
+             self.sectcolors = "lilac"
+             self.sectsym = "rose"
+             self.weapons[swordname] = wodao
+             self.onplayer[minrobe.itemname] = minrobe
+             self.robe = minrobe
+         case "Qiaoxue Wu":
+             self.sectcolors = "onyx"
+             self.sectsym = "raven"
+             self.weapons[swordname] = hooksword
+             self.onplayer[wurobe.itemname] = wurobe
+             self.robe = wurobe
+         case other:
+             self.setsect(input("Please select a valid sect. ").title(), swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe)
+     self.robe.amount[self] = 1
+     self.weapons[swordname].amount[self] = 1
+     self.weapons[swordname].itemname = swordname
+     self.onplayer[swordname] = self.weapons[swordname]
  def takeitem(self, qk_pouch, item, container):
      if item == qk_pouch:
          del self.playloc.items[item.itemname]
@@ -132,7 +163,6 @@ class Player:
          item.amount[qk_pouch] = 1
      return f'You take the {item.itemname}.'
  def getdescription(self, qk_pouch):
-     sep = ", "
      description = f'Your given name is {self.surname} {self.birthname}. Your courtesy name is {self.surname} {self.courtname}. '
      if self.title != None:
          description += f'Your title is {self.title}. '
@@ -156,49 +186,49 @@ class Player:
      if self.vambraces != None:
          description += f' Over your robe is a pair of {self.vambraces.itemname}.'
      if self.earrings != {}:
-         description += f' There are {Util.basiclistdescription(list(self.earrings.keys()))} on your ears.'
+         description += f' There are{Util.basiclistdescription(list(self.earrings.values()))} on your ears.'
      if self.necklaces != {}:
          description += f' On your neck '
          if len(list(self.necklaces.keys())) == 1:
              description += f'is'
          else:
              description += f'are'
-         description += f' {Util.basiclistdescription(list(self.necklaces.keys()))}.'
+         description += f'{Util.getlistdescription(list(self.necklaces.values()), self.playloc)}.'
      if self.weapons != {}:
          description += f' Strapped to your side '
          if len(list(self.weapons.keys())) == 1:
              description += f'is'
          else:
              description += f'are'
-         description += f' {Util.basiclistdescription(list(self.weapons.keys()))}.'
+         description += f'{Util.basiclistdescription(list(self.weapons.values()))}.'
      if self.instruments != {}:
          description += f' Bound to your back '
          if len(list(self.instruments.keys())) == 1:
              description += f'is'
          else:
              description += f'are'
-         description += f' {Util.basiclistdescription(list(self.instruments.keys()))}.'
+         description += f'{Util.basiclistdescription(list(self.instruments.values()))}.'
      if self.rings != {}:
          description += f' On your hand'
          if len(list(self.rings.keys())) == 1:
              description += f' is'
          else:
              description += f's are'
-         description += f' {Util.basiclistdescription(list(self.rings.keys()))}.'
+         description += f'{Util.getlistdescription(list(self.rings.values()), self.playloc)}.'
      if self.hairpins != {}:
          description += f' In your hair '
          if len(list(self.hairpins.keys())) == 1:
              description += f'is'
          else:
              description += f'are'
-         description += f' {Util.basiclistdescription(list(self.hairpins.keys()))}.'
+         description += f'{Util.getlistdescription(list(self.hairpins.values()), self.playloc)}.'
      if self.bracelets != {}:
          description += f' Around your wrist'
          if len(list(self.necklaces.keys())) == 1:
              description += f' is'
          else:
              description += f's are'
-         description += f' {Util.basiclistdescription(list(self.necklaces.keys()))}.'
+         description += f'{Util.getlistdescription(list(self.necklaces.values()), self.playloc)}.'
      return description
  def eat(self, qk_pouch, item):
      item.amount[qk_pouch] -= 1
@@ -242,14 +272,6 @@ class Player:
              del qk_pouch.contents[item.itemname]
              del item.amount[qk_pouch]
          return f'You put 1 {item.itemname} {container.inoron} the {container.itemname}.'
- def push(self, item):
-     if item.canPush == False:
-         return f'You try to push the {item.itemname} but it doesn\'t budge.'
-     match item:
-         case 0:
-             return "hi"
-         case other:
-            return f'You push the {item.itemname} around. It doesn\'t do much.'
  def wear(self, qk_pouch, item):
      reaction = ""
      if item in self.onplayer.values():

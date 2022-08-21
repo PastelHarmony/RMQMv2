@@ -1,4 +1,5 @@
 from util import Util
+
 class Room:
  def __init__(self, loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs):
      self.loc = loc

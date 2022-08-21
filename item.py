@@ -1,10 +1,9 @@
 from util import Util
 
 class Item:
- def __init__(self, itemname, itemdesc, type, uses, canTake, canPush, isRegenerative, isContainer, contents, isLocked, inoron, amount):
+ def __init__(self, itemname, itemdesc, type, canTake, canPush, isRegenerative, isContainer, contents, isLocked, inoron, amount):
      self.itemname = itemname
      self.itemdesc = itemdesc
-     self.uses = uses
      self.canTake = canTake
      self.canPush = canPush
      self.isRegenerative = isRegenerative
@@ -14,12 +13,6 @@ class Item:
      self.isLocked = isLocked
      self.inoron = inoron
      self.amount = amount
- def use(itema, itemb):
-     reaction = ""
-     match itema.itemname and itemb.itemname:
-         case "apple" | "pear":
-             return "hi"
-     return reaction
  def examineitem(self, player, qk_pouch, location):
      description = self.getitemdescription(player)
      if self.type == "container":

@@ -9,22 +9,25 @@ class Util():
             else:
                 list += f' a {word}'
             return list
-        for i in range(len(listofitems)):
-            word = listofitems[i].itemname
-            if i != 0 and len(listofitems) > 2:
-                list += ","
-            if i == len(listofitems)-1:
-                list += " and"
-            if listofitems[i].amount[location] > 1:
-                list += f' {listofitems[i].amount[location]} {word}s'
-            elif word[0].lower() == "a" or word[0].lower() == "e" or word[0].lower() == "i" or word[0].lower() == "o" or word[0].lower() == "u":
-                list += f' an {word}'
-            else:
-                list += f' a {word}'
+        else:
+            for i in range(len(listofitems)):
+                word = listofitems[i].itemname
+                if i != 0 and len(listofitems) > 2:
+                    list += ","
+                if i == len(listofitems)-1:
+                    list += " and"
+                if listofitems[i].amount[location] > 1:
+                    list += f' {listofitems[i].amount[location]} {word}s'
+                elif word[0].lower() == "a" or word[0].lower() == "e" or word[0].lower() == "i" or word[0].lower() == "o" or word[0].lower() == "u":
+                    list += f' an {word}'
+                else:
+                    list += f' a {word}'
         return list
     @staticmethod
     def basiclistdescription(listofitems):
         list = ""
+        if len(listofitems) == 1:
+            return f' {listofitems[0].itemname}'
         for i in range(len(listofitems)):
             word = listofitems[i].itemname
             if i != 0 and len(listofitems) > 2:
@@ -74,7 +77,9 @@ class Util():
             print(arr[0])
             player.playloc = arr[1]
         elif "inv" == action:
-            print(Util.examine(player, qk_pouch, "self", None, time))
+            description = Util.examine(player, qk_pouch, "self", None, time)
+            newdesc = description.split(". ")
+            print(". ".join(newdesc[4:]))
         elif "take" == action[:4]:
             itemname = action[5:]
             if " from " in itemname:
@@ -86,18 +91,18 @@ class Util():
             print(Util.take(player, qk_pouch, itemname, containername))
         elif "eat" == action[:3]:
             try:
-                arr = action[4:].split(" in ")
-                itemname = arr[0]
-                containername = arr[1]
-                Util.take(player, qk_pouch, itemname, containername)
-            except:
-                itemname = action[4:]
                 try:
-                    item = qk_pouch.contents[itemname]
+                    arr = action[4:].split(" in ")
+                    itemname = arr[0]
+                    containername = arr[1]
+                    Util.take(player, qk_pouch, itemname, containername)
                 except:
-                    item = player.playloc.items[itemname]
-            item = qk_pouch.contents[itemname]
-            try:
+                    itemname = action[4:]
+                    try:
+                        item = qk_pouch.contents[itemname]
+                    except:
+                        item = player.playloc.items[itemname]
+                item = qk_pouch.contents[itemname]
                 if item.type == "food":
                     print(player.eat(qk_pouch, item))
                 else:
@@ -126,17 +131,71 @@ class Util():
                         print("Where are you trying to put that?")
         elif "push" == action[:4]:
             item = Util.getitemfromunknown(player, None, action[5:])[0]
-            print(player.push(item))
+            print(Util.push(player, item))
         elif "wear" == action[:4]:
             item = Util.getitemfromunknown(player, None, action[5:])[0]
             print(player.wear(qk_pouch, item))
         elif "undress" == action[:7]:
             item = player.onplayer[action[8:]]
             print(player.undress(qk_pouch, item))
+        elif "change" == action[:5]:
+            print(Util.changeinfo(player, action[6:]))
+        elif "rename" == action[:6]:
+            print(Util.rename(player, action[7:]))
         else:
             print("What are you trying to do?")
-        # Util.runact(player, qk_pouch, input(""), time)
-        return
+        Util.runact(player, qk_pouch, input(""), time)
+
+    @staticmethod
+    def rename(player, thing):
+        if thing in player.weapons:
+            newname = input(f'What do you want to rename {thing} to?')
+            player.weapons[thing].itemname = newname
+            player.weapons[newname] = player.weapons.pop(thing)
+            player.onplayer[newname] = player.onplayer.pop(thing)
+            return f'{thing.capitalize()} has been renamed to {newname}'
+        elif thing in player.instruments:
+            newname = input(f'What do you want to rename {thing} to?')
+            player.instruments[thing].itemname = newname
+            player.instruments[newname] = player.instruments.pop(thing)
+            player.onplayer[newname] = player.onplayer.pop(thing)
+            return f'{thing.capitalize()} has been renamed to {newname}'
+        else:
+            return "What do you want to rename?"
+
+    @staticmethod
+    def changeinfo(player, info):
+        match info:
+            case "sect":
+                return "To change your sect, you must apply for a sect change to your desired sect's leader."
+            case "surname":
+                player.surname = input("What would you like to change your surname to? ")
+                return f'Your surname is now {player.surname}.'
+            case "birth name":
+                player.birthname = input("What would you like to change your birth name to? ")
+                return f'Your birth name is now {player.birthname}.'
+            case "courtesy name":
+                court = input("You may only change one character of your courtesy name at a time. Would you like to change your 1. first or 2. second character? ")
+                match court:
+                    case "1":
+                        player.courtname1 = input("What would you like to change the first character of your courtesy name to? ")
+                        player.courtname = player.courtname1.capitalize() + player.courtname2.lower()
+                        return f'Your courtesy name is now {player.courtname}.'
+                    case "2":
+                        player.courtname2 = input("What would you like to change the second character of your courtesy name to? ")
+                        player.courtname = player.courtname1.capitalize() + player.courtname2.lower()
+                        return f'Your courtesy name is now {player.courtname}.'
+                    case other:
+                        print("That is not a valid number.")
+                        Util.changeinfo(player, "courtesy name")
+            case "pronouns":
+                player.setprn(input("What would you like to change your pronouns to? "))
+                return f'Your pronouns are now {player.pronouns["subjprn"]}/{player.pronouns["objpronoun"]}.'
+            case "honorific":
+                player.sethonorific(input("What would you like to change your honorifics to? (1. Meimei and jiejie 2. Didi and gege) "))
+                return f'Your honorifics are now {player.jieorge}{player.jieorge} and {player.meiordi}{player.meiordi}.'
+            case other:
+                return "You cannot change that."
 
     @staticmethod
     def getitemfromfree(player, qk_pouch, itemname):
@@ -151,8 +210,9 @@ class Util():
         elif itemname in player.onplayer:
             container = player
             item = player.onplayer[itemname]
+        elif itemname == qk_pouch.itemname:
+            item = qk_pouch
         return [container, item]
-
     @staticmethod
     def examine(player, qk_pouch, itemname, containername, time):
         if containername != None:
@@ -178,7 +238,6 @@ class Util():
                         container = player
                     except:
                         return "What are you trying to examine?"
-
         return item.examineitem(player, qk_pouch, container)
 
     @staticmethod
@@ -192,8 +251,6 @@ class Util():
             if itemname in player.playloc.items or itemname in player.playloc.hidden_items:
                 container = player.playloc
                 item = player.playloc.getitem(itemname)
-            elif itemname in qk_pouch.contents or itemname in player.onplayer:
-                return "You already have that item!"
             else:
                 return "What are you trying to take?"
         return player.takeitem(qk_pouch, item, container)
@@ -234,9 +291,13 @@ class Util():
     @staticmethod
     def numberofitems(player, qk_pouch, item, location):
         description = " "
-        if location == player:
+        if location == qk_pouch:
             description += f'You have {str(item.amount[qk_pouch])} {item.itemname}'
             if item.amount[qk_pouch] != 1:
+                description += "s"
+        elif location == player:
+            description += f'You have {str(item.amount[player])} {item.itemname}'
+            if item.amount[player] != 1:
                 description += "s"
         else:
             description += "There "
@@ -258,13 +319,22 @@ class Util():
 
     @staticmethod
     def useitem(player, itema, itemb):
-        if isinstance(itema, str):
+        if isinstance(itema, str or None) or isinstance(itemb, str or None):
             return "You don't have that item."
+        match itema.itemname and itemb.itemname:
+            case "apple" | "pear":
+                return "hi"
+        return "Those items don't do anything together."
+
+    @staticmethod
+    def push(player, item):
         try:
-            reaction = itema.uses[itemb]
+            if item.canPush == False:
+                return f'You try to push the {item.itemname} but it doesn\'t budge.'
+            match item.itemname:
+                case "window":
+                    return "hi"
+                case other:
+                    return f'You push the {item.itemname} around. It doesn\'t do much.'
         except:
-            return "Those items don't do anything together."
-        if reaction == "special":
-            return itema.use(itemb)
-        else:
-            return reaction
+            return "What are you trying to push?"
