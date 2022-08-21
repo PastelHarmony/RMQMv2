@@ -331,8 +331,8 @@ class Util():
         try:
             if item.canPush == False:
                 return f'You try to push the {item.itemname} but it doesn\'t budge.'
-            match item.itemname:
-                case "window":
+            match item.itemname and player.playloc.loc and player.playloc.subloc:
+                case "window" | "Laolu Inn" | "Your Room":
                     return "hi"
                 case other:
                     return f'You push the {item.itemname} around. It doesn\'t do much.'

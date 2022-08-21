@@ -1,7 +1,7 @@
 from util import Util
 
 class Room:
- def __init__(self, loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs):
+ def __init__(self, loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs):
      self.loc = loc
      self.subloc = subloc
      self.daydesc = daydesc
@@ -12,6 +12,7 @@ class Room:
      self.items = items
      self.hidden_items = hiddenitems
      self.npcs = npcs
+     self.hidden_npcs = hiddennpcs
      self.connects = {}
  def getdescription(self, time):
      sep = ", a "

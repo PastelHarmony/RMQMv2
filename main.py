@@ -40,7 +40,7 @@ start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly thro
                   "The pattering of the rain echoes loudly through the dim room.",
                   "Snow twirls outside the window, blowing wildly in the wind.",
                   "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.",
-                  {qk_pouch.itemname: qk_pouch}, {}, {})
+                  {qk_pouch.itemname: qk_pouch}, {}, {}, {})
 qk_pouch.amount[start_room] = 1
 player.playloc = start_room
 

@@ -39,6 +39,15 @@ class Player:
      self.bracelets = {}
      self.sectstatus = "disciple"
      self.quests = {}
+     # phys dmg = base dmg * (1 + strength/200) * (1 + dexterity/200)
+     # blunt dmg = base dmg * (1 + strength/100)
+     # precision dmg = base dmg * (1 + dexterity/100)
+     # magic dmg = base dmg * (1 + cultivation/100)
+     # taken dmg = base dmg - defense
+     # chance to dodge attack = (dexterity/500)
+     # social score = charisma + answer + status
+     # xp points = base points * (1 + intelligence/100)
+     self.stats = {"max health":100, "hp":100, "strength":0, "cultiavation":0, "defense":0, "dexterity":0, "charisma":0, "intelligence":0}
  def getitem(self, qk_pouch, ex):
      if ex in qk_pouch.contents:
          item = qk_pouch.contents[ex]
