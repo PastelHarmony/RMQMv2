@@ -142,9 +142,34 @@ class Util():
             print(Util.changeinfo(player, action[6:]))
         elif "rename" == action[:6]:
             print(Util.rename(player, action[7:]))
+        elif "attack" == action[:6]:
+            try:
+                arr = action[7:].split(" with ")
+                try:
+                    creature = player.playloc.npcs[arr[0]]
+                    try:
+                        weapon = player.weapons[arr[1]]
+                        print(player.attack(creature, weapon))
+                    except:
+                        try:
+                            weapon = player.instruments[arr[1]]
+                            print(player.attack(creature, weapon))
+                        except:
+                            print("What are you trying to attack the creature with?")
+                except:
+                    print("What are you trying to attack?")
+            except:
+                print(f'What are you trying to attack the creature with?')
         else:
             print("What are you trying to do?")
+        Util.updateframe()
         Util.runact(player, qk_pouch, input(""), time)
+
+    @staticmethod
+    def updateframe():
+        # random event chance
+        # turn if in combat
+        return
 
     @staticmethod
     def rename(player, thing):

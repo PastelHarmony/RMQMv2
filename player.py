@@ -436,3 +436,29 @@ class Player:
      else:
          reaction = "What are you trying to take off?"
      return reaction
+
+ def attack(self, creature, weapon):
+     dmg = 0
+     # creature status (frozen, burning, confused, etc)
+     # creature dodge chance
+     # if creature dodge: return f'The {creature.name} dodged and took no damage.'
+     # weapon base dmg
+     # find weapon type
+     # dmg = basedmg*self.stats["strength" and/or "dexterity" and/or "cultivation"] - creature.stats["defense"]
+     # if dmg<0: dmg = 0
+     # creature.stats["health"] -= dmg
+     # if creature.stats["health"] <=0:
+     #      return player.kill(creature, f'You attacked the {creature.name} with your {weapon.itemname} and dealt {dmg} damage.')
+     return f'You attacked the {creature.name} with your {weapon.itemname} and dealt {dmg} damage. It has {creature.stats["health"]} hit points left.'
+
+ def kill(self, creature, msg):
+     loot = []
+     # for item in creature.drops:
+     #      chance of getting item
+     #      add or not add item to loot
+     killmsg = f'{msg} You slayed the {creature.name}.'
+     if loot != []:
+         killmsg += f' It dropped{Util.getlistdescription(loot, self.playloc)}.'
+     else:
+         killmsg += f' It dropped nothing.'
+     return killmsg
