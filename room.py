@@ -27,7 +27,7 @@ class Room:
          people = []
          for npc in self.npcs.values():
              if isinstance(npc, Character):
-                people.append(npc.name)
+                people.append(f'{npc.name}')
              else:
                  creatures.append(npc.name)
          if creatures != []:
