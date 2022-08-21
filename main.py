@@ -2,13 +2,17 @@ from player import Player
 from room import Room
 from item import Item
 from util import Util
+from npc import NPC
+from npc import Creature
+from npc import Character
+from event import Quest
+from event import Story
+from event import Random
 
-# TODO (functions)
+# TODO
 # talk
 # give
 # quest
-# OTHER STUFF
-# dialogue
 # quests
 # events
 # random events
@@ -21,8 +25,6 @@ from util import Util
 # animals
 # cooking
 # crafting
-# check if info is right
-# edit self
 # saving
 
 player = Player()

@@ -38,6 +38,7 @@ class Player:
      self.hairpins = {}
      self.bracelets = {}
      self.sectstatus = "disciple"
+     self.quests = {}
  def getitem(self, qk_pouch, ex):
      if ex in qk_pouch.contents:
          item = qk_pouch.contents[ex]
