@@ -21,11 +21,11 @@ class Item:
      self.isCrafter = isCrafter
      self.isTool = isTool
 
- def examineitem(self, player, qk_pouch, location):
+ def examineitem(self, player, location):
      description = self.getitemdescription(player)
      if self.isContainer == True:
          description = self.getcontainerdescription(player)
-     description += Util.numberofitems(player, qk_pouch, self, location)
+     description += Util.numberofitems(player, self, location)
      return description
  def getitemdescription(self, player):
      if self.itemname == "Qiankun pouch":
@@ -43,7 +43,6 @@ class Item:
      description = self.getitemdescription(player)
      if self.isLocked == False:
          if len(self.contents) != 0:
-             sep = ", a "
              description += " " + self.inoron.capitalize() + " it is" + Util.getlistdescription(list(self.contents.values()), self) + "."
          else:
              description += " There is nothing " + self.inoron + " the " + self.itemname + "."

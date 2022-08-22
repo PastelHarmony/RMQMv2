@@ -34,9 +34,9 @@ from event import Random
 
 player = Player()
 
-qk_pouch = Item("Qiankun pouch",
+qk_pouch = Item("Qiankun pouch", "Qiankun pouches",
                 f'A small {player.sectcolors} bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate {player.sectsym}s. It can hold an unlimited amount of objects.',
-                "container", True, True, False, True, {}, False, "in", {})
+                "container", True, True, False, {}, True, {}, False, "in", False, False, None, False, False, False)
 
 # rooms: loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs
 

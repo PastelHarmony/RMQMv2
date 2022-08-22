@@ -52,9 +52,10 @@ class Player:
      self.afflictions = []
      self.incombat = False
      self.spawnpoint = None
- def getitem(self, qk_pouch, ex):
-     if ex in qk_pouch.contents:
-         item = qk_pouch.contents[ex]
+     self.inv = None
+ def getitem(self, ex):
+     if ex in self.inv.contents:
+         item = self.inv.contents[ex]
      elif ex in self.onplayer:
          item = self.onplayer[ex]
      else:
@@ -164,6 +165,7 @@ class Player:
      if item == qk_pouch:
          del self.playloc.items[item.itemname]
          self.hasPouch = True
+         self.inv = qk_pouch
          return "You take the Qiankun pouch."
      elif self.hasPouch == False:
          return "You don't have anything to hold that item in."
@@ -177,18 +179,18 @@ class Player:
                  amount = Util.getamount(container, item, "take")
                  if amount == 0:
                      return f'You don\'t take any {item.pluralitemname}.'
-                 qk_pouch.contents[item.itemname] = item
+                 self.inv.contents[item.itemname] = item
                  if item.isRegenerative == False:
                      item.amount[container] = item.amount[container] - 1
                      if item.amount[container] == 0:
                         del item.amount[container]
                         del container.items[item.itemname]
      try:
-         item.amount[qk_pouch] = item.amount[qk_pouch] + 1
+         item.amount[self.inv] = item.amount[self.inv] + 1
      except:
-         item.amount[qk_pouch] = 1
+         item.amount[self.inv] = 1
      return f'You take the {item.itemname}.'
- def getdescription(self, qk_pouch):
+ def getdescription(self):
      description = f'Your given name is {self.surname} {self.birthname}. Your courtesy name is {self.surname} {self.courtname}. '
      if self.title != None:
          description += f'Your title is {self.title}. '
@@ -197,10 +199,10 @@ class Player:
          description += "You are not carrying anything. "
      else:
          description += "You are carrying a Qiankun pouch. "
-         if qk_pouch.contents == {}:
+         if self.inv.contents == {}:
              description += "There is nothing in the Qiankun pouch. "
          else:
-             description += f'Inside it is{Util.getlistdescription(list(qk_pouch.contents.values()), qk_pouch)}. '
+             description += f'Inside it is{Util.getlistdescription(list(self.inv.contents.values()), self.inv)}. '
      description += f'You are wearing a {self.robe.itemname}.'
      if self.coat != None:
          description -= f'.'
@@ -256,12 +258,12 @@ class Player:
              description += f's are'
          description += f'{Util.getlistdescription(list(self.necklaces.values()), self.playloc)}.'
      return description
- def eat(self, qk_pouch, item):
-     amount = Util.getamount(qk_pouch, item, "eat")
-     item.amount[qk_pouch] -= amount
-     if item.amount[qk_pouch] == 0:
-         del item.amount[qk_pouch]
-         del qk_pouch.contents[item.itemname]
+ def eat(self, item):
+     amount = Util.getamount(self.inv, item, "eat")
+     item.amount[self.inv] -= amount
+     if item.amount[self.inv] == 0:
+         del item.amount[self.inv]
+         del self.inv.contents[item.itemname]
      if amount == 1:
         return f'You eat the {item.itemname}.'
      else:
@@ -276,29 +278,31 @@ class Player:
          return [newroom.getdescription(time), newroom]
      except:
          return ["That area hasn't been developed yet!", self.playloc]
- def put(self, qk_pouch, itemname, where):
+ def put(self, itemname, where):
      try:
-         item = qk_pouch.contents[itemname]
+         item = self.inv.contents[itemname]
      except:
          return "You don't have that item. (Tip: The item needs to be in your pouch)"
      if where == "down":
-         amount = Util.getamount(qk_pouch, item, "put")
+         amount = Util.getamount(self.inv, item, "put")
          try:
              item.amount[self.playloc] += amount
          except:
              self.playloc.items[itemname] = item
              item.amount[self.playloc] = amount
-         item.amount[qk_pouch] -= amount
-         if item.amount[qk_pouch] == 0:
-            del qk_pouch.contents[item.itemname]
-            del item.amount[qk_pouch]
+         item.amount[self.inv] -= amount
+         if item.amount[self.inv] == 0:
+            del self.inv.contents[item.itemname]
+            del item.amount[self.inv]
+         if item == self.inv:
+             self.inv = None
          if amount == 1:
             return f'You put down 1 {item.itemname}.'
          else:
              return f'You put down {amount} {item.pluralitemname}.'
      else:
          container = Util.getitemfromunknown(self, None, where)[0]
-         amount = Util.getamount(qk_pouch, item, "put")
+         amount = Util.getamount(self.inv, item, "put")
          if container == None:
              return "Where do you want to put that?"
          try:
@@ -306,47 +310,49 @@ class Player:
          except:
              container.contents[itemname] = item
              item.amount[container] = amount
-         item.amount[qk_pouch] -= amount
-         if item.amount[qk_pouch] == 0:
-             del qk_pouch.contents[item.itemname]
-             del item.amount[qk_pouch]
+         item.amount[self.inv] -= amount
+         if item.amount[self.inv] == 0:
+             del self.inv.contents[item.itemname]
+             del item.amount[self.inv]
+             if item == self.inv:
+                 self.inv = None
          if amount == 1:
             return f'You put 1 {item.itemname} {container.inoron} the {container.itemname}.'
          else:
              return f'You put {amount} {item.pluralitemname} {container.inoron} the {container.itemname}.'
- def wear(self, qk_pouch, item):
+ def wear(self, item):
      reaction = ""
      if item in self.onplayer.values():
          return "You're already wearing that!"
-     if item in qk_pouch.contents.values():
+     if item in self.inv.contents.values():
          match item.type:
              case "robe":
                  reaction = f'You slip out of your {self.robe} and into your {item.itemname}.'
-                 qk_pouch.contents[self.robe.itemname] = self.robe
+                 self.inv.contents[self.robe.itemname] = self.robe
                  del self.onplayer[self.robe.itemname]
                  self.onplayer[item.itemname] = item
                  self.robe = item
              case "coat":
                  reaction = f'You shrug off your {self.coat} and put on your {item.itemname}.'
-                 qk_pouch.contents[self.coat.itemname] = self.coat
+                 self.inv.contents[self.coat.itemname] = self.coat
                  del self.onplayer[self.coat.itemname]
                  self.onplayer[item.itemname] = item
                  self.coat = item
              case "veil":
                  reaction = f'You untie your {self.veil} and drape your {item.itemname} over your face.'
-                 qk_pouch.contents[self.veil.itemname] = self.veil
+                 self.inv.contents[self.veil.itemname] = self.veil
                  del self.onplayer[self.veil.itemname]
                  self.onplayer[item.itemname] = item
                  self.veil = item
              case "armor":
                  reaction = f'You unattach your {self.armor} and heft on your {item.itemname}.'
-                 qk_pouch.contents[self.armor.itemname] = self.armor
+                 self.inv.contents[self.armor.itemname] = self.armor
                  del self.onplayer[self.armor.itemname]
                  self.onplayer[item.itemname] = item
                  self.armor = item
              case "vambrace":
                  reaction = f'You take off your {self.vambraces} and strap on your {item.itemname}.'
-                 qk_pouch.contents[self.vambraces.itemname] = self.vambraces
+                 self.inv.contents[self.vambraces.itemname] = self.vambraces
                  del self.onplayer[self.vambraces.itemname]
                  self.onplayer[item.itemname] = item
                  self.vambraces = item
@@ -403,7 +409,7 @@ class Player:
      else:
          reaction = "What are you trying to wear?"
      return reaction
- def undress(self, qk_pouch, item):
+ def undress(self, item):
      reaction = ""
      if item in self.onplayer.values():
          match item.type:
@@ -411,58 +417,58 @@ class Player:
                  reaction = "You can't take that off."
              case "coat":
                  reaction = f'You shrug off your {self.coat}.'
-                 qk_pouch.contents[self.coat.itemname] = self.coat
+                 self.inv.contents[self.coat.itemname] = self.coat
                  del self.onplayer[self.coat.itemname]
                  self.coat = None
              case "veil":
                  reaction = f'You untie your {self.veil}.'
-                 qk_pouch.contents[self.veil.itemname] = self.veil
+                 self.inv.contents[self.veil.itemname] = self.veil
                  del self.onplayer[self.veil.itemname]
                  self.veil = None
              case "armor":
                  reaction = f'You unattach your {self.armor}.'
-                 qk_pouch.contents[self.armor.itemname] = self.armor
+                 self.inv.contents[self.armor.itemname] = self.armor
                  del self.onplayer[self.armor.itemname]
                  self.armor = None
              case "vambrace":
                  reaction = f'You take off your {self.vambraces}.'
-                 qk_pouch.contents[self.vambraces.itemname] = self.vambraces
+                 self.inv.contents[self.vambraces.itemname] = self.vambraces
                  del self.onplayer[self.vambraces.itemname]
                  self.vambraces = None
              case "earring":
                  reaction = f' You carefully unfasten your {item.itemname}.'
                  self.earslots += 1
-                 qk_pouch.contents[item.itemname] = item
+                 self.inv.contents[item.itemname] = item
                  del self.onplayer[item.itemname]
                  del self.earrings[item.itemname]
              case "ring":
                  reaction = f' You slide your {item.itemname} off your finger.'
                  self.ringslots += 1
-                 qk_pouch.contents[item.itemname] = item
+                 self.inv.contents[item.itemname] = item
                  del self.onplayer[item.itemname]
                  del self.rings[item.itemname]
              case "bracelet":
                  reaction = f' You slide your {item.itemname} off your wrist.'
                  self.wristslots += 1
-                 qk_pouch.contents[item.itemname] = item
+                 self.inv.contents[item.itemname] = item
                  del self.onplayer[item.itemname]
                  del self.bracelets[item.itemname]
              case "hairpin":
                  reaction = f' You slide your {item.itemname} out of your hair.'
                  self.hairslots += 1
-                 qk_pouch.contents[item.itemname] = item
+                 self.inv.contents[item.itemname] = item
                  del self.onplayer[item.itemname]
                  del self.hairpins[item.itemname]
              case "weapon":
                  reaction = f' You take your {item.itemname} off your side.'
                  self.weaponslots += 1
-                 qk_pouch.contents[item.itemname] = item
+                 self.inv.contents[item.itemname] = item
                  del self.onplayer[item.itemname]
                  del self.weapons[item.itemname]
              case "instrument":
                  reaction = f' You take your {item.itemname} off your back.'
                  self.instrumentslots += 1
-                 qk_pouch.contents[item.itemname] = item
+                 self.inv.contents[item.itemname] = item
                  del self.onplayer[item.itemname]
                  del self.instruments[item.itemname]
      else:
@@ -471,6 +477,7 @@ class Player:
 
  def push(self, item):
     try:
+        print(item)
         if item.canPush == False:
             return f'You try to push the {item.itemname} but it doesn\'t budge.'
         match item.itemname and self.playloc.loc and self.playloc.subloc:

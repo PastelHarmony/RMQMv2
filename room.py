@@ -20,7 +20,7 @@ class Room:
  def getdescription(self, time):
      description = f'{self.loc} > {self.subloc} \n\n {self.get_timedesc(time)} {self.gendesc}'
      if len(self.items) != 0:
-         description += f'\nIn this room, you can see {Util.getlistdescription(list(self.items.values()), self)}'
+         description += f'\nIn this room, you can see{Util.getlistdescription(list(self.items.values()), self)}'
      if self.npcs != {}:
          description += "\nIn this room "
          creatures = []

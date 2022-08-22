@@ -39,133 +39,136 @@ class Util():
 
     @staticmethod
     def runact(player, qk_pouch, action, time):
-        if "examine" == action[:7]:
-            itemname = action[8:]
-            if " in " in action:
-                arr = itemname.split(" in ")
-                itemname = arr[0]
-                containername = arr[1]
-            if " from " in action:
-                arr = itemname.split(" from ")
-                itemname = arr[0]
-                containername = arr[1]
-            else:
-                containername = None
-            print(Util.examine(player, qk_pouch, itemname, containername, time))
-        elif "use" == action[:3]:
-            item = action[4:]
-            if " with " in item:
-                arr = item.split(" with ")
-                a = arr[0]
-                b = arr[1]
-            elif " on " in item:
-                arr = item.split(" on ")
-                a = arr[0]
-                b = arr[1]
-            elif " and " in item:
-                arr = item.split(" and ")
-                a = arr[0]
-                b = arr[1]
-            else:
-                a = item
-                b = ""
-            itema = Util.getitemfromfree(player, qk_pouch, a)[1]
-            itemb = Util.getitemfromfree(player, qk_pouch, b)[1]
-            print(player.useitem(itema, itemb))
-        elif "go" == action[:2]:
-            arr = player.go(time, action[3:])
-            print(arr[0])
-            player.playloc = arr[1]
-        elif "inv" == action:
-            description = Util.examine(player, qk_pouch, "self", None, time)
-            newdesc = description.split(". ")
-            print(". ".join(newdesc[4:]))
-        elif "take" == action[:4]:
-            itemname = action[5:]
-            if " from " in itemname:
-                arr = itemname.split(" from ")
-                itemname = arr[0]
-                containername = arr[1]
-            else:
-                containername = None
-            print(Util.take(player, qk_pouch, itemname, containername))
-        elif "eat" == action[:3]:
-            try:
-                try:
-                    arr = action[4:].split(" in ")
+        try:
+            if "examine" == action[:7]:
+                itemname = action[8:]
+                if " in " in action:
+                    arr = itemname.split(" in ")
                     itemname = arr[0]
                     containername = arr[1]
-                    Util.take(player, qk_pouch, itemname, containername)
-                except:
-                    itemname = action[4:]
-                    try:
-                        item = qk_pouch.contents[itemname]
-                    except:
-                        item = player.playloc.items[itemname]
-                item = qk_pouch.contents[itemname]
-                if item.type == "food":
-                    print(player.eat(qk_pouch, item))
+                if " from " in action:
+                    arr = itemname.split(" from ")
+                    itemname = arr[0]
+                    containername = arr[1]
                 else:
-                    print("You can't eat that.")
-            except:
-                print("What are you trying to eat?")
-        elif "put" == action[:3]:
-            if "down" in action[4:]:
-                arr = action[4:].split(" ")
-                itemname = arr[0]
-                containername = "down"
-                print(player.put(qk_pouch, itemname, containername))
-            else:
-                try:
-                    arr = action[4:].split(" in ")
+                    containername = None
+                print(Util.examine(player, itemname, containername, time))
+            elif "use" == action[:3]:
+                item = action[4:]
+                if " with " in item:
+                    arr = item.split(" with ")
+                    a = arr[0]
+                    b = arr[1]
+                elif " on " in item:
+                    arr = item.split(" on ")
+                    a = arr[0]
+                    b = arr[1]
+                elif " and " in item:
+                    arr = item.split(" and ")
+                    a = arr[0]
+                    b = arr[1]
+                else:
+                    a = item
+                    b = ""
+                itema = Util.getitemfromfree(player, a)[1]
+                itemb = Util.getitemfromfree(player, b)[1]
+                print(player.useitem(itema, itemb))
+            elif "go" == action[:2]:
+                arr = player.go(time, action[3:])
+                print(arr[0])
+                player.playloc = arr[1]
+            elif "inv" == action:
+                description = Util.examine(player, "self", None, time)
+                newdesc = description.split(". ")
+                print(". ".join(newdesc[4:]))
+            elif "take" == action[:4]:
+                itemname = action[5:]
+                if " from " in itemname:
+                    arr = itemname.split(" from ")
                     itemname = arr[0]
                     containername = arr[1]
-                    print(player.put(qk_pouch, itemname, containername))
-                except:
+                else:
+                    containername = None
+                print(Util.take(player, qk_pouch, itemname, containername))
+            elif "eat" == action[:3]:
+                try:
                     try:
-                        arr = action[4:].split(" on ")
+                        arr = action[4:].split(" in ")
                         itemname = arr[0]
                         containername = arr[1]
-                        print(player.put(qk_pouch, itemname, containername))
+                        Util.take(player, qk_pouch, itemname, containername)
                     except:
-                        print("Where are you trying to put that?")
-        elif "push" == action[:4]:
-            item = Util.getitemfromunknown(player, None, action[5:])[0]
-            print(player.push(item))
-        elif "wear" == action[:4]:
-            item = Util.getitemfromunknown(player, None, action[5:])[0]
-            print(player.wear(qk_pouch, item))
-        elif "undress" == action[:7]:
-            item = player.onplayer[action[8:]]
-            print(player.undress(qk_pouch, item))
-        elif "change" == action[:5]:
-            print(Util.changeinfo(player, action[6:]))
-        elif "rename" == action[:6]:
-            print(Util.rename(player, action[7:]))
-        elif "attack" == action[:6]:
-            try:
-                arr = action[7:].split(" with ")
-                try:
-                    creature = player.playloc.npcs[arr[0]]
+                        itemname = action[4:]
+                        try:
+                            item = player.inv.contents[itemname]
+                        except:
+                            item = player.playloc.items[itemname]
+                    item = player.inv.contents[itemname]
+                    if item.type == "food":
+                        print(player.eat(player.inv, item))
+                    else:
+                        print("You can't eat that.")
+                except:
+                    print("What are you trying to eat?")
+            elif "put" == action[:3]:
+                if "down" in action[4:]:
+                    arr = action[4:].split(" ")
+                    itemname = arr[0]
+                    containername = "down"
+                    print(player.put(player.inv, itemname, containername))
+                else:
                     try:
-                        weapon = player.weapons[arr[1]]
-                        creature.isHostile = True
-                        player.inCombat = True
-                        print(player.attack(creature, weapon))
+                        arr = action[4:].split(" in ")
+                        itemname = arr[0]
+                        containername = arr[1]
+                        print(player.put(player.inv, itemname, containername))
                     except:
                         try:
-                            weapon = player.instruments[arr[1]]
+                            arr = action[4:].split(" on ")
+                            itemname = arr[0]
+                            containername = arr[1]
+                            print(player.put(player.inv, itemname, containername))
+                        except:
+                            print("Where are you trying to put that?")
+            elif "push" == action[:4]:
+                item = Util.getitemfromunknown(player, None, action[5:])[0]
+                print(player.push(item))
+            elif "wear" == action[:4]:
+                item = Util.getitemfromunknown(player, None, action[5:])[0]
+                print(player.wear(player.inv, item))
+            elif "undress" == action[:7]:
+                item = player.onplayer[action[8:]]
+                print(player.undress(player.inv, item))
+            elif "change" == action[:5]:
+                print(Util.changeinfo(player, action[6:]))
+            elif "rename" == action[:6]:
+                print(Util.rename(player, action[7:]))
+            elif "attack" == action[:6]:
+                try:
+                    arr = action[7:].split(" with ")
+                    try:
+                        creature = player.playloc.npcs[arr[0]]
+                        try:
+                            weapon = player.weapons[arr[1]]
                             creature.isHostile = True
                             player.inCombat = True
                             print(player.attack(creature, weapon))
                         except:
-                            print("What are you trying to attack the creature with?")
+                            try:
+                                weapon = player.instruments[arr[1]]
+                                creature.isHostile = True
+                                player.inCombat = True
+                                print(player.attack(creature, weapon))
+                            except:
+                                print("What are you trying to attack the creature with?")
+                    except:
+                        print("What are you trying to attack?")
                 except:
-                    print("What are you trying to attack?")
-            except:
-                print(f'What are you trying to attack the creature with?')
-        else:
-            print("What are you trying to do?")
+                    print(f'What are you trying to attack the creature with?')
+            else:
+                print("What are you trying to do?")
+        except:
+            print("Could not perform that action. (Hint: You must be carrying your Qiankun pouch for most actions.) ")
         Util.updateframe(player)
         Util.runact(player, qk_pouch, input(""), time)
 
@@ -242,23 +245,26 @@ class Util():
                 return "You cannot change that."
 
     @staticmethod
-    def getitemfromfree(player, qk_pouch, itemname):
+    def getitemfromfree(player, itemname):
         container = ""
         item = ""
+        try:
+            if itemname in player.inv.contents:
+                container = player.inv
+                item = player.inv.contents[itemname]
+            elif itemname == player.inv.itemname:
+                item = player.inv
+        except:
+            pass
         if itemname in player.playloc.items or itemname in player.playloc.hidden_items:
             container = player.playloc
             item = player.playloc.getitem(itemname)
-        elif itemname in qk_pouch.contents:
-            container = qk_pouch
-            item = qk_pouch.contents[itemname]
         elif itemname in player.onplayer:
             container = player
             item = player.onplayer[itemname]
-        elif itemname == qk_pouch.itemname:
-            item = qk_pouch
         return [container, item]
     @staticmethod
-    def examine(player, qk_pouch, itemname, containername, time):
+    def examine(player, itemname, containername, time):
         if containername != None:
             container = Util.getitemfromunknown(player, None, containername)[0]
             item = Util.getitemfromunknown(player, container, itemname)[0]
@@ -266,15 +272,21 @@ class Util():
             if itemname == "room":
                 return player.playloc.getdescription(time)
             if itemname == "self" or itemname == "me":
-                return player.getdescription(qk_pouch)
-            if itemname == qk_pouch.itemname:
-                return qk_pouch.getcontainerdescription(player)
+                try:
+                    return player.getdescription()
+                except:
+                    return player.getdescription()
+            try:
+                if itemname == player.inv.itemname:
+                    return player.inv.getcontainerdescription(player)
+            except:
+                pass
             try:
                 item = player.playloc.items[itemname]
                 container = player.playloc
             except:
                 try:
-                    item = qk_pouch.contents[itemname]
+                    item = player.inv.contents[itemname]
                     container = player
                 except:
                     try:
@@ -282,7 +294,7 @@ class Util():
                         container = player
                     except:
                         return "What are you trying to examine?"
-        return item.examineitem(player, qk_pouch, container)
+        return item.examineitem(player, container)
 
     @staticmethod
     def take(player, qk_pouch, itemname, containername):
@@ -304,8 +316,7 @@ class Util():
         item = None
         for thing in player.playloc.items.values():
             if thing.itemname == itemname:
-                item = thing
-                return [item, container]
+                return [thing, player.playloc]
             elif thing.isContainer == True:
                 arr = Util.getitemfromcontainer(player, thing, itemname)
                 if arr != [None, None]:
@@ -313,13 +324,26 @@ class Util():
                     container = arr[1]
         for thing in player.playloc.hidden_items.values():
             if thing.itemname == itemname:
-                item = thing
-                return [item, container]
+                return [thing, player.playloc]
             elif thing.isContainer == True:
                 arr = Util.getitemfromcontainer(player, thing, itemname)
                 if arr != [None, None]:
                     item = arr[0]
                     container = arr[1]
+        for thing in player.onplayer.values():
+            if thing.itemname == itemname:
+                return [thing, player]
+        try:
+            for thing in player.inv.contents.values():
+                if thing.itemname == itemname:
+                    return [thing, player.inv]
+                elif thing.isContainer == True:
+                    arr = Util.getitemfromcontainer(player, thing, itemname)
+                    if arr != [None, None]:
+                        item = arr[0]
+                        container = arr[1]
+        except:
+            pass
         return [item, container]
 
     @staticmethod
@@ -333,13 +357,16 @@ class Util():
         return [None, None]
 
     @staticmethod
-    def numberofitems(player, qk_pouch, item, location):
+    def numberofitems(player, item, location):
         description = " "
-        if location == qk_pouch:
-            description += f'You have {str(item.amount[qk_pouch])} {item.itemname}'
-            if item.amount[qk_pouch] != 1:
-                description += "s"
-        elif location == player:
+        try:
+            if location == player.inv:
+                description += f'You have {str(item.amount[player.inv])} {item.itemname}'
+                if item.amount[player.inv] != 1:
+                    description += "s"
+        except:
+            pass
+        if location == player:
             description += f'You have {str(item.amount[player])} {item.itemname}'
             if item.amount[player] != 1:
                 description += "s"
