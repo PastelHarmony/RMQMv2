@@ -174,6 +174,9 @@ class Player:
              if item.isLiquid == True:
                  return "You can't take that, it's liquid. First put it in a container."
              else:
+                 amount = Util.getamount(container, item, "take")
+                 if amount == 0:
+                     return f'You don\'t take any {item.pluralitemname}.'
                  qk_pouch.contents[item.itemname] = item
                  if item.isRegenerative == False:
                      item.amount[container] = item.amount[container] - 1
@@ -254,11 +257,15 @@ class Player:
          description += f'{Util.getlistdescription(list(self.necklaces.values()), self.playloc)}.'
      return description
  def eat(self, qk_pouch, item):
-     item.amount[qk_pouch] -= 1
+     amount = Util.getamount(qk_pouch, item, "eat")
+     item.amount[qk_pouch] -= amount
      if item.amount[qk_pouch] == 0:
          del item.amount[qk_pouch]
          del qk_pouch.contents[item.itemname]
-     return f'You eat the {item.itemname}.'
+     if amount == 1:
+        return f'You eat the {item.itemname}.'
+     else:
+         return f'You eat {amount} {item.pluralitemname}.'
  def go(self, time, direction):
      try:
          newroom = self.playloc.connects[direction]
@@ -275,30 +282,38 @@ class Player:
      except:
          return "You don't have that item. (Tip: The item needs to be in your pouch)"
      if where == "down":
+         amount = Util.getamount(qk_pouch, item, "put")
          try:
-             item.amount[self.playloc] += 1
+             item.amount[self.playloc] += amount
          except:
              self.playloc.items[itemname] = item
-             item.amount[self.playloc] = 1
-         item.amount[qk_pouch] -= 1
+             item.amount[self.playloc] = amount
+         item.amount[qk_pouch] -= amount
          if item.amount[qk_pouch] == 0:
             del qk_pouch.contents[item.itemname]
             del item.amount[qk_pouch]
-         return f'You put down 1 {item.itemname}.'
+         if amount == 1:
+            return f'You put down 1 {item.itemname}.'
+         else:
+             return f'You put down {amount} {item.pluralitemname}.'
      else:
          container = Util.getitemfromunknown(self, None, where)[0]
+         amount = Util.getamount(qk_pouch, item, "put")
          if container == None:
              return "Where do you want to put that?"
          try:
-             item.amount[container] += 1
+             item.amount[container] += amount
          except:
              container.contents[itemname] = item
-             item.amount[container] = 1
-         item.amount[qk_pouch] -= 1
+             item.amount[container] = amount
+         item.amount[qk_pouch] -= amount
          if item.amount[qk_pouch] == 0:
              del qk_pouch.contents[item.itemname]
              del item.amount[qk_pouch]
-         return f'You put 1 {item.itemname} {container.inoron} the {container.itemname}.'
+         if amount == 1:
+            return f'You put 1 {item.itemname} {container.inoron} the {container.itemname}.'
+         else:
+             return f'You put {amount} {item.pluralitemname} {container.inoron} the {container.itemname}.'
  def wear(self, qk_pouch, item):
      reaction = ""
      if item in self.onplayer.values():

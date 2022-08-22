@@ -360,3 +360,26 @@ class Util():
                 description += f' {location.inoron} this {location.itemname}'
         description += f'.'
         return description
+
+    @staticmethod
+    def getamount(container, item, action):
+        amount = input(f'How many {item.itemname}s do you want to {action}?')
+        match action:
+            case "take":
+                if amount <= item.amount[container]:
+                    return amount
+                else:
+                    print(f'There are less than {amount} {item.itemname}s here.')
+                    Util.getamount(container, item, action)
+            case "eat":
+                if amount <= item.amount[container]:
+                    return amount
+                else:
+                    print(f'You have less than {amount} {item.pluralitemname}.')
+                    Util.getamount(container, item, action)
+            case "put":
+                if amount <= item.amount[container]:
+                    return amount
+                else:
+                    print(f'There are less than {amount} {item.itemname}s here.')
+                    Util.getamount(container, item, action)

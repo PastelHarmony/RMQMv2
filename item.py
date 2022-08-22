@@ -1,8 +1,9 @@
 from util import Util
 
 class Item:
- def __init__(self, itemname, itemdesc, type, canTake, canPush, isRegenerative, amount, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool):
+ def __init__(self, itemname, pluralitemname, itemdesc, type, canTake, canPush, isRegenerative, amount, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool):
      self.itemname = itemname
+     self.pluralitemname = pluralitemname
      self.itemdesc = itemdesc
      self.canTake = canTake
      self.canPush = canPush
