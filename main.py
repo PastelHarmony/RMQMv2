@@ -16,7 +16,8 @@ from event import Random
 # quests
 # events
 # random events
-# dates, seasons, holidays
+# dates, seasons, holidays, weather
+# regeneration and time-based regeneration (time = days = how many times slept)
 # npcs
 # fans (items)
 # food
@@ -27,6 +28,7 @@ from event import Random
 # cooking
 # crafting
 # put and take multiples of items
+# sleep
 # make talismans??
 # saving
 
