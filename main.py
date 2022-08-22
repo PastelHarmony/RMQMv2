@@ -10,27 +10,25 @@ from event import Story
 from event import Random
 
 # TODO
-# talk
-# give
-# quest
-# quests
-# events
-# random events
+# talk (dialogue trees)
+# give (^ also npcs)
+# quests (wip)
+# events (wip)
+# random events (wip)
 # dates, seasons, holidays, weather
 # regeneration and time-based regeneration (time = days = how many times slept)
-# npcs
+# npcs (wip)
 # fans (items)
-# food
-# drink
-# health, medicine
-# farming
-# animals
-# cooking
-# crafting
-# put and take multiples of items
-# sleep
-# make talismans??
-# saving
+# food (wip)
+# drink (wip)
+# disease & medicine (wip)
+# farming (ugghhhhh so long </3 fields, seeds, plow, water?? ^ time based regen)
+# animals (random events, time based regen. drop meat 0^0)
+# cooking (wip)
+# crafting (wip)
+# sleep (ez do this soon)
+# make talismans?? (hard)
+# saving (how.)
 
 player = Player()
 
