@@ -47,10 +47,11 @@ class Player:
      # chance to dodge attack = (dexterity/500)
      # social score = charisma + answer + status
      # xp points = base points * (1 + intelligence/100)
-     self.stats = {"max health":100, "hit points":100, "strength":0, "cultivation":0, "physical defense":0, "magical defense":0, "dexterity":0, "charisma":0, "intelligence":0}
+     self.stats = {"max health":100, "health":100, "strength":0, "cultivation":0, "physical defense":0, "spiritual defense":0, "fire resistance":0, "poison resistance":0, "dexterity":0, "charisma":0, "intelligence":0}
      self.skills = {}
      self.afflictions = []
      self.incombat = False
+     self.spawnpoint = None
  def getitem(self, qk_pouch, ex):
      if ex in qk_pouch.contents:
          item = qk_pouch.contents[ex]
@@ -117,36 +118,42 @@ class Player:
              self.weapons[swordname] = zhanmadao
              self.onplayer[zhanrobe.itemname] = zhanrobe
              self.robe = zhanrobe
+             # self.spawnpoint = zhan_clinic_room1
          case "Huangling Sheng":
              self.sectcolors = "golden"
              self.sectsym = "koi"
              self.weapons[swordname] = hudiedao
              self.onplayer[shengrobe.itemname] = shengrobe
              self.robe = shengrobe
+             # self.spawnpoint = sheng_clinic_room1
          case "Antian Yi":
              self.sectcolors = "sapphire"
              self.sectsym = "star"
              self.weapons[swordname] = taijijian
              self.onplayer[yirobe.itemname] = yirobe
              self.robe = yirobe
+             # self.spawnpoint = yi_clinic_room1
          case "Jingnong Yong":
              self.sectcolors = "viridian"
              self.sectsym = "willow"
              self.weapons[swordname] = dadao
              self.onplayer[yongrobe.itemname] = yongrobe
              self.robe = yongrobe
+             # self.spawnpoint = yong_clinic_room1
          case "Liangzi Min":
              self.sectcolors = "lilac"
              self.sectsym = "rose"
              self.weapons[swordname] = wodao
              self.onplayer[minrobe.itemname] = minrobe
              self.robe = minrobe
+             # self.spawnpoint = min_clinic_room1
          case "Qiaoxue Wu":
              self.sectcolors = "onyx"
              self.sectsym = "raven"
              self.weapons[swordname] = hooksword
              self.onplayer[wurobe.itemname] = wurobe
              self.robe = wurobe
+             # self.spawnpoint = wu_clinic_room1
          case other:
              self.setsect(input("Please select a valid sect. ").title(), swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe)
      self.robe.amount[self] = 1
@@ -255,6 +262,10 @@ class Player:
  def go(self, time, direction):
      try:
          newroom = self.playloc.connects[direction]
+         for creature in self.playloc.npcs.values():
+             creature.stats["health"] = creature.stats["max health"]
+             if creature.isPassive == True:
+                 creature.isHostile = False
          return [newroom.getdescription(time), newroom]
      except:
          return ["That area hasn't been developed yet!", self.playloc]
@@ -500,12 +511,11 @@ class Player:
 
  def attack(self, creature, weapon):
      msg = ""
-     # creature status (frozen, burning, confused, etc)
-     #
      # creature dodge chance
      # if creature dodge: return f'The {creature.name} dodged and took no damage.'
-     # else:
-     # match weapon.type
+     match weapon.type:
+         case "sword":
+             self.skills["sword"] += 10 * (1 + self.stats["intelligence"]/100)
      # add weapon skill xp
      # msg = f'You got '
      physdmg = weapon.bluntdmg*self.stats["strength"] + weapon.precdmg*self.stats["dexterity"] - creature.stats["physical defense"]
@@ -516,16 +526,19 @@ class Player:
      creature.stats["health"] -= dmg
      msg += f' You attacked the {creature.name} with your {weapon.itemname} and dealt {dmg} damage.'
      if creature.stats["health"] <=0:
-        return self.kill(creature, msg)
-     msg += f' It has {creature.stats["health"]} hit points left.'
+        msg += f' {self.kill(creature)}'
+     else:
+         msg += f' It has {creature.stats["health"]} hit points left.'
+     return msg
 
- def kill(self, creature, msg):
+ def kill(self, creature):
      self.incombat = False
+
      loot = []
      # for item in creature.drops:
      #      chance of getting item
      #      add or not add item to loot
-     killmsg = f'{msg} You slayed the {creature.name}.'
+     killmsg = f'You slayed the {creature.name}.'
      if loot != []:
          killmsg += f' It dropped{Util.getlistdescription(loot, self.playloc)}.'
      else:
@@ -533,3 +546,9 @@ class Player:
      self.skills["combat"] += creature.killxp
      killmsg += f' You got {creature.killxp} combat exp.'
      return killmsg
+
+ def die(self):
+     msg = ""
+     self.playloc = self.spawnpoint
+     msg += "You fainted!"
+     msg += f'\n{self.playloc.getdescription()}'

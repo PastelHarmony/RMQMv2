@@ -149,10 +149,14 @@ class Util():
                     creature = player.playloc.npcs[arr[0]]
                     try:
                         weapon = player.weapons[arr[1]]
+                        creature.isHostile = True
+                        player.inCombat = True
                         print(player.attack(creature, weapon))
                     except:
                         try:
                             weapon = player.instruments[arr[1]]
+                            creature.isHostile = True
+                            player.inCombat = True
                             print(player.attack(creature, weapon))
                         except:
                             print("What are you trying to attack the creature with?")
@@ -162,16 +166,29 @@ class Util():
                 print(f'What are you trying to attack the creature with?')
         else:
             print("What are you trying to do?")
-        Util.updateframe()
+        Util.updateframe(player)
         Util.runact(player, qk_pouch, input(""), time)
 
     @staticmethod
-    def updateframe():
+    def updateframe(player):
         # random event chance
-        # if hostile enemies, player.incombat = True
-        # if player.incombat = True:
-        #
+        # debuff effects (bleeding, poison, disease, etc)
+        enemies = Util.getenemies(player)
+        if enemies != []:
+            player.incombat = True
+            for creature in enemies:
+                creature.attack(player)
+        else:
+            player.incombat = False
         return
+
+    @staticmethod
+    def getenemies(player):
+        enemies = []
+        for creature in player.playloc.npcs.values():
+            if creature.isHostile == True:
+                enemies.append(creature)
+        return enemies
 
     @staticmethod
     def rename(player, thing):
