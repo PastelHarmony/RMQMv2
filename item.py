@@ -1,21 +1,28 @@
 from util import Util
 
 class Item:
- def __init__(self, itemname, itemdesc, type, canTake, canPush, isRegenerative, isContainer, contents, isLocked, inoron, amount):
+ def __init__(self, itemname, itemdesc, type, canTake, canPush, isRegenerative, amount, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool):
      self.itemname = itemname
      self.itemdesc = itemdesc
      self.canTake = canTake
      self.canPush = canPush
      self.isRegenerative = isRegenerative
+     self.amount = amount
      self.isContainer = isContainer
      self.contents = contents
      self.type = type
      self.isLocked = isLocked
      self.inoron = inoron
-     self.amount = amount
+     self.isLiquid = isLiquid
+     self.isFood = isFood
+     self.restores = restores
+     self.isIngredient = isIngredient
+     self.isCrafter = isCrafter
+     self.isTool = isTool
+
  def examineitem(self, player, qk_pouch, location):
      description = self.getitemdescription(player)
-     if self.type == "container":
+     if self.isContainer == True:
          description = self.getcontainerdescription(player)
      description += Util.numberofitems(player, qk_pouch, self, location)
      return description

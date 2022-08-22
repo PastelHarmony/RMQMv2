@@ -47,7 +47,10 @@ class Player:
      # chance to dodge attack = (dexterity/500)
      # social score = charisma + answer + status
      # xp points = base points * (1 + intelligence/100)
-     self.stats = {"max health":100, "hp":100, "strength":0, "cultiavation":0, "defense":0, "dexterity":0, "charisma":0, "intelligence":0}
+     self.stats = {"max health":100, "hit points":100, "strength":0, "cultivation":0, "physical defense":0, "magical defense":0, "dexterity":0, "charisma":0, "intelligence":0}
+     self.skills = {}
+     self.afflictions = []
+     self.incombat = False
  def getitem(self, qk_pouch, ex):
      if ex in qk_pouch.contents:
          item = qk_pouch.contents[ex]
@@ -161,12 +164,15 @@ class Player:
          if item.canTake == False:
              return "You can't take that!"
          else:
-             qk_pouch.contents[item.itemname] = item
-             if item.isRegenerative == False:
-                 item.amount[container] = item.amount[container] - 1
-                 if item.amount[container] == 0:
-                    del item.amount[container]
-                    del container.items[item.itemname]
+             if item.isLiquid == True:
+                 return "You can't take that, it's liquid. First put it in a container."
+             else:
+                 qk_pouch.contents[item.itemname] = item
+                 if item.isRegenerative == False:
+                     item.amount[container] = item.amount[container] - 1
+                     if item.amount[container] == 0:
+                        del item.amount[container]
+                        del container.items[item.itemname]
      try:
          item.amount[qk_pouch] = item.amount[qk_pouch] + 1
      except:
@@ -437,21 +443,84 @@ class Player:
          reaction = "What are you trying to take off?"
      return reaction
 
+ def push(self, item):
+    try:
+        if item.canPush == False:
+            return f'You try to push the {item.itemname} but it doesn\'t budge.'
+        match item.itemname and self.playloc.loc and self.playloc.subloc:
+            case "window" | "Laolu Inn" | "Your Room":
+                return "hi"
+            case other:
+                return f'You push the {item.itemname} around. It doesn\'t do much.'
+    except:
+        return "What are you trying to push?"
+
+ def useitem(self, itema, itemb):
+    if itema.isCrafter == True and isinstance(itemb, str):
+       return self.craft(itema)
+    if itemb == "":
+        return "What do you want to use this item with?"
+    if isinstance(itema, str) or isinstance(itemb, str):
+        return "You don't have that item."
+    if itema.isTool == True:
+        return self.usetool(itema, itemb)
+    elif itemb.isTool == True:
+        return self.usetool(itemb, itema)
+    match itema.itemname and itemb.itemname:
+        case "apple" | "pear":
+            return "hi"
+    return "Those items don't do anything together."
+
+ def usetool(self, tool, item):
+     match tool.type:
+         case "axe":
+             return f'{item} go chop chop make wood'
+         case "knife":
+             return f'{item}'
+         case "pickaxe":
+             return
+         case "writer":
+             return "do you wanna draw or write"
+         case other:
+             return "Those items don't do anything together."
+ def craft(self, crafter):
+     match crafter.type:
+         case "forge":
+             return self.forge(crafter)
+         case "cooker":
+             return self.cook(crafter)
+         case other:
+             return f'The items in the {crafter.itemname} do not do anything together.'
+
+ def forge(self, forge):
+     return
+
+ def cook(self, cooker):
+     return
+
  def attack(self, creature, weapon):
-     dmg = 0
+     msg = ""
      # creature status (frozen, burning, confused, etc)
+     #
      # creature dodge chance
      # if creature dodge: return f'The {creature.name} dodged and took no damage.'
-     # weapon base dmg
-     # find weapon type
-     # dmg = basedmg*self.stats["strength" and/or "dexterity" and/or "cultivation"] - creature.stats["defense"]
-     # if dmg<0: dmg = 0
-     # creature.stats["health"] -= dmg
-     # if creature.stats["health"] <=0:
-     #      return player.kill(creature, f'You attacked the {creature.name} with your {weapon.itemname} and dealt {dmg} damage.')
-     return f'You attacked the {creature.name} with your {weapon.itemname} and dealt {dmg} damage. It has {creature.stats["health"]} hit points left.'
+     # else:
+     # match weapon.type
+     # add weapon skill xp
+     # msg = f'You got '
+     physdmg = weapon.bluntdmg*self.stats["strength"] + weapon.precdmg*self.stats["dexterity"] - creature.stats["physical defense"]
+     if physdmg <0: physdmg = 0
+     magicdmg = weapon.spiritdmg["cultivation"] - creature.stats["spiritual defense"]
+     if magicdmg<0: magicdmg = 0
+     dmg = physdmg+magicdmg
+     creature.stats["health"] -= dmg
+     msg += f' You attacked the {creature.name} with your {weapon.itemname} and dealt {dmg} damage.'
+     if creature.stats["health"] <=0:
+        return self.kill(creature, msg)
+     msg += f' It has {creature.stats["health"]} hit points left.'
 
  def kill(self, creature, msg):
+     self.incombat = False
      loot = []
      # for item in creature.drops:
      #      chance of getting item
@@ -461,4 +530,6 @@ class Player:
          killmsg += f' It dropped{Util.getlistdescription(loot, self.playloc)}.'
      else:
          killmsg += f' It dropped nothing.'
+     self.skills["combat"] += creature.killxp
+     killmsg += f' You got {creature.killxp} combat exp.'
      return killmsg

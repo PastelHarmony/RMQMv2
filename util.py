@@ -71,7 +71,7 @@ class Util():
                 b = ""
             itema = Util.getitemfromfree(player, qk_pouch, a)[1]
             itemb = Util.getitemfromfree(player, qk_pouch, b)[1]
-            print(Util.useitem(player, itema, itemb))
+            print(player.useitem(itema, itemb))
         elif "go" == action[:2]:
             arr = player.go(time, action[3:])
             print(arr[0])
@@ -131,7 +131,7 @@ class Util():
                         print("Where are you trying to put that?")
         elif "push" == action[:4]:
             item = Util.getitemfromunknown(player, None, action[5:])[0]
-            print(Util.push(player, item))
+            print(player.push(item))
         elif "wear" == action[:4]:
             item = Util.getitemfromunknown(player, None, action[5:])[0]
             print(player.wear(qk_pouch, item))
@@ -168,7 +168,9 @@ class Util():
     @staticmethod
     def updateframe():
         # random event chance
-        # turn if in combat
+        # if hostile enemies, player.incombat = True
+        # if player.incombat = True:
+        #
         return
 
     @staticmethod
@@ -287,7 +289,7 @@ class Util():
             if thing.itemname == itemname:
                 item = thing
                 return [item, container]
-            elif thing.type == "container":
+            elif thing.isContainer == True:
                 arr = Util.getitemfromcontainer(player, thing, itemname)
                 if arr != [None, None]:
                     item = arr[0]
@@ -296,7 +298,7 @@ class Util():
             if thing.itemname == itemname:
                 item = thing
                 return [item, container]
-            elif thing.type == "container":
+            elif thing.isContainer == True:
                 arr = Util.getitemfromcontainer(player, thing, itemname)
                 if arr != [None, None]:
                     item = arr[0]
@@ -309,7 +311,7 @@ class Util():
             if thing.itemname == itemname:
                 item = thing
                 return [item, container]
-            elif thing.type == "container":
+            elif thing.isContainer == True:
                 Util.getitemfromcontainer(player, thing, itemname)
         return [None, None]
 
@@ -341,25 +343,3 @@ class Util():
                 description += f' {location.inoron} this {location.itemname}'
         description += f'.'
         return description
-
-    @staticmethod
-    def useitem(player, itema, itemb):
-        if isinstance(itema, str or None) or isinstance(itemb, str or None):
-            return "You don't have that item."
-        match itema.itemname and itemb.itemname:
-            case "apple" | "pear":
-                return "hi"
-        return "Those items don't do anything together."
-
-    @staticmethod
-    def push(player, item):
-        try:
-            if item.canPush == False:
-                return f'You try to push the {item.itemname} but it doesn\'t budge.'
-            match item.itemname and player.playloc.loc and player.playloc.subloc:
-                case "window" | "Laolu Inn" | "Your Room":
-                    return "hi"
-                case other:
-                    return f'You push the {item.itemname} around. It doesn\'t do much.'
-        except:
-            return "What are you trying to push?"
