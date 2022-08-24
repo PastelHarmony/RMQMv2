@@ -48,7 +48,8 @@ class Player:
      # social score = charisma + answer + status
      # xp points = base points * (1 + intelligence/100)
      self.stats = {"max health":100, "health":100, "strength":0, "cultivation":0, "physical defense":0, "spiritual defense":0, "fire resistance":0, "poison resistance":0, "dexterity":0, "charisma":0, "intelligence":0}
-     self.skills = {}
+     # skill:(xp, level)
+     self.skills = {"bladework":(0, 0), "archery":(0, 0), "spears":(0, 0), "battleaxe":(0, 0), "clubbing":(0, 0), "unarmed combat":(0, 0), "talismans":(0, 0), "healing":(0, 0), "botany":(0, 0), "fishing":(0, 0), "cooking":(0, 0), "":(0, 0), "logging":(0, 0), "mining":(0, 0), "forging":(0, 0), "communication":(0, 0)}
      self.afflictions = []
      self.incombat = False
      self.spawnpoint = None
@@ -499,10 +500,87 @@ class Player:
         return self.usetool(itema, itemb)
     elif itemb.isTool == True:
         return self.usetool(itemb, itema)
+    if itema.type == "talisman":
+        try:
+            isCreature = itemb.drops
+            return self.usetalismanoncreature(itema, itemb)
+        except:
+            try:
+                isItem = itemb.canTake
+                return self.usetalismanonobject(itema, itemb)
+            except:
+                return "You cannot use a talisman on that."
+    elif itemb.type == "talisman":
+        try:
+            isCreature = itema.drops
+            return self.usetalismanoncreature(itemb, itema)
+        except:
+            try:
+                isItem = itema.canTake
+                return self.usetalismanonobject(itemb, itema)
+            except:
+                return "You cannot use a talisman on that."
     match itema.itemname and itemb.itemname:
         case "apple" | "pear":
             return "hi"
     return "Those items don't do anything together."
+
+ def usetalismanoncreature(self, talisman, creature):
+     match talisman.itemname:
+         case "freezing talisman":
+             if "frozen" in creature.afflictions:
+                 return f'This {creature.name} is already frozen.'
+             elif "wet" in creature.afflictions or creature.isLiquid == True:
+                 self.skills["talismans"] += 10 * (1 + self.stats["intelligence"] / 100)
+                 # remove "wet"
+                 creature.afflictions.append("frozen")
+                 return f'You froze the {creature.name}.'
+             elif "burning" in creature.afflictions:
+                 self.skills["talismans"] += 10 * (1 + self.stats["intelligence"] / 100)
+                 # remove "burning"
+                 return f'The cold put out the fire on the {creature.name}.'
+             else:
+                 return f'You use the freezing talisman, but the {creature.name} shakes it off.'
+         case "water talisman":
+             if "wet" in creature.afflictions or creature.isLiquid == True:
+                 return f'The {creature.name} is already wet.'
+             elif "wet" not in creature.afflictions and creature.isLiquid == False:
+                self.skills["talismans"] += 10 * (1 + self.stats["intelligence"]/100)
+                creature.afflictions.append("wet")
+                if "burning" in creature.afflictions:
+                    # remove "burning"
+                    return f'The water put out the fire on the {creature.name}.'
+                return f'You splashed water on the {creature.name}.'
+         case "burning talisman":
+             if "burning" in creature.afflictions:
+                 return f'This {creature.name} is already on fire.'
+             elif creature.isLiquid == True:
+                 self.skills["talismans"] += 10 * (1 + self.stats["intelligence"] / 100)
+                 tempmsg = f'You vaporized the {creature.name}, dealing {creature.stats["health"] * .1} points of damage.'
+                 creature.stats["health"] = creature.stats["health"] * .9
+                 return tempmsg
+             elif "wet" in creature.afflictions:
+                 self.skills["talismans"] += 10 * (1 + self.stats["intelligence"] / 100)
+                 return f'The fire vaporized the water off of the {creature.name}.'
+             elif "frozen" in creature.afflictions:
+                 self.skills["talismans"] += 10 * (1 + self.stats["intelligence"] / 100)
+                 # remove "frozen
+                 tempmsg = f'You melted the {creature.name}, dealing {creature.stats["health"] * .1} points of damage.'
+                 creature.stats["health"] = creature.stats["health"] * .9
+                 return tempmsg
+         case other:
+             return
+
+ def usetalismanonobject(self, talisman, object):
+     match talisman.itemname:
+         case "freezing talisman":
+             return
+         case "water talisman":
+             return
+         case "burning talisman":
+             return
+         case other:
+             return
 
  def usetool(self, tool, item):
      match tool.type:
@@ -533,20 +611,40 @@ class Player:
 
  def attack(self, creature, weapon):
      msg = ""
-     # creature dodge chance
-     # if creature dodge: return f'The {creature.name} dodged and took no damage.'
-     match weapon.type:
-         case "sword":
-             self.skills["sword"] += 10 * (1 + self.stats["intelligence"]/100)
-     # add weapon skill xp
-     # msg = f'You got '
-     physdmg = weapon.bluntdmg*self.stats["strength"] + weapon.precdmg*self.stats["dexterity"] - creature.stats["physical defense"]
-     if physdmg <0: physdmg = 0
-     magicdmg = weapon.spiritdmg["cultivation"] - creature.stats["spiritual defense"]
-     if magicdmg<0: magicdmg = 0
-     dmg = physdmg+magicdmg
-     creature.stats["health"] -= dmg
-     msg += f' You attacked the {creature.name} with your {weapon.itemname} and dealt {dmg} damage.'
+     dodge = Util.chance(creature.stats["dodge"])
+     if dodge == True:
+         return f'The {creature.name} dodged and took no damage.'
+     if weapon == "self":
+         creature.stats["health"] -= self.stats["strength"] + (self.skills["unarmed combat"] * 10)
+         msg = f'You hit the {creature.name} and dealt {self.stats["strength"]} damage.'
+     else:
+         match weapon.type:
+             case "sword":
+                 self.skills["bladework"] += 10 * (1 + self.stats["intelligence"]/100)
+                 dmg = self.skills["unarmed combat"] * 10
+             case "bow":
+                 self.skills["archery"] += 10 * (1 + self.stats["intelligence"] / 100)
+                 dmg = self.skills["archery"] * 10
+             case "spear":
+                self.skills["spears"] += 10 * (1 + self.stats["intelligence"] / 100)
+                dmg = self.skills["spears"] * 10
+             case "club":
+                 self.skills["clubbing"] += 10 * (1 + self.stats["intelligence"] / 100)
+                 dmg = self.skills["clubbing"] * 10
+             case "battleaxe":
+                 self.skills["battleaxe"] += 10 * (1 + self.stats["intelligence"] / 100)
+             case other:
+                 print("There is a bug. Weapon type not found.")
+                 dmg = 0
+         # add weapon skill xp
+         # msg = f'You got '
+         physdmg = weapon.bluntdmg*self.stats["strength"] + weapon.precdmg*self.stats["dexterity"] - creature.stats["physical defense"]
+         if physdmg <0: physdmg = 0
+         magicdmg = weapon.spiritdmg["cultivation"] - creature.stats["spiritual defense"]
+         if magicdmg<0: magicdmg = 0
+         dmg += physdmg+magicdmg
+         creature.stats["health"] -= dmg
+         msg += f' You attacked the {creature.name} with your {weapon.itemname} and dealt {dmg} damage.'
      if creature.stats["health"] <=0:
         msg += f' {self.kill(creature)}'
      else:
@@ -554,23 +652,27 @@ class Player:
      return msg
 
  def kill(self, creature):
-     self.incombat = False
-
      loot = []
-     # for item in creature.drops:
-     #      chance of getting item
-     #      add or not add item to loot
+     for item in creature.drops.keys():
+         loot.append(item)
+         if item not in self.playloc.items.values():
+             self.playloc.items.values[item.itemname] = item
+             item.amount[self.playloc] = creature.drops[item]
+         else:
+             item.amount[self.playloc] += creature.drops[item]
      killmsg = f'You slayed the {creature.name}.'
      if loot != []:
          killmsg += f' It dropped{Util.getlistdescription(loot, self.playloc)}.'
      else:
          killmsg += f' It dropped nothing.'
-     self.skills["combat"] += creature.killxp
-     killmsg += f' You got {creature.killxp} combat exp.'
      return killmsg
 
  def die(self):
-     msg = ""
+     self.incombat = False
+     for creature in self.playloc.npcs:
+         if creature.isPassive == True:
+             creature.isHostile = False
      self.playloc = self.spawnpoint
-     msg += "You fainted!"
+     msg = "You fainted!"
      msg += f'\n{self.playloc.getdescription()}'
+     return msg

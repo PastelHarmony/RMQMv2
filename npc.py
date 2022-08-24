@@ -5,7 +5,7 @@ class NPC():
         self.name = name
         
 class Creature(NPC):
-    def __init__(self, name, drops, killxp, isPassive, isHostile, stats, afflictions, special):
+    def __init__(self, name, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid):
         super().__init__(name)
         self.drops = drops
         self.killxp = killxp
@@ -13,6 +13,7 @@ class Creature(NPC):
         self.isHostile = isHostile
         self.stats = stats
         self.afflictions = afflictions
+        isLiquid = isLiquid
     def attack(self, player):
         msg = ""
         if "frozen" in self.afflictions:

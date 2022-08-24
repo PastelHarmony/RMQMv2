@@ -27,14 +27,16 @@ from event import Random
 # cooking (wip)
 # crafting (wip)
 # sleep (ez do this soon)
+# fishing
 # make talismans?? (hard)
 # saving (how.)
+# shopping
 
 player = Player()
 
 qk_pouch = Item("Qiankun pouch", "Qiankun pouches",
                 f'A small {player.sectcolors} bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate {player.sectsym}s. It can hold an unlimited amount of objects.',
-                "container", True, True, False, {}, True, {}, False, "in", False, False, None, False, False, False)
+                "container", True, True, False, {}, True, {}, False, "in", False, False, None, False, False, False, False, False, False)
 
 # rooms: loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs
 
@@ -47,7 +49,7 @@ start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly thro
 qk_pouch.amount[start_room] = 1
 player.playloc = start_room
 
-# items: itemname, pluralitemname, itemdesc, type, uses, canTake, canPush, isRegenerative, amnt, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool
+# items: itemname, pluralitemname, itemdesc, type, uses, canTake, canPush, isRegenerative, amnt, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool, isWet, isFrozen, isFlammable
 
 zhan_disc_robe = Item("Zhan disciple robe", "Zhan disciple robes",
                       "Standard Zhan disciple robes made of a thick, crimson fabric weighted at the edges to give a foreboding silhouette. Between each layer is a thin sheet of plated metal etched with flames.",
@@ -81,7 +83,7 @@ min_wodao = Item("Min wodao", None, f'A long, slender wodao in a lilac sheath.',
                  None, None, False, False, None, False, False, False)
 
 
-# npcs:
+# npcs: name, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid
 
 # quests:
 

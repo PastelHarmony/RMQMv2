@@ -1,3 +1,6 @@
+from random import randint
+
+
 class Util():
     @staticmethod
     def getlistdescription(listofitems, location):
@@ -410,3 +413,11 @@ class Util():
                 else:
                     print(f'There are less than {amount} {item.itemname}s here.')
                     Util.getamount(container, item, action)
+
+    @staticmethod
+    def chance(stat):
+        chance = randint(1, 100)
+        if chance <= stat:
+            return True
+        else:
+            return False

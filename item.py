@@ -1,7 +1,7 @@
 from util import Util
 
 class Item:
- def __init__(self, itemname, pluralitemname, itemdesc, type, canTake, canPush, isRegenerative, amount, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool):
+ def __init__(self, itemname, pluralitemname, itemdesc, type, canTake, canPush, isRegenerative, amount, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool, isWet, isFrozen ,isFlammable):
      self.itemname = itemname
      self.pluralitemname = pluralitemname
      self.itemdesc = itemdesc
@@ -20,6 +20,9 @@ class Item:
      self.isIngredient = isIngredient
      self.isCrafter = isCrafter
      self.isTool = isTool
+     self.isWet = isWet
+     self.isFrozen = isFrozen
+     self.isFlammable = isFlammable
 
  def examineitem(self, player, location):
      description = self.getitemdescription(player)
