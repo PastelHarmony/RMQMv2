@@ -115,10 +115,10 @@ class Util():
                     print("What are you trying to eat?")
             elif "put" == action[:3]:
                 if "down" in action[4:]:
-                    arr = action[4:].split(" ")
-                    itemname = arr[0]
+                    arr = action.split(" down ")
+                    itemname = arr[1]
                     containername = "down"
-                    print(player.put(player.inv, itemname, containername))
+                    print(player.put(itemname, containername))
                 else:
                     try:
                         arr = action[4:].split(" in ")

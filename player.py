@@ -39,21 +39,14 @@ class Player:
      self.bracelets = {}
      self.sectstatus = "disciple"
      self.quests = {}
-     # phys dmg = base dmg * (1 + strength/200) * (1 + dexterity/200)
-     # blunt dmg = base dmg * (1 + strength/100)
-     # precision dmg = base dmg * (1 + dexterity/100)
-     # magic dmg = base dmg * (1 + cultivation/100)
-     # taken dmg = base dmg - defense
-     # chance to dodge attack = (dexterity/500)
      # social score = charisma + answer + status
-     # xp points = base points * (1 + intelligence/100)
      self.stats = {"max health":100, "health":100, "strength":0, "cultivation":0, "physical defense":0, "spiritual defense":0, "fire resistance":0, "poison resistance":0, "dexterity":0, "charisma":0, "intelligence":0}
-     # skill:(xp, level)
      self.skills = {"bladework":(0, 0), "archery":(0, 0), "spears":(0, 0), "battleaxe":(0, 0), "clubbing":(0, 0), "unarmed combat":(0, 0), "talismans":(0, 0), "healing":(0, 0), "botany":(0, 0), "fishing":(0, 0), "cooking":(0, 0), "logging":(0, 0), "mining":(0, 0), "forging":(0, 0), "communication":(0, 0)}
      self.afflictions = []
      self.incombat = False
      self.spawnpoint = None
      self.inv = None
+     self.money = 140
  def getitem(self, ex):
      if ex in self.inv.contents:
          item = self.inv.contents[ex]
@@ -196,6 +189,7 @@ class Player:
      if self.title != None:
          description += f'Your title is {self.title}. '
      description += f'Your pronouns are {self.pronouns["subjprn"]}/{self.pronouns["objprn"]}. You are in the {self.sect} sect. '
+     description += f'You have {self.money} yuan. '
      if self.hasPouch == False:
          description += "You are not carrying anything. "
      else:
@@ -280,6 +274,20 @@ class Player:
      except:
          return ["That area hasn't been developed yet!", self.playloc]
  def put(self, itemname, where):
+     if itemname == "Qiankun pouch":
+         if where == "down":
+             self.inv.amount[self.playloc] += 1
+             self.playloc.items[self.inv.itemname] = self.inv
+             self.inv = None
+             self.hasPouch = False
+             return f'You put the Qiankun pouch down.'
+         else:
+             container = Util.getitemfromunknown(self, None, where)[0]
+             self.inv.amount[container] += 1
+             container.contents[self.inv.itemname] = self.inv
+             self.inv = None
+             self.hasPouch = False
+             return f'You put the Qiankun pouch {container.inoron} the {container.itemname}.'
      try:
          item = self.inv.contents[itemname]
      except:
