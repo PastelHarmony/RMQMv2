@@ -36,7 +36,7 @@ class Room:
                  description += f'.{Util.basiclistdescription(people)} are also here'
          elif people != []:
              description += f'are{Util.basiclistdescription(people)}'
-         description += "."
+     description += "."
      return description
  def get_timedesc(self, time):
      if time == "day":
