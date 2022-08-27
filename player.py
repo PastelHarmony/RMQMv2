@@ -49,7 +49,7 @@ class Player:
      # xp points = base points * (1 + intelligence/100)
      self.stats = {"max health":100, "health":100, "strength":0, "cultivation":0, "physical defense":0, "spiritual defense":0, "fire resistance":0, "poison resistance":0, "dexterity":0, "charisma":0, "intelligence":0}
      # skill:(xp, level)
-     self.skills = {"bladework":(0, 0), "archery":(0, 0), "spears":(0, 0), "battleaxe":(0, 0), "clubbing":(0, 0), "unarmed combat":(0, 0), "talismans":(0, 0), "healing":(0, 0), "botany":(0, 0), "fishing":(0, 0), "cooking":(0, 0), "":(0, 0), "logging":(0, 0), "mining":(0, 0), "forging":(0, 0), "communication":(0, 0)}
+     self.skills = {"bladework":(0, 0), "archery":(0, 0), "spears":(0, 0), "battleaxe":(0, 0), "clubbing":(0, 0), "unarmed combat":(0, 0), "talismans":(0, 0), "healing":(0, 0), "botany":(0, 0), "fishing":(0, 0), "cooking":(0, 0), "logging":(0, 0), "mining":(0, 0), "forging":(0, 0), "communication":(0, 0)}
      self.afflictions = []
      self.incombat = False
      self.spawnpoint = None
@@ -615,29 +615,29 @@ class Player:
      if dodge == True:
          return f'The {creature.name} dodged and took no damage.'
      if weapon == "self":
-         creature.stats["health"] -= self.stats["strength"] + (self.skills["unarmed combat"] * 10)
+         dmg = self.stats["strength"] + (self.skills["unarmed combat"] * 10)
+         creature.stats["health"] -= dmg
          msg = f'You hit the {creature.name} and dealt {self.stats["strength"]} damage.'
      else:
          match weapon.type:
              case "sword":
-                 self.skills["bladework"] += 10 * (1 + self.stats["intelligence"]/100)
-                 dmg = self.skills["unarmed combat"] * 10
+                 self.skills["bladework"][1] += 10 * (1 + self.stats["intelligence"]/100)
+                 dmg = self.skills["bladework"][0] * 15 + self.skills["battleaxe"][0]**2
              case "bow":
-                 self.skills["archery"] += 10 * (1 + self.stats["intelligence"] / 100)
-                 dmg = self.skills["archery"] * 10
+                 self.skills["archery"][1] += 10 * (1 + self.stats["intelligence"] / 100)
+                 dmg = self.skills["archery"][0] * 15 + self.skills["battleaxe"][0]**2
              case "spear":
-                self.skills["spears"] += 10 * (1 + self.stats["intelligence"] / 100)
-                dmg = self.skills["spears"] * 10
+                self.skills["spears"][1] += 10 * (1 + self.stats["intelligence"] / 100)
+                dmg = self.skills["spears"][0] * 15 + self.skills["battleaxe"][0]**2
              case "club":
-                 self.skills["clubbing"] += 10 * (1 + self.stats["intelligence"] / 100)
-                 dmg = self.skills["clubbing"] * 10
+                 self.skills["clubbing"][1] += 10 * (1 + self.stats["intelligence"] / 100)
+                 dmg = self.skills["clubbing"][0] * 15 + self.skills["battleaxe"][0]**2
              case "battleaxe":
-                 self.skills["battleaxe"] += 10 * (1 + self.stats["intelligence"] / 100)
+                 self.skills["battleaxe"][1] += 10 * (1 + self.stats["intelligence"] / 100)
+                 dmg = self.skills["battleaxe"][0] * 15 + self.skills["battleaxe"][0]**2
              case other:
                  print("There is a bug. Weapon type not found.")
                  dmg = 0
-         # add weapon skill xp
-         # msg = f'You got '
          physdmg = weapon.bluntdmg*self.stats["strength"] + weapon.precdmg*self.stats["dexterity"] - creature.stats["physical defense"]
          if physdmg <0: physdmg = 0
          magicdmg = weapon.spiritdmg["cultivation"] - creature.stats["spiritual defense"]

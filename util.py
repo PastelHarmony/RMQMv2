@@ -186,7 +186,54 @@ class Util():
                 creature.attack(player)
         else:
             player.incombat = False
+        Util.skilllvl(player)
         return
+
+    @staticmethod
+    def skilllvl(player):
+        msg = ""
+        for skill in player.skills.keys():
+            lvlup = False
+            currentlvl = player.skills[skill][0]
+            exp = player.skills[skill][1]
+            if currentlvl != 10:
+                for i in range(currentlvl, 10):
+                    match i:
+                        case 0:
+                            if exp >= 100:
+                                lvlup = True
+                        case 1:
+                            if exp >= 250:
+                                lvlup = True
+                        case 2:
+                            if exp >= 500:
+                                lvlup = True
+                        case 3:
+                            if exp >= 750:
+                                lvlup = True
+                        case 4:
+                            if exp >= 1000:
+                                lvlup = True
+                        case 5:
+                            if exp >= 1500:
+                                lvlup = True
+                        case 6:
+                            if exp >= 2000:
+                                lvlup = True
+                        case 7:
+                            if exp >= 2500:
+                                lvlup = True
+                        case 8:
+                            if exp >= 3000:
+                                lvlup = True
+                        case 9:
+                            if exp >= 4000:
+                                lvlup = True
+                    i += 1
+            if lvlup == True:
+                currentlvl += 1
+                msg += f'\nYour {skill} skill leveled up! It is now at level {currentlvl}.'
+        return msg
 
     @staticmethod
     def getenemies(player):
