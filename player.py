@@ -256,7 +256,12 @@ class Player:
          else:
              description += f's are'
          description += f'{Util.getlistdescription(list(self.necklaces.values()), self.playloc)}.'
-     description += f' You have {self.stats["health"]} hit points.'
+     description += f'\nSTATS:'
+     for stat in self.stats.keys():
+         description += f'\n{stat.title()}: {self.stats[stat]}'
+     description += f'\nSKILLS:'
+     for skill in self.skills.keys():
+         description += f'\n{skill.title()}: Level {self.skills[skill][0]} - {self.skills[skill][1]} xp'
      return description
  def eat(self, item):
      amount = Util.getamount(self.inv, item, "eat")
