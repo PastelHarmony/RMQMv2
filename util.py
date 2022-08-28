@@ -175,6 +175,17 @@ class Util():
                     print(player.sleep())
                 else:
                     print("You cannot rest right now.")
+            elif "plant" == action[:5]:
+                plantname = action[6:]
+                try:
+                    plant = player.inv[plantname]
+                    if plant.canPlant == True:
+                        print(player.plant(plant))
+                    else:
+                        print("You can't plant that.")
+                except:
+                    print("What are you trying to plant?")
+                return
             else:
                 print("What are you trying to do?")
         except:
@@ -193,8 +204,20 @@ class Util():
                 print(creature.attack(player))
         else:
             player.incombat = False
+        Util.growplants(player)
         print(Util.skilllvl(player))
         return
+
+    @staticmethod
+    def growplants(player):
+        for field in player.plantedfields.keys():
+            player.plantedfields[field][1] -= 1
+            if player.plantedfields[field][1] == 0:
+                plant = player.plantedfields[field][0]
+                field.contents[plant.itemname] = plant.harvestamnt
+                plant.amount[field] = plant.harvestamnt
+                field.itemdesc -= f' There are {plant.itemname} seeds growing in this field.'
+
 
     @staticmethod
     def checkdate(player):

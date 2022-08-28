@@ -36,7 +36,7 @@ player = Player()
 
 qk_pouch = Item("Qiankun pouch", "Qiankun pouches",
                 f'A small {player.sectcolors} bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate {player.sectsym}s. It can hold an unlimited amount of objects.',
-                "container", True, True, False, {}, True, {}, False, "in", False, False, None, False, False, False, False, False, False)
+                "container", True, True, False, {}, True, {}, False, "in", False, False, None, False, False, False, False, False, False, False, False, False)
 
 # rooms: loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs
 
@@ -49,38 +49,38 @@ start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly thro
 qk_pouch.amount[start_room] = 1
 player.playloc = start_room
 
-# items: itemname, pluralitemname, itemdesc, type, uses, canTake, canPush, isRegenerative, amnt, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool, isWet, isFrozen, isFlammable
+# items: itemname, pluralitemname, itemdesc, type, uses, canTake, canPush, isRegenerative, amnt, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool, isWet, isFrozen, isFlammable, canPlant, growtime, harvestamnt
 
 zhan_disc_robe = Item("Zhan disciple robe", "Zhan disciple robes",
                       "Standard Zhan disciple robes made of a thick, crimson fabric weighted at the edges to give a foreboding silhouette. Between each layer is a thin sheet of plated metal etched with flames.",
-                      "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                      "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 sheng_disc_robe = Item("Sheng disciple robe", "Sheng disciple robes",
                        "Standard Sheng disciple robes made of a shimmering, intricately embroidered golden cloth. They are covered in the unmistakable swirling koi of the Sheng sect.",
-                       "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                       "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 yong_disc_robe = Item("Yong disciple robe", "Yong disciple robes",
                       "Standard Yong disciple robes made of simple, firm cloth doused in deep viridian. They are comfortable and easy to move in, suited for long hours of training.",
-                      "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                      "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 yi_disc_robe = Item("Yi disciple robe", "Yi disciple robes",
                     "Standard Yi disciple robes made of rich sapphire blue. They are high-necked and long-sleeved, with stiff under-layers and draping outer-layers that obscure the figure.",
-                    "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                    "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 min_disc_robe = Item("Min disciple robe", "Min disciple robes",
                      "Standard Min disciple robes made of a light, flowing fabric in rippling hues of lilac. With many stacked thin layers meant to imitate a rose, they create an ethereal figure.",
-                     "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                     "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 wu_disc_robe = Item("Wu disciple robe", "Wu disciple robes",
                     "Standard Wu disciple robes in dark onyx, flexible and sleek. They are covered in a sturdy yet lightweight hooded cloak.",
-                    "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                    "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 yong_dadao = Item("Yong dadao", None, f'A large, hefty dadao in a dark green sheath.', "sword", True, True, False, {}, False,
-                  None, None, None, False, False, None, False, False, False, False, False, False)
+                  None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 zhan_zhanmadao = Item("Zhan zhanmadao", None, f'A powerful two-handed zhanmadao in a crimson sheath.', "sword", True, True,
-                      False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                      False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 sheng_hudiedao = Item("Sheng hudiedao", None, f'A thin, wide hudiedao in a golden sheath.', "sword", True, True, False, {}, False,
-                      None, None, None, False, False, None, False, False, False, False, False, False)
+                      None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 yi_taijijian = Item("Yi taijijian", None, f'A sharp, lightweight spiritual taijijian in a sapphire sheath.', "sword", True,
-                    True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                    True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 wu_hooksword = Item("Wu hook swords", None, f'Two deadly, versatile hook swords in onyx sheaths.', "sword", True, True, False,
-                    {}, False, None, None, None, False, False, None, False, False, False, False, False, False)
+                    {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 min_wodao = Item("Min wodao", None, f'A long, slender wodao in a lilac sheath.', "sword", True, True, False, {}, False, None,
-                 None, None, False, False, None, False, False, False, False, False, False)
+                 None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 
 
 # npcs: name, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid

@@ -713,3 +713,15 @@ class Player:
      msg = "You fainted!"
      msg += f'\n{self.playloc.getdescription(self)}'
      return msg
+
+ def plant(self, plant):
+     for item in self.playloc.hiddenitems.values():
+         if item.type == "field":
+             item.itemdesc += f' There are {plant.itemname} seeds growing in this field.'
+             self.plantedfields[item] = (plant, plant.growtime)
+             plant.amount[self.inv] -= 1
+             if plant.amount[self.inv] == 0:
+                 del plant.amount[self.inv]
+                 del self.inv.contents[plant.itemname]
+             return f'You planted a {plant.itemname} in this field. Come back in {plant.growtime} days to get {plant.harvestamnt} {plant.pluralitemname}.'
+     return "There are no fields in this room for you to plant that in."
