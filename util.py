@@ -188,11 +188,20 @@ class Util():
         if enemies != []:
             player.incombat = True
             for creature in enemies:
-                creature.attack(player)
+                print(creature.attack(player))
         else:
             player.incombat = False
-        Util.skilllvl(player)
+        print(Util.skilllvl(player))
         return
+
+    @staticmethod
+    def checkdate(player):
+        msg = ""
+        day = player.days%365
+        if day == 0:
+            player.age += 1
+            msg = 'Happy birthday! The world of RMQM thanks you sincerely for your loyal devotion.'
+        return msg
 
     @staticmethod
     def skilllvl(player):

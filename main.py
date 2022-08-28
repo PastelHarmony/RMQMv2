@@ -26,7 +26,6 @@ from event import Random
 # animals (random events, time based regen. drop meat 0^0)
 # cooking (wip)
 # crafting (wip)
-# sleep (ez do this soon)
 # fishing
 # make talismans?? (hard)
 # saving (how.)

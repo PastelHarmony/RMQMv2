@@ -192,7 +192,7 @@ class Player:
      description = f'Your given name is {self.surname} {self.birthname}. Your courtesy name is {self.surname} {self.courtname}. You are {self.age} years old.'
      if self.title != None:
          description += f'Your title is {self.title}. '
-     description += f'Your pronouns are {self.pronouns["subjprn"]}/{self.pronouns["objprn"]}. You are in the {self.sect} sect. '
+     description += f'Your pronouns are {self.pronouns["subjprn"]}/{self.pronouns["objprn"]}. You are a {self.sectstatus} in the {self.sect} sect. '
      description += f'You have {self.money} yuan. '
      if self.hasPouch == False:
          description += "You are not carrying anything. "
@@ -256,6 +256,7 @@ class Player:
          else:
              description += f's are'
          description += f'{Util.getlistdescription(list(self.necklaces.values()), self.playloc)}.'
+     description += f' You have {self.stats["health"]} hit points.'
      return description
  def eat(self, item):
      amount = Util.getamount(self.inv, item, "eat")
@@ -543,10 +544,15 @@ class Player:
     return "Those items don't do anything together."
 
  def sleep(self):
+    self.stats["health"] = self.stats["max health"]
     self.time = "day"
-    return f'You slept.\nIt is now {self.time}. You have been in Rolling Mists, Quiet Moons for {self.days} days.'
+    self.days += 1
+    msg = f'You slept.\nIt is now {self.time}. You have been in Rolling Mists, Quiet Moons for {self.days} days.'
+    msg += Util.checkdate(self)
+    return msg
 
  def rest(self):
+     self.stats["health"] = self.stats["max health"]
      self.time = "night"
      return f'You rested until it was {self.time}.'
 
