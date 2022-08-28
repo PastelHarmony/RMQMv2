@@ -171,6 +171,8 @@ class Util():
             elif action == "rest":
                 if player.time == "day" and player.incombat == False:
                     print(player.rest())
+                elif player.time == "night" and player.incombat == False:
+                    print(player.sleep())
                 else:
                     print("You cannot rest right now.")
             else:

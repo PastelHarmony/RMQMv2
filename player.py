@@ -51,6 +51,7 @@ class Player:
      self.days = 0
      self.time = "day"
      self.weather = "clear"
+     self.plantedfields = {}
  def getitem(self, ex):
      if ex in self.inv.contents:
          item = self.inv.contents[ex]
