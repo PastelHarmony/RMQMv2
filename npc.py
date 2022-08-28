@@ -43,6 +43,8 @@ class Creature(NPC):
         msg += f' The {self.name} attacked you and dealt {dmg} damage.'
         if player.stats["health"] <= 0: player.stats["health"] = 0
         msg += f' You have {player.stats["health"]} hit points left.'
+        if player.stats["health"] == 0: return player.die()
+        return msg
 
 class Character(NPC):
     def __init__(self, player, surname, birthname, courtname, npcsect, npctitle, npcnick, npcbirthnick, npczhiji, yourhonorific, callsyoucourt, callsyoubirth):
@@ -73,3 +75,21 @@ class Character(NPC):
         self.intimacy = 0
         self.intlvls = {}
         self.consideration = {}
+    def getintimacy(self, amnt):
+        pre = self.intimacy
+        self.intpoints += amnt
+        if self.intpoints <= self.intlvls[-2]:
+            self.intimacy = -2
+            self.npccalled = self.npcnamelist[-2]
+            self.callsyou = self.yournamelist[-2]
+        elif self.intpoints <= self.intlvls[-1]:
+            self.intimacy = -1
+            self.npccalled = self.npcnamelist[-1]
+            self.callsyou = self.yournamelist[-1]
+        for i in range(0, 10):
+            if self.intpoints >= self.intlvls[i]:
+                self.intimacy = i
+                self.npccalled = self.npcnamelist[i]
+                self.callsyou = self.yournamelist[i]
+        if pre != self.intimacy:
+            return f'{self.name} now considers you their {self.consideration[self.intimacy]}!'

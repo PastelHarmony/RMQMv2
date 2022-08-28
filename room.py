@@ -17,8 +17,8 @@ class Room:
      self.npcs = npcs
      self.hidden_npcs = hiddennpcs
      self.connects = {}
- def getdescription(self, time):
-     description = f'{self.loc} > {self.subloc} \n\n {self.get_timedesc(time)} {self.gendesc}'
+ def getdescription(self, player):
+     description = f'{self.loc} > {self.subloc} \n\n {self.getweatherdesc(player)} {self.gendesc}'
      if len(self.items) != 0:
          description += f'\nIn this room, you can see{Util.getlistdescription(list(self.items.values()), self)}'
      if self.npcs != {}:
@@ -38,15 +38,27 @@ class Room:
              description += f'are{Util.basiclistdescription(people)}'
      description += "."
      return description
- def get_timedesc(self, time):
-     if time == "day":
-         return self.daydesc
-     elif time == "night":
-         return self.nightdesc
-     elif time == "rain":
-         return self.raindesc
-     elif time == "snow":
-         return self.snowdesc
+ def getweatherdesc(self, player):
+     if player.time == "day":
+         match player.weather:
+             case "clear":
+                 return self.daydesc
+             case "rain":
+                 return self.raindesc
+             case "snow":
+                 return self.snowdesc
+             case other:
+                 return "Time bug"
+     elif player.time == "night":
+         match player.weather:
+             case "clear":
+                 return self.nightdesc
+             case "rain":
+                 return self.raindesc
+             case "snow":
+                 return self.snowdesc
+             case other:
+                 return "Time bug"
  def getitem(self, ex):
      if ex in self.items:
          item = self.items[ex]

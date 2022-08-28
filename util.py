@@ -41,7 +41,7 @@ class Util():
         return list
 
     @staticmethod
-    def runact(player, qk_pouch, action, time):
+    def runact(player, qk_pouch, action):
         try:
             if "examine" == action[:7]:
                 itemname = action[8:]
@@ -55,7 +55,7 @@ class Util():
                     containername = arr[1]
                 else:
                     containername = None
-                print(Util.examine(player, itemname, containername, time))
+                print(Util.examine(player, itemname, containername))
             elif "use" == action[:3]:
                 item = action[4:]
                 if " with " in item:
@@ -77,11 +77,11 @@ class Util():
                 itemb = Util.getitemfromfree(player, b)[1]
                 print(player.useitem(itema, itemb))
             elif "go" == action[:2]:
-                arr = player.go(time, action[3:])
+                arr = player.go(action[3:])
                 print(arr[0])
                 player.playloc = arr[1]
             elif "inv" == action:
-                description = Util.examine(player, "self", None, time)
+                description = Util.examine(player, "self", None)
                 newdesc = description.split(". ")
                 print(". ".join(newdesc[4:]))
             elif "take" == action[:4]:
@@ -168,12 +168,17 @@ class Util():
                         print("What are you trying to attack?")
                 except:
                     print(f'What are you trying to attack the creature with?')
+            elif action == "rest":
+                if player.time == "day" and player.incombat == False:
+                    print(player.rest())
+                else:
+                    print("You cannot rest right now.")
             else:
                 print("What are you trying to do?")
         except:
             print("Could not perform that action. (Hint: You must be carrying your Qiankun pouch for most actions.) ")
         Util.updateframe(player)
-        Util.runact(player, qk_pouch, input(""), time)
+        Util.runact(player, qk_pouch, input(""))
 
     @staticmethod
     def updateframe(player):
@@ -314,13 +319,13 @@ class Util():
             item = player.onplayer[itemname]
         return [container, item]
     @staticmethod
-    def examine(player, itemname, containername, time):
+    def examine(player, itemname, containername):
         if containername != None:
             container = Util.getitemfromunknown(player, None, containername)[0]
             item = Util.getitemfromunknown(player, container, itemname)[0]
         else:
             if itemname == "room":
-                return player.playloc.getdescription(time)
+                return player.playloc.getdescription(player)
             if itemname == "self" or itemname == "me":
                 try:
                     return player.getdescription()

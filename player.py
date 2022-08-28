@@ -47,6 +47,10 @@ class Player:
      self.spawnpoint = None
      self.inv = None
      self.money = 140
+     self.age = 21
+     self.days = 0
+     self.time = "day"
+     self.weather = "clear"
  def getitem(self, ex):
      if ex in self.inv.contents:
          item = self.inv.contents[ex]
@@ -185,7 +189,7 @@ class Player:
          item.amount[self.inv] = 1
      return f'You take the {item.itemname}.'
  def getdescription(self):
-     description = f'Your given name is {self.surname} {self.birthname}. Your courtesy name is {self.surname} {self.courtname}. '
+     description = f'Your given name is {self.surname} {self.birthname}. Your courtesy name is {self.surname} {self.courtname}. You are {self.age} years old.'
      if self.title != None:
          description += f'Your title is {self.title}. '
      description += f'Your pronouns are {self.pronouns["subjprn"]}/{self.pronouns["objprn"]}. You are in the {self.sect} sect. '
@@ -263,14 +267,14 @@ class Player:
         return f'You eat the {item.itemname}.'
      else:
          return f'You eat {amount} {item.pluralitemname}.'
- def go(self, time, direction):
+ def go(self, direction):
      try:
          newroom = self.playloc.connects[direction]
          for creature in self.playloc.npcs.values():
              creature.stats["health"] = creature.stats["max health"]
              if creature.isPassive == True:
                  creature.isHostile = False
-         return [newroom.getdescription(time), newroom]
+         return [newroom.getdescription(self), newroom]
      except:
          return ["That area hasn't been developed yet!", self.playloc]
  def put(self, itemname, where):
@@ -500,6 +504,11 @@ class Player:
  def useitem(self, itema, itemb):
     if itema.isCrafter == True and isinstance(itemb, str):
        return self.craft(itema)
+    if itema.type == "bed":
+        if self.time == "night" and self.incombat == False:
+            return self.sleep()
+        else:
+            return "You can't sleep right now."
     if itemb == "":
         return "What do you want to use this item with?"
     if isinstance(itema, str) or isinstance(itemb, str):
@@ -532,6 +541,14 @@ class Player:
         case "apple" | "pear":
             return "hi"
     return "Those items don't do anything together."
+
+ def sleep(self):
+    self.time = "day"
+    return f'You slept.\nIt is now {self.time}. You have been in Rolling Mists, Quiet Moons for {self.days} days.'
+
+ def rest(self):
+     self.time = "night"
+     return f'You rested until it was {self.time}.'
 
  def usetalismanoncreature(self, talisman, creature):
      match talisman.itemname:
@@ -682,5 +699,5 @@ class Player:
              creature.isHostile = False
      self.playloc = self.spawnpoint
      msg = "You fainted!"
-     msg += f'\n{self.playloc.getdescription()}'
+     msg += f'\n{self.playloc.getdescription(self)}'
      return msg

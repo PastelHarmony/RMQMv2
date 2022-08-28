@@ -9,7 +9,7 @@ from event import Quest
 from event import Story
 from event import Random
 
-# TODO
+# TODO (in no particular order):
 # talk (dialogue trees)
 # give (^ also npcs)
 # quests (wip)
@@ -31,6 +31,7 @@ from event import Random
 # make talismans?? (hard)
 # saving (how.)
 # shopping
+# cheats
 
 player = Player()
 
@@ -115,12 +116,10 @@ def setinfo(player):
                    wu_hooksword,
                    zhan_disc_robe, sheng_disc_robe, yi_disc_robe, yong_disc_robe, min_disc_robe, wu_disc_robe)
     print(
-     f'Your name is {player.surname} {player.birthname}, courtesy {player.courtname}. Your pronouns are {player.pronouns["subjprn"]}/{player.pronouns["objprn"]}/{player.pronouns["posadj"]}/{player.pronouns["posprn"]}/{player.pronouns["refprn"]}. Your elders may refer to you as {player.meiordi}{player.meiordi}. Your juniors may refer to you as {player.jieorge}{player.jieorge}. You are a twenty-one-year-old cultivator from the {player.sect} sect, and your sword is named {swordname}. You are in your room at Laolu inn in Baiping village on a mission to exorcise a vengeful ghost.')
+     f'Your name is {player.surname} {player.birthname}, courtesy {player.courtname}. Your pronouns are {player.pronouns["subjprn"]}/{player.pronouns["objprn"]}/{player.pronouns["posadj"]}/{player.pronouns["posprn"]}/{player.pronouns["refprn"]}. Your elders may refer to you as {player.meiordi}{player.meiordi}. Your juniors may refer to you as {player.jieorge}{player.jieorge}. You are a {player.age} year old cultivator from the {player.sect} sect, and your sword is named {swordname}. You are in your room at Laolu inn in Baiping village on a mission to exorcise a vengeful ghost.')
     del swordname
     if input("Is this correct? (Yes/No): ") == "No":
      setinfo(player)
-
-time = "day"
 
 print("""
 Welcome to Rolling Mists, Quiet Moons.
@@ -129,8 +128,8 @@ Rolling Mists, Quiet Moons is a text-based adventure developed in Python by Abig
 ready = input("Please press enter when you are ready to begin the game. ")
 if ready == "":
     print("Loading...")
-print(start_room.getdescription(time))
+print(start_room.getdescription(player))
 print(
     "Your eyes flicker open slowly. You take a moment to gather yourself. As you blink away the haze of sleep, your memories come trickling back to you.")
 setinfo(player)
-Util.runact(player, qk_pouch, input(""), time)
+Util.runact(player, qk_pouch, input(""))
