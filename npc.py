@@ -47,34 +47,32 @@ class Creature(NPC):
         return msg
 
 class Character(NPC):
-    def __init__(self, player, surname, birthname, courtname, npcsect, npctitle, npcnick, npcbirthnick, npczhiji, yourhonorific, callsyoucourt, callsyoubirth):
+    def __init__(self, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship):
         super().__init__(f'{surname} {courtname}')
         self.npcsurname = surname
         self.npcbirthname = birthname
         self.npccourtname = courtname
-        self.npcsect = npcsect
         self.npctitle = npctitle
-        self.npcnick = npcnick
-        self.npcbirthnick = npcbirthnick
-        self.npczhiji = npczhiji
-        self.yourhonorific = yourhonorific
-        self.callsyoucourt = callsyoucourt
-        self.callsyoubirth = callsyoubirth
-        self.npcnamelist = {-2: self.npctitle, -1: self.npctitle, 0: self.npctitle, 1: self.name,
-                            2: self.npccourtname, 3: self.npcnick, 4: self.npcnick, 5: self.npcsurname + self.npcbirthname,
-                            6: self.npcsurname + self.npcbirthname, 7: self.npcbirthnick, 8: self.npcbirthnick, 9: self.npczhiji,
-                            10: self.npczhiji}
-        self.yournamelist = {-2: player.courtname, -1: player.courtname, 0: player.courtname,
-                             1: player.sectorcourt(self), 2: player.sectorcourt(self), 3: self.callsyoucourt,
-                             4: self.callsyoucourt, 5: (player.surname + " " + player.birthname),
-                             6: (player.surname + " " + player.birthname), 7: self.callsyoubirth, 8: self.callsyoubirth,
-                             9: "A-" + player.birthname}
+        self.npcsect = npcsect
+        self.npcnamelist = npcnamelist # {-2: self.npctitle, -1: self.npctitle, 0: self.npctitle, 1: self.name,
+                            # 2: self.npccourtname, 3: self.sectorcourt(player), 4: self.sectorcourt(player), 5: self.npcsurname + self.npcbirthname,
+                            # 6: self.npcsurname + self.npcbirthname, 7: self.npcbirthnick, 8: self.npcbirthnick, 9: self.npczhiji,
+                            # 10: self.npczhiji}
+        self.yournamelist = yournamelist # {-2: player.courtname, -1: player.courtname, 0: player.courtname,
+                             # 1: player.sectorcourt(self), 2: player.sectorcourt(self), 3: self.callsyoucourt,
+                             # 4: self.callsyoucourt, 5: (player.surname + " " + player.birthname),
+                             # 6: (player.surname + " " + player.birthname), 7: self.callsyoubirth, 8: self.callsyoubirth,
+                             # 9: "A-" + player.birthname}
         self.npccalled = self.npcnamelist[0]
         self.callsyou = self.yournamelist[0]
         self.intpoints = 0
         self.intimacy = 0
-        self.intlvls = {}
-        self.consideration = {}
+        self.intlvls = intlvls
+        self.relationship = relationship
+    def sectorcourt(self, player):
+        if player.sect == self.npcsect:
+            return self.npcsectnick
+        else: return self.npccourtnick
     def getintimacy(self, amnt):
         pre = self.intimacy
         self.intpoints += amnt
@@ -92,4 +90,4 @@ class Character(NPC):
                 self.npccalled = self.npcnamelist[i]
                 self.callsyou = self.yournamelist[i]
         if pre != self.intimacy:
-            return f'{self.name} now considers you their {self.consideration[self.intimacy]}!'
+            return f'{self.name} now considers you their {self.relationship[self.intimacy]}!'

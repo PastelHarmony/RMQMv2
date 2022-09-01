@@ -109,7 +109,7 @@ class Player:
      else:
          self.sethonorific(input("Please input a valid number (1 or 2). "))
 
- def setsect(self, sect, swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe):
+ def setsect(self, sect, swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe, zhanjiuke):
      self.sect = sect
      match sect:
          case "Yandi Zhan":
@@ -118,6 +118,12 @@ class Player:
              self.weapons[swordname] = zhanmadao
              self.onplayer[zhanrobe.itemname] = zhanrobe
              self.robe = zhanrobe
+             zhanjiuke.npcnamelist[3] = "Zhan-shixiong"
+             zhanjiuke.npcnamelist[4] = "Zhan-shixiong"
+             zhanjiuke.yournamelist[3] = f'{self.surname}-shi{self.meiordi}'
+             zhanjiuke.yournamelist[4] = f'{self.surname}-shi{self.meiordi}'
+             zhanjiuke.intpoints = 50
+             zhanjiuke.intimacy = 1
              # self.spawnpoint = zhan_clinic_room1
          case "Huangling Sheng":
              self.sectcolors = "golden"
@@ -725,3 +731,6 @@ class Player:
                  del self.inv.contents[plant.itemname]
              return f'You planted a {plant.itemname} in this field. Come back in {plant.growtime} days to get {plant.harvestamnt} {plant.pluralitemname}.'
      return "There are no fields in this room for you to plant that in."
+
+ # add function for leveling up within sect
+ # - title: change bad intimacies from name to title

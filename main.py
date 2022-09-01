@@ -22,11 +22,9 @@ from event import Random
 # food (wip)
 # drink (wip)
 # disease & medicine (wip)
-# farming (ugghhhhh so long </3 fields, seeds, plow, water?? ^ time based regen)
 # animals (random events, time based regen. drop meat 0^0)
 # cooking (wip)
 # crafting (wip)
-# fishing
 # make talismans?? (hard)
 # saving (how.)
 # shopping
@@ -83,7 +81,13 @@ min_wodao = Item("Min wodao", None, f'A long, slender wodao in a lilac sheath.',
                  None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 
 
-# npcs: name, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid
+# creatures: name, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid
+
+# npcs: surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship
+zhanjiuke = Character("Zhan", "Mei", "Jiuke", "Kushao-jun", "Yandi Zhan", {-2:"Kushao-jun", -1:"Kushao-jun", 0:"Kushao-jun", 1:"Kushao-jun", 2:"Zhan-qianbei", 3:"Zhan-dage", 4:"Zhan-dage", 5:"Jiu-dage", 6:"Jiu-dage", 7:"Mei-gege", 8:"Mei-gege", 9:"A-Mei", 10:"A-Mei"},
+                      {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:player.courtname, 2:player.courtname, 3:f'{player.surname}-xiao{player.meiordi}', 4:f'{player.surname}-xiao{player.meiordi}', 5:f'{player.courtname1}-xiao{player.meiordi}', 6:f'{player.courtname1}-xiao{player.meiordi}', 7:f'{player.courtname1}-xiao{player.meiordi}', 8:f'{player.birthname}-xiao{player.meiordi}', 9:f'{player.birthname}-xiao{player.meiordi}', 10:f'A-{player.birthname}'},
+                      {-2:-50, -1:-25, 0:0, 1:50, 2:100, 3:150, 4:200, 5:300, 6:400, 7:500, 8:600, 9:750, 10:900},
+                      {-2:"Enemy", -1:"Annoyance", 0:"Stranger", 1:"Acquaintance", 2:"Associate", 3:"Colleague", 4:"Companion", 5:"Friend", 6:"Ally", 7:"Confidant", 8:"Dear", 9:"Beloved", 10:"Soulmate"})
 
 # quests:
 
@@ -111,9 +115,10 @@ def setinfo(player):
     Liangzi Min - The Min sect is a scholarly sect of intermediate size with rolling hills and sparkling lakes fed by the many bays below it. It is bordered by the Antian Yi on the north and the Yandi Zhang on the east.
     Qiaoxue Wu - The Wu sect is on the smaller side, but it is one of the oldest that still exists. It has magnificent cave systems and shadowy forests. It is also heavily shrouded in mystery; Despite this, it is known for producing great works of art. It is located to the south of the Jingnong Yong and to the east of the Yandi Zhan.
     (Please reply with full sect name): """).title()
+    zhanjiuke.yournamelist = {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:player.courtname, 2:player.courtname, 3:f'{player.surname}-xiao{player.meiordi}', 4:f'{player.surname}-xiao{player.meiordi}', 5:f'{player.courtname1}-xiao{player.meiordi}', 6:f'{player.courtname1}-xiao{player.meiordi}', 7:f'{player.courtname1}-xiao{player.meiordi}', 8:f'{player.birthname}-xiao{player.meiordi}', 9:f'{player.birthname}-xiao{player.meiordi}', 10:f'A-{player.birthname}'}
     player.setsect(playersect, swordname, zhan_zhanmadao, sheng_hudiedao, yi_taijijian, yong_dadao, min_wodao,
                    wu_hooksword,
-                   zhan_disc_robe, sheng_disc_robe, yi_disc_robe, yong_disc_robe, min_disc_robe, wu_disc_robe)
+                   zhan_disc_robe, sheng_disc_robe, yi_disc_robe, yong_disc_robe, min_disc_robe, wu_disc_robe, zhanjiuke)
     print(
      f'Your name is {player.surname} {player.birthname}, courtesy {player.courtname}. Your pronouns are {player.pronouns["subjprn"]}/{player.pronouns["objprn"]}/{player.pronouns["posadj"]}/{player.pronouns["posprn"]}/{player.pronouns["refprn"]}. Your elders may refer to you as {player.meiordi}{player.meiordi}. Your juniors may refer to you as {player.jieorge}{player.jieorge}. You are a {player.age} year old cultivator from the {player.sect} sect, and your sword is named {swordname}. You are in your room at Laolu inn in Baiping village on a mission to exorcise a vengeful ghost.')
     del swordname
