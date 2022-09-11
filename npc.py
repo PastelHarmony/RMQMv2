@@ -69,10 +69,6 @@ class Character(NPC):
         self.intimacy = 0
         self.intlvls = intlvls
         self.relationship = relationship
-    def sectorcourt(self, player):
-        if player.sect == self.npcsect:
-            return self.npcsectnick
-        else: return self.npccourtnick
     def getintimacy(self, amnt):
         pre = self.intimacy
         self.intpoints += amnt

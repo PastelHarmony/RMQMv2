@@ -84,10 +84,17 @@ min_wodao = Item("Min wodao", None, f'A long, slender wodao in a lilac sheath.',
 # creatures: name, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid
 
 # npcs: surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship
-zhanjiuke = Character("Zhan", "Mei", "Jiuke", "Kushao-jun", "Yandi Zhan", {-2:"Kushao-jun", -1:"Kushao-jun", 0:"Kushao-jun", 1:"Kushao-jun", 2:"Zhan-qianbei", 3:"Zhan-dage", 4:"Zhan-dage", 5:"Jiu-dage", 6:"Jiu-dage", 7:"Mei-gege", 8:"Mei-gege", 9:"A-Mei", 10:"A-Mei"},
+# dictionary copy-paste: -2:f'', -1:f'', 0:f'', 1:f'', 2:f'', 3:f'', 4:f'', 5:f'', 6:f'', 7:f'', 8:f'', 9:f'', 10:f''
+zhanjiuke = Character("Zhan", "Mei", "Jiuke", "Kushao-jun", "Yandi Zhan",
+                      {-2:"Kushao-jun", -1:"Kushao-jun", 0:"Kushao-jun", 1:"Kushao-jun", 2:"Zhan-qianbei", 3:"Zhan-dage", 4:"Zhan-dage", 5:"Jiu-dage", 6:"Jiu-dage", 7:"Mei-gege", 8:"Mei-gege", 9:"A-Mei", 10:"A-Mei"},
                       {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:player.courtname, 2:player.courtname, 3:f'{player.surname}-xiao{player.meiordi}', 4:f'{player.surname}-xiao{player.meiordi}', 5:f'{player.courtname1}-xiao{player.meiordi}', 6:f'{player.courtname1}-xiao{player.meiordi}', 7:f'{player.courtname1}-xiao{player.meiordi}', 8:f'{player.birthname}-xiao{player.meiordi}', 9:f'{player.birthname}-xiao{player.meiordi}', 10:f'A-{player.birthname}'},
                       {-2:-50, -1:-25, 0:0, 1:50, 2:100, 3:150, 4:200, 5:300, 6:400, 7:500, 8:600, 9:750, 10:900},
                       {-2:"Enemy", -1:"Annoyance", 0:"Stranger", 1:"Acquaintance", 2:"Associate", 3:"Colleague", 4:"Companion", 5:"Friend", 6:"Ally", 7:"Confidant", 8:"Dear", 9:"Beloved", 10:"Soulmate"})
+yongwenshi = Character("Yong", "Yan", "Wenshi", "Qinfen-jun", "Jingnong Yong",
+                       {-2:"Qinfen-jun", -1:"Qinfen-jun", 0:"Qinfen-jun", 1:"Yong-dajie", 2:"Yong-dajie", 3:"Wenshi-dajie", 4:"Wenshi-dajie", 5:"Wen-jiejie", 6:"Wen-jiejie", 7:"Yan-jie", 8:"Yan-jie", 9:"Yong Yan", 10:"A-Yan"},
+                       {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:f'{player.courtname}', 2:f'{player.courtname}', 3:f'{player.courtname1}-{player.meiordi}', 4:f'{player.courtname1}-{player.meiordi}', 5:f'{player.surname} {player.birthname}', 6:f'{player.surname} {player.birthname}', 7:f'Xiao-{player.birthname}', 8:f'Xiao-{player.birthname}', 9:f'A-{player.birthname}', 10:f'A-{player.birthname}'},
+                       {-2:-100, -1:-50, 0:0, 1:25, 2:50, 3:100, 4:150, 5:250, 6:350, 7:450, 8:550, 9:700, 10:800},
+                       {-2:"Enemy", -1:"Adversary", 0:"Stranger", 1:"Acquaintance", 2:"Colleague", 3:"Friend", 4:"Comrade", 5:"Ally", 6:"Confidant", 7:"Best Friend", 8:"Kindred Spirit", 9:"Lover", 10:"Soulmate"})
 
 # quests:
 
@@ -116,9 +123,10 @@ def setinfo(player):
     Qiaoxue Wu - The Wu sect is on the smaller side, but it is one of the oldest that still exists. It has magnificent cave systems and shadowy forests. It is also heavily shrouded in mystery; Despite this, it is known for producing great works of art. It is located to the south of the Jingnong Yong and to the east of the Yandi Zhan.
     (Please reply with full sect name): """).title()
     zhanjiuke.yournamelist = {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:player.courtname, 2:player.courtname, 3:f'{player.surname}-xiao{player.meiordi}', 4:f'{player.surname}-xiao{player.meiordi}', 5:f'{player.courtname1}-xiao{player.meiordi}', 6:f'{player.courtname1}-xiao{player.meiordi}', 7:f'{player.courtname1}-xiao{player.meiordi}', 8:f'{player.birthname}-xiao{player.meiordi}', 9:f'{player.birthname}-xiao{player.meiordi}', 10:f'A-{player.birthname}'}
+    yongwenshi.yournamelist = {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:f'{player.courtname}', 2:f'{player.courtname}', 3:f'{player.courtname1}-{player.meiordi}', 4:f'{player.courtname1}-{player.meiordi}', 5:f'{player.surname} {player.birthname}', 6:f'{player.surname} {player.birthname}', 7:f'Xiao-{player.birthname}', 8:f'Xiao-{player.birthname}', 9:f'A-{player.birthname}', 10:f'A-{player.birthname}'}
     player.setsect(playersect, swordname, zhan_zhanmadao, sheng_hudiedao, yi_taijijian, yong_dadao, min_wodao,
                    wu_hooksword,
-                   zhan_disc_robe, sheng_disc_robe, yi_disc_robe, yong_disc_robe, min_disc_robe, wu_disc_robe, zhanjiuke)
+                   zhan_disc_robe, sheng_disc_robe, yi_disc_robe, yong_disc_robe, min_disc_robe, wu_disc_robe, zhanjiuke, yongwenshi)
     print(
      f'Your name is {player.surname} {player.birthname}, courtesy {player.courtname}. Your pronouns are {player.pronouns["subjprn"]}/{player.pronouns["objprn"]}/{player.pronouns["posadj"]}/{player.pronouns["posprn"]}/{player.pronouns["refprn"]}. Your elders may refer to you as {player.meiordi}{player.meiordi}. Your juniors may refer to you as {player.jieorge}{player.jieorge}. You are a {player.age} year old cultivator from the {player.sect} sect, and your sword is named {swordname}. You are in your room at Laolu inn in Baiping village on a mission to exorcise a vengeful ghost.')
     del swordname
