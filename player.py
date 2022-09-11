@@ -288,12 +288,13 @@ class Player:
          return f'You eat {amount} {item.pluralitemname}.'
  def go(self, direction):
      try:
-         newroom = self.playloc.connects[direction]
-         for creature in self.playloc.npcs.values():
-             creature.stats["health"] = creature.stats["max health"]
-             if creature.isPassive == True:
-                 creature.isHostile = False
-         return [newroom.getdescription(self), newroom]
+         if self.playloc.connects[direction][1] == "active":
+             newroom = self.playloc.connects[direction][0]
+             for creature in self.playloc.npcs.values():
+                 creature.stats["health"] = creature.stats["max health"]
+                 if creature.isPassive == True:
+                     creature.isHostile = False
+             return [newroom.getdescription(self), newroom]
      except:
          return ["That area hasn't been developed yet!", self.playloc]
  def put(self, itemname, where):
@@ -514,7 +515,10 @@ class Player:
             return f'You try to push the {item.itemname} but it doesn\'t budge.'
         match item.itemname and self.playloc.loc and self.playloc.subloc:
             case "window" | "Laolu Inn" | "Your Room":
-                return "hi"
+                self.playloc.connects["north"][1] = "active"
+                self.playloc.hiddenitems["window"].itemdesc += " It is cracked slightly open, just wide enough to get through."
+                self.playloc.gendesc = "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. To your north is an open window which leads into the gardens. To your south is the door to the hallway."
+                return "You put both hands on the window and push gently. To your surprise, it comes open with a pop. You inspect the opening you've created and think it may be just wide enough for you to slip through."
             case other:
                 return f'You push the {item.itemname} around. It doesn\'t do much.'
     except:
@@ -701,6 +705,7 @@ class Player:
      return msg
 
  def kill(self, creature):
+     # get rid of creature
      loot = []
      for item in creature.drops.keys():
          loot.append(item)

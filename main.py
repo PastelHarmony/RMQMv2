@@ -36,16 +36,20 @@ qk_pouch = Item("Qiankun pouch", "Qiankun pouches",
                 f'A small {player.sectcolors} bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate {player.sectsym}s. It can hold an unlimited amount of objects.',
                 "container", True, True, False, {}, True, {}, False, "in", False, False, None, False, False, False, False, False, False, False, False, False)
 
-# rooms: loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs
+# rooms: loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs, connects
 
 start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.",
                   "Silver moonlight gently brushes along the walls.",
                   "The pattering of the rain echoes loudly through the dim room.",
                   "Snow twirls outside the window, blowing wildly in the wind.",
                   "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.",
-                  {qk_pouch.itemname: qk_pouch}, {}, {}, {})
+                  {qk_pouch.itemname: qk_pouch}, {}, {}, {}, {})
 qk_pouch.amount[start_room] = 1
 player.playloc = start_room
+ll_hall_north = Room("Laolu Inn", "North Hall", "Sunshine bathes the hall in bright rays.", "The hall is dark except for twinkling speckles of starlight.", "", "", "The walls are worn with old stains and scuffs. To the west and east are two rooms, while your own room is to the north. There is a rickety spiral staircase leading down. Across the staircase, to your south, is the south hall.", {}, {}, {}, {}, {"north":(start_room, "active")})
+start_room.connects["south"] = (ll_hall_north, "active")
+ll_gardens = Room("Laolu Inn", "Gardens", "Birds chirp on sprightly boughs that hang low over your head. Dappled sunlight shines through the bushy leaves.", "The sound of crickets fill the air, accompanied by the occasional owl's bold hoot.", "Rain pours down, pooling up in the soil. The scent of petrichor hangs rich in the air.", "Snow has piled up, fresh flakes bouncing off the tree branches and landing on the ground.", "The garden is a small plot of land with colorful flowers between cobbled paths.", {}, {}, {}, {}, {"south":(start_room, "inactive")})
+start_room.connects["north"] = (ll_gardens, "inactive")
 
 # items: itemname, pluralitemname, itemdesc, type, uses, canTake, canPush, isRegenerative, amnt, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool, isWet, isFrozen, isFlammable, canPlant, growtime, harvestamnt
 

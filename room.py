@@ -4,7 +4,7 @@ from npc import Creature
 from npc import Character
 
 class Room:
- def __init__(self, loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs):
+ def __init__(self, loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs, connects):
      self.loc = loc
      self.subloc = subloc
      self.daydesc = daydesc
@@ -16,11 +16,12 @@ class Room:
      self.hidden_items = hiddenitems
      self.npcs = npcs
      self.hidden_npcs = hiddennpcs
-     self.connects = {}
+     self.connects = connects
  def getdescription(self, player):
      description = f'{self.loc} > {self.subloc} \n\n {self.getweatherdesc(player)} {self.gendesc}'
      if len(self.items) != 0:
          description += f'\nIn this room, you can see{Util.getlistdescription(list(self.items.values()), self)}'
+         description += "."
      if self.npcs != {}:
          description += "\nIn this room "
          creatures = []
@@ -35,8 +36,8 @@ class Room:
              if people!= []:
                  description += f'.{Util.basiclistdescription(people)} are also here'
          elif people != []:
-             description += f'are{Util.basiclistdescription(people)}'
-     description += "."
+            description += f'are{Util.basiclistdescription(people)}'
+         description += "."
      return description
  def getweatherdesc(self, player):
      if player.time == "day":
