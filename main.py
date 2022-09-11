@@ -51,8 +51,9 @@ start_room.connects["south"] = (ll_hall_north, "active")
 ll_gardens = Room("Laolu Inn", "Gardens", "Birds chirp on sprightly boughs that hang low over your head. Dappled sunlight shines through the bushy leaves.", "The sound of crickets fill the air, accompanied by the occasional owl's bold hoot.", "Rain pours down, pooling up in the soil. The scent of petrichor hangs rich in the air.", "Snow has piled up, fresh flakes bouncing off the tree branches and landing on the ground.", "The garden is a small plot of land with colorful flowers between cobbled paths.", {}, {}, {}, {}, {"south":(start_room, "inactive")})
 start_room.connects["north"] = (ll_gardens, "inactive")
 
-# items: itemname, pluralitemname, itemdesc, type, uses, canTake, canPush, isRegenerative, amnt, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool, isWet, isFrozen, isFlammable, canPlant, growtime, harvestamnt
-
+# items: itemname, pluralitemname, itemdesc, type, canTake, canPush, isRegenerative, amnt, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool, isWet, isFrozen, isFlammable, canPlant, growtime, harvestamnt
+ll_yr_window = Item("window", "windows", "A small circular window covered in translucent rice paper. It looks a little loose.", "furniture", False, True, False, {start_room:1}, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False)
+start_room.hidden_items["window"] = ll_yr_window
 zhan_disc_robe = Item("Zhan disciple robe", "Zhan disciple robes",
                       "Standard Zhan disciple robes made of a thick, crimson fabric weighted at the edges to give a foreboding silhouette. Between each layer is a thin sheet of plated metal etched with flames.",
                       "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)

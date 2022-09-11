@@ -167,7 +167,7 @@ class Player:
              self.robe = wurobe
              # self.spawnpoint = wu_clinic_room1
          case other:
-             self.setsect(input("Please select a valid sect. ").title(), swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe)
+             self.setsect(input("Please select a valid sect. ").title(), swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe, zhanjiuke, yongwenshi)
      self.robe.amount[self] = 1
      self.weapons[swordname].amount[self] = 1
      self.weapons[swordname].itemname = swordname
@@ -289,7 +289,8 @@ class Player:
  def go(self, direction):
      try:
          if self.playloc.connects[direction][1] == "active":
-             newroom = self.playloc.connects[direction][0]
+             mylist = list(self.playloc.connects[direction])
+             newroom = mylist[0]
              for creature in self.playloc.npcs.values():
                  creature.stats["health"] = creature.stats["max health"]
                  if creature.isPassive == True:
@@ -509,19 +510,24 @@ class Player:
      return reaction
 
  def push(self, item):
-    try:
-        print(item)
+    # try:
         if item.canPush == False:
             return f'You try to push the {item.itemname} but it doesn\'t budge.'
-        match item.itemname and self.playloc.loc and self.playloc.subloc:
-            case "window" | "Laolu Inn" | "Your Room":
-                self.playloc.connects["north"][1] = "active"
-                self.playloc.hiddenitems["window"].itemdesc += " It is cracked slightly open, just wide enough to get through."
-                self.playloc.gendesc = "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. To your north is an open window which leads into the gardens. To your south is the door to the hallway."
+        match (item.itemname, self.playloc.loc, self.playloc.subloc):
+            case ("window", "Laolu Inn", "Your Room"):
+                mylist = list(self.playloc.connects["north"])
+                mylist[1] = "active"
+                mytuple = tuple(mylist)
+                self.playloc.connects["north"] = mytuple
+                newlist = list(mylist[0].connects["south"])
+                newlist[1] = "active"
+                newtuple = tuple(newlist)
+                mylist[0].connects["south"] = newtuple
+                self.playloc.hidden_items["window"].itemdesc = "A small circular window covered in translucent rice paper. It is cracked slightly open, just wide enough to get through."
                 return "You put both hands on the window and push gently. To your surprise, it comes open with a pop. You inspect the opening you've created and think it may be just wide enough for you to slip through."
             case other:
                 return f'You push the {item.itemname} around. It doesn\'t do much.'
-    except:
+    # except:
         return "What are you trying to push?"
 
  def useitem(self, itema, itemb):
