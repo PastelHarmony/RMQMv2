@@ -1,12 +1,13 @@
 from util import Util
 
 class NPC():
-    def __init__(self, name):
+    def __init__(self, name, desc):
         self.name = name
+        self.desc = desc
         
 class Creature(NPC):
-    def __init__(self, name, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid):
-        super().__init__(name)
+    def __init__(self, name, desc, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid):
+        super().__init__(name, desc)
         self.drops = drops
         self.killxp = killxp
         self.isPassive = isPassive
@@ -47,8 +48,8 @@ class Creature(NPC):
         return msg
 
 class Character(NPC):
-    def __init__(self, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship):
-        super().__init__(f'{surname} {courtname}')
+    def __init__(self, desc, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship):
+        super().__init__(f'{surname} {courtname}', desc)
         self.npcsurname = surname
         self.npcbirthname = birthname
         self.npccourtname = courtname
@@ -80,10 +81,10 @@ class Character(NPC):
             self.intimacy = -1
             self.npccalled = self.npcnamelist[-1]
             self.callsyou = self.yournamelist[-1]
-        for i in range(0, 10):
+        for i in range(-2, 10):
             if self.intpoints >= self.intlvls[i]:
                 self.intimacy = i
                 self.npccalled = self.npcnamelist[i]
                 self.callsyou = self.yournamelist[i]
         if pre != self.intimacy:
-            return f'{self.name} now considers you their {self.relationship[self.intimacy]}!'
+            return f'{self.name} now considers you their {self.relationship[self.intimacy]}! Your relationship level is {self.intimacy}. Get {self.intlvls[self.intimacy+1]-self.intpoints} more relationship xp to become {self.name}\'s {self.relationship[self.intimacy+1]}.'

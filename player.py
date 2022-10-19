@@ -202,7 +202,7 @@ class Player:
          item.amount[self.inv] = 1
      return f'You take the {item.itemname}.'
  def getdescription(self):
-     description = f'Your given name is {self.surname} {self.birthname}. Your courtesy name is {self.surname} {self.courtname}. You are {self.age} years old.'
+     description = f'Your given name is {self.surname} {self.birthname}. Your courtesy name is {self.surname} {self.courtname}. You are {self.age} years old. '
      if self.title != None:
          description += f'Your title is {self.title}. '
      description += f'Your pronouns are {self.pronouns["subjprn"]}/{self.pronouns["objprn"]}. You are a {self.sectstatus} in the {self.sect} sect. '
@@ -366,18 +366,21 @@ class Player:
                  del self.onplayer[self.robe.itemname]
                  self.onplayer[item.itemname] = item
                  self.robe = item
+                 item.amount[self] = 1
              case "coat":
                  reaction = f'You shrug off your {self.coat} and put on your {item.itemname}.'
                  self.inv.contents[self.coat.itemname] = self.coat
                  del self.onplayer[self.coat.itemname]
                  self.onplayer[item.itemname] = item
                  self.coat = item
+                 item.amount[self] = 1
              case "veil":
                  reaction = f'You untie your {self.veil} and drape your {item.itemname} over your face.'
                  self.inv.contents[self.veil.itemname] = self.veil
                  del self.onplayer[self.veil.itemname]
                  self.onplayer[item.itemname] = item
                  self.veil = item
+                 item.amount[self] = 1
              case "armor":
                  reaction = f'You unattach your {self.armor} and heft on your {item.itemname}.'
                  self.inv.contents[self.armor.itemname] = self.armor
@@ -390,6 +393,7 @@ class Player:
                  del self.onplayer[self.vambraces.itemname]
                  self.onplayer[item.itemname] = item
                  self.vambraces = item
+                 item.amount[self] = 1
              case "earring":
                  if self.earslots == 0:
                      reaction = "You don't have enough open piercings to wear that."
@@ -398,6 +402,7 @@ class Player:
                     self.earslots -= 1
                     self.onplayer[item.itemname] = item
                     self.earrings[item.itemname] = item
+                    item.amount[self] = 1
              case "ring":
                  if self.ringslots == 0:
                      reaction = "You don't have enough space to wear that."
@@ -406,6 +411,7 @@ class Player:
                      self.ringslots -= 1
                      self.onplayer[item.itemname] = item
                      self.rings[item.itemname] = item
+                     item.amount[self] = 1
              case "bracelet":
                  if self.wristslots == 0:
                      reaction = "You don't have enough space to wear that."
@@ -414,6 +420,7 @@ class Player:
                      self.wristslots -= 1
                      self.onplayer[item.itemname] = item
                      self.bracelets[item.itemname] = item
+                     item.amount[self] = 1
              case "hairpin":
                  if self.hairslots == 0:
                      reaction = "You don't have enough space to wear that."
@@ -422,6 +429,7 @@ class Player:
                      self.hairslots -= 1
                      self.onplayer[item.itemname] = item
                      self.hairpins[item.itemname] = item
+                     item.amount[self] = 1
              case "weapon":
                  if self.weaponslots == 0:
                      reaction = "You don't have enough space to wear that."
@@ -430,6 +438,7 @@ class Player:
                      self.weaponslots -= 1
                      self.onplayer[item.itemname] = item
                      self.weapons[item.itemname] = item
+                     item.amount[self] = 1
              case "instrument":
                  if self.instrumentslots == 0:
                      reaction = "You don't have enough space to wear that."
@@ -438,6 +447,7 @@ class Player:
                      self.instrumentslots -= 1
                      self.onplayer[item.itemname] = item
                      self.instruments[item.itemname] = item
+                     item.amount[self] = 1
              case other:
                  reaction = "You can't wear that!"
      else:
@@ -510,7 +520,7 @@ class Player:
      return reaction
 
  def push(self, item):
-    # try:
+    try:
         if item.canPush == False:
             return f'You try to push the {item.itemname} but it doesn\'t budge.'
         match (item.itemname, self.playloc.loc, self.playloc.subloc):
@@ -527,7 +537,7 @@ class Player:
                 return "You put both hands on the window and push gently. To your surprise, it comes open with a pop. You inspect the opening you've created and think it may be just wide enough for you to slip through."
             case other:
                 return f'You push the {item.itemname} around. It doesn\'t do much.'
-    # except:
+    except:
         return "What are you trying to push?"
 
  def useitem(self, itema, itemb):
@@ -748,6 +758,15 @@ class Player:
                  del self.inv.contents[plant.itemname]
              return f'You planted a {plant.itemname} in this field. Come back in {plant.growtime} days to get {plant.harvestamnt} {plant.pluralitemname}.'
      return "There are no fields in this room for you to plant that in."
+
+ def examinenpc(self, npc):
+     desc = ""
+     desc += f'{npc.name}' \
+             f'{npc.desc} {npc.name}\'s birth name is {npc.npcsurname} {npc.npcbirthname}. '
+     if npc.npctitle != None:
+         desc += f' Their title is {npc.npctitle}. '
+     desc += f'Your relationship with {npc.name} is level {npc.intimacy}. They regard you as their {npc.relationship[npc.intimacy]}. You call them {npc.npccalled}. They call you {npc.callsyou}. Gain {npc.intlvls[npc.intimacy+1]-npc.intpoints} more relationship xp to become {npc.name}\'s {npc.relationship[npc.intimacy+1]}.'
+     return desc
 
  # add function for leveling up within sect
  # - title: change bad intimacies from name to title

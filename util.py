@@ -375,14 +375,18 @@ class Util():
                 container = player.playloc
             except:
                 try:
-                    item = player.inv.contents[itemname]
-                    container = player
+                    item = player.playloc.hidden_items[itemname]
+                    container = player.playloc
                 except:
                     try:
-                        item = player.onplayer[itemname]
+                        item = player.inv.contents[itemname]
                         container = player
                     except:
-                        return "What are you trying to examine?"
+                        try:
+                            item = player.onplayer[itemname]
+                            container = player
+                        except:
+                            return "What are you trying to examine?"
         return item.examineitem(player, container)
 
     @staticmethod
@@ -456,9 +460,7 @@ class Util():
         except:
             pass
         if location == player:
-            description += f'You have {str(item.amount[player])} {item.itemname}'
-            if item.amount[player] != 1:
-                description += "s"
+            description += f'You are wearing this {item.itemname}'
         else:
             description += "There "
             if item.amount[location] == 1:
