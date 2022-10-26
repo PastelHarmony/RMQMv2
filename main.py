@@ -96,18 +96,63 @@ zhanjiuke = Character("",
                       {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:player.courtname, 2:player.courtname, 3:f'{player.surname}-xiao{player.meiordi}', 4:f'{player.surname}-xiao{player.meiordi}', 5:f'{player.courtname1}-xiao{player.meiordi}', 6:f'{player.courtname1}-xiao{player.meiordi}', 7:f'{player.courtname1}-xiao{player.meiordi}', 8:f'{player.birthname}-xiao{player.meiordi}', 9:f'{player.birthname}-xiao{player.meiordi}', 10:f'A-{player.birthname}'},
                       {-2:-50, -1:-25, 0:0, 1:50, 2:100, 3:150, 4:200, 5:300, 6:400, 7:500, 8:600, 9:750, 10:900},
                       {-2:"Enemy", -1:"Annoyance", 0:"Stranger", 1:"Acquaintance", 2:"Associate", 3:"Colleague", 4:"Companion", 5:"Friend", 6:"Ally", 7:"Confidant", 8:"Dear", 9:"Beloved", 10:"Soulmate"})
+zhanjiumai = Character("",
+                       "Zhan", "", "Jiumai", "", "Yandi Zhan",
+                       {},
+                       {},
+                       {},
+                       {})
 yongwenshi = Character("",
                        "Yong", "Yan", "Wenshi", "Qinfen-jun", "Jingnong Yong",
                        {-2:"Qinfen-jun", -1:"Qinfen-jun", 0:"Qinfen-jun", 1:"Yong-zhongzhu", 2:"Yong-dajie", 3:"Wenshi-dajie", 4:"Wenshi-dajie", 5:"Wen-jiejie", 6:"Wen-jiejie", 7:"Yan-jie", 8:"Yan-jie", 9:"Yong Yan", 10:"A-Yan"},
                        {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:f'{player.courtname}', 2:f'{player.courtname}', 3:f'{player.courtname1}-{player.meiordi}', 4:f'{player.courtname1}-{player.meiordi}', 5:f'{player.surname} {player.birthname}', 6:f'{player.surname} {player.birthname}', 7:f'Xiao-{player.birthname}', 8:f'Xiao-{player.birthname}', 9:f'A-{player.birthname}', 10:f'A-{player.birthname}'},
                        {-2:-100, -1:-50, 0:0, 1:25, 2:50, 3:100, 4:150, 5:250, 6:350, 7:450, 8:550, 9:700, 10:800},
                        {-2:"Enemy", -1:"Adversary", 0:"Stranger", 1:"Acquaintance", 2:"Colleague", 3:"Friend", 4:"Comrade", 5:"Ally", 6:"Confidant", 7:"Best Friend", 8:"Kindred Spirit", 9:"Lover", 10:"Soulmate"})
+#yong wenshi's brother
 shengsulian = Character("",
                         "Sheng", "Biao", "Sulian", "Xingrong-jun", "Huangliang Sheng",
                         {-2:"Xingrong-jun", -1:"Xingrong-jun", 0:"Xingrong-jun", 1:"Xingrong-jun", 2:"Sheng-zhongzhu", 3:"Sheng-qianbei", 4:"Sheng-xiansheng", 5:"Sheng-xiansheng", 6:"Sulian-xiong", 7:"Sheng Sulian", 8:"Sulian", 9:"Sheng Biao", 10:"A-Biao"},
                         {-2:"", -1:"", 0:"", 1:"", 2:"", 3:"", 4:"", 5:"", 6:"", 7:"", 8:"", 9:"", 10:""},
                         {-2:-150, -1:-100, 0:0, 1:50, 2:75, 3:200, 4:300, 5:450, 6:525, 7:625, 8:750, 9:900, 10:1000},
                         {-2:"Threat", -1:"Hazard", 0:"Pest", 1:"Nuisance", 2:"Pawn", 3:"Puppet", 4:"Tool", 5:"Acquaintance", 6:"Colleague", 7:"Friend", 8:"Ally", 9:"Confidant", 10:"Soulmate"})
+yizunxiao = Character("",
+                       "Yi", "Shi", "Zunxiao", "", "Antian Yi",
+                       {},
+                       {},
+                       {},
+                       {})
+yifanzai = Character("",
+                       "Yi", "Shi", "Zunxiao", "", "Antian Yi",
+                       {},
+                       {},
+                       {},
+                       {})
+#hai yi?
+minguangjian = Character("",
+                       "Min", "Lan", "Guangjian", "", "Liangzi Min",
+                       {},
+                       {},
+                       {},
+                       {})
+wulueyuan = Character("",
+                       "Wu", "Yin", "Lueyuan", "", "Qiaoxue Wu",
+                       {},
+                       {},
+                       {},
+                       {})
+wuquanya = Character("",
+                       "Wu", "Yang", "Quanya", "", "Qiaoxue Wu",
+                       {},
+                       {},
+                       {},
+                       {})
+chihukuai = Character("",
+                       "Chi", "", "Hukuai", "", "Rogue",
+                       {},
+                       {},
+                       {},
+                       {})
+#fox girl character
 
 # quests:
 
@@ -139,7 +184,7 @@ def setinfo(player):
     yongwenshi.yournamelist = {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:f'{player.courtname}', 2:f'{player.courtname}', 3:f'{player.courtname1}-{player.meiordi}', 4:f'{player.courtname1}-{player.meiordi}', 5:f'{player.surname} {player.birthname}', 6:f'{player.surname} {player.birthname}', 7:f'Xiao-{player.birthname}', 8:f'Xiao-{player.birthname}', 9:f'A-{player.birthname}', 10:f'A-{player.birthname}'}
     player.setsect(playersect, swordname, zhan_zhanmadao, sheng_hudiedao, yi_taijijian, yong_dadao, min_wodao,
                    wu_hooksword,
-                   zhan_disc_robe, sheng_disc_robe, yi_disc_robe, yong_disc_robe, min_disc_robe, wu_disc_robe, zhanjiuke, yongwenshi)
+                   zhan_disc_robe, sheng_disc_robe, yi_disc_robe, yong_disc_robe, min_disc_robe, wu_disc_robe, zhanjiuke, yongwenshi, shengsulian)
     print(
      f'Your name is {player.surname} {player.birthname}, courtesy {player.courtname}. Your pronouns are {player.pronouns["subjprn"]}/{player.pronouns["objprn"]}/{player.pronouns["posadj"]}/{player.pronouns["posprn"]}/{player.pronouns["refprn"]}. Your elders may refer to you as {player.meiordi}{player.meiordi}. Your juniors may refer to you as {player.jieorge}{player.jieorge}. You are a {player.age} year old cultivator from the {player.sect} sect, and your sword is named {swordname}. You are in your room at Laolu inn in Baiping village on a mission to exorcise a vengeful ghost.')
     del swordname
