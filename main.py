@@ -64,7 +64,7 @@ yong_disc_robe = Item("Yong disciple robe", "Yong disciple robes",
                       "Standard Yong disciple robes made of simple, firm cloth doused in deep viridian. They are comfortable and easy to move in, suited for long hours of training.",
                       "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 yi_disc_robe = Item("Yi disciple robe", "Yi disciple robes",
-                    "Standard Yi disciple robes made of rich sapphire blue. They are high-necked and long-sleeved, with stiff under-layers and draping outer-layers that obscure the figure.",
+                    "Standard Yi disciple robes in rich sapphire blue. They are high-necked and long-sleeved, with stiff under-layers and draping outer-layers that obscure the figure.",
                     "robe", True, True, False, {}, False, None, None, None, False, False, None, False, False, False, False, False, False, False, False, False)
 min_disc_robe = Item("Min disciple robe", "Min disciple robes",
                      "Standard Min disciple robes made of a light, flowing fabric in rippling hues of lilac. With many stacked thin layers meant to imitate a rose, they create an ethereal figure.",
@@ -88,7 +88,7 @@ min_wodao = Item("Min wodao", None, f'A long, slender wodao in a lilac sheath.',
 
 # creatures: name, desc, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid
 
-# npcs: desc surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship
+# npcs: desc, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship
 # dictionary copy-paste: -2:f'', -1:f'', 0:f'', 1:f'', 2:f'', 3:f'', 4:f'', 5:f'', 6:f'', 7:f'', 8:f'', 9:f'', 10:f''
 zhanjiuke = Character("",
                       "Zhan", "Mei", "Jiuke", "Kushao-jun", "Yandi Zhan",
@@ -97,7 +97,7 @@ zhanjiuke = Character("",
                       {-2:-50, -1:-25, 0:0, 1:50, 2:100, 3:150, 4:200, 5:300, 6:400, 7:500, 8:600, 9:750, 10:900},
                       {-2:"Enemy", -1:"Annoyance", 0:"Stranger", 1:"Acquaintance", 2:"Associate", 3:"Colleague", 4:"Companion", 5:"Friend", 6:"Ally", 7:"Confidant", 8:"Dear", 9:"Beloved", 10:"Soulmate"})
 zhanjiumai = Character("",
-                       "Zhan", "", "Jiumai", "", "Yandi Zhan",
+                       "Zhan", "Xiu", "Jiumai", "", "Yandi Zhan",
                        {},
                        {},
                        {},
@@ -122,7 +122,7 @@ yizunxiao = Character("",
                        {},
                        {})
 yifanzai = Character("",
-                       "Yi", "Shi", "Zunxiao", "", "Antian Yi",
+                       "Yi", "Xian", "Fanzai", "", "Antian Yi",
                        {},
                        {},
                        {},
@@ -147,7 +147,7 @@ wuquanya = Character("",
                        {},
                        {})
 chihukuai = Character("",
-                       "Chi", "", "Hukuai", "", "Rogue",
+                       "Chi", "Shao", "Hukuai", "", "Rogue",
                        {},
                        {},
                        {},

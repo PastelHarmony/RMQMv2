@@ -633,7 +633,7 @@ class Player:
                  return f'The fire vaporized the water off of the {creature.name}.'
              elif "frozen" in creature.afflictions:
                  self.skills["talismans"] += 10 * (1 + self.stats["intelligence"] / 100)
-                 # remove "frozen
+                 #remove frozen
                  tempmsg = f'You melted the {creature.name}, dealing {creature.stats["health"] * .1} points of damage.'
                  creature.stats["health"] = creature.stats["health"] * .9
                  return tempmsg
