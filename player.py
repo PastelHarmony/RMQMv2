@@ -109,7 +109,7 @@ class Player:
      else:
          self.sethonorific(input("Please input a valid number (1 or 2). "))
 
- def setsect(self, sect, swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe, zhanjiuke, yongwenshi):
+ def setsect(self, sect, swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe, zhanjiuke, yongwenshi, shengsulian):
      self.sect = sect
      match sect:
          case "Yandi Zhan":
@@ -131,6 +131,12 @@ class Player:
              self.weapons[swordname] = hudiedao
              self.onplayer[shengrobe.itemname] = shengrobe
              self.robe = shengrobe
+             shengsulian.npcnamelist[5] = "Sheng-shixiong"
+             shengsulian.npcnamelist[6] = "Sheng-shixiong"
+             shengsulian.yournamelist[6] = f'{self.surname}-shi{self.meiordi}'
+             shengsulian.yournamelist[7] = f'{self.surname}-shi{self.meiordi}'
+             shengsulian.intpoints = 25
+             shengsulian.intimacy = 0
              # self.spawnpoint = sheng_clinic_room1
          case "Antian Yi":
              self.sectcolors = "sapphire"
@@ -167,7 +173,9 @@ class Player:
              self.robe = wurobe
              # self.spawnpoint = wu_clinic_room1
          case other:
-             self.setsect(input("Please select a valid sect. ").title(), swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe, zhanjiuke, yongwenshi)
+             self.setsect(input("Please select a valid sect. ").title(), swordname, zhanmadao, hudiedao, taijijian, dadao, wodao, hooksword, zhanrobe, shengrobe, yirobe, yongrobe, minrobe, wurobe, zhanjiuke, yongwenshi, shengsulian)
+     shengsulian.intpoints -= 25
+     if shengsulian.intpoints < 0: shengsulian.intimacy = -1
      self.robe.amount[self] = 1
      self.weapons[swordname].amount[self] = 1
      self.weapons[swordname].itemname = swordname
