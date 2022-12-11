@@ -5,6 +5,7 @@ from util import Util
 from npc import NPC
 from npc import Creature
 from npc import Character
+from event import Event
 from event import Quest
 from event import Story
 from event import Random
@@ -54,6 +55,7 @@ ll_room_northeast = Room("Laolu Inn", "Northeast Room", "", "", "", "", "", {}, 
 ll_room_southwest = Room("Laolu Inn", "Southwest Room", "", "", "", "", "", {}, {}, {}, {}, {})
 ll_room_southeast = Room("Laolu Inn", "Southeast Room", "", "", "", "", "", {}, {}, {}, {}, {})
 ll_room_south = Room("Laolu Inn", "South Room", "", "", "", "", "", {}, {}, {}, {}, {})
+ll_lobby = Room("Laolu Inn", "Lobby", "", "", "", "", "", {}, {}, {}, {}, {})
 ll_gardens = Room("Laolu Inn", "Gardens", "Birds chirp on sprightly boughs that hang low over your head. Dappled sunlight shines through the bushy leaves.", "The sound of crickets fill the air, accompanied by the occasional owl's bold hoot.", "Rain pours down, pooling up in the soil. The scent of petrichor hangs rich in the air.", "Snow has piled up, fresh flakes bouncing off the tree branches and landing on the ground.", "The garden is a small plot of land with colorful flowers between cobbled paths.", {}, {}, {}, {}, {})
 start_room.connects["south"] = (ll_hall_north, "active")
 start_room.connects["north"] = (ll_gardens, "inactive")

@@ -303,7 +303,10 @@ class Player:
                  creature.stats["health"] = creature.stats["max health"]
                  if creature.isPassive == True:
                      creature.isHostile = False
+             
              return [newroom.getdescription(self), newroom]
+         else:
+             return ["Where are you trying to go?", self.playloc]
      except:
          return ["That area hasn't been developed yet!", self.playloc]
  def put(self, itemname, where):
