@@ -303,7 +303,7 @@ class Player:
                  creature.stats["health"] = creature.stats["max health"]
                  if creature.isPassive == True:
                      creature.isHostile = False
-             
+
              return [newroom.getdescription(self), newroom]
          else:
              return ["Where are you trying to go?", self.playloc]
@@ -690,6 +690,7 @@ class Player:
      return
 
  def attack(self, creature, weapon):
+     self.incombat = True
      msg = ""
      dodge = Util.chance(creature.stats["dodge"])
      if dodge == True:

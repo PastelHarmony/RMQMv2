@@ -10,7 +10,7 @@ class Story(Event):
         super().__init__(name, conditions)
 
 class Quest(Event):
-    def __int__(self, name, conditions, currentstep, stepamnt, overalldesc, stepname, stepdesc, completionreq, rewards):
+    def __int__(self, name, conditions, currentstep, stepamnt, overalldesc, stepname, stepdesc, completionreq, rewards, isFinished):
         super().__init__(name, conditions)
         self.qcurrentstep = currentstep
         self.qstepamnt = stepamnt
@@ -20,6 +20,8 @@ class Quest(Event):
         self.qcompreq = completionreq # requirements for completion
         self.qrewards = rewards
         self.qisFinished = False
+    def startquest(self):
+        return
     def updatequest(self):
         msg = f'You completed \'{self.qstepname}\', step {self.qcurrentstep} out of {self.qstepamnt} in \'{self.qstepname}\''
         self.qcurrentstep += 1
@@ -27,7 +29,7 @@ class Quest(Event):
             self.completequest()
         else:
             msg += f'\n'
-            # change & list new requirements
+            # list new requirements
             return
     def completequest(self):
         self.qisFinished = True

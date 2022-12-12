@@ -176,7 +176,8 @@ shengsulian = Character("",
 #                        {})
 #fox girl character
 
-# quests:
+# quests: name, conditions, currentstep, stepamnt, overalldesc, stepname, stepdesc, completionreq, rewards
+ll_hunt_water = Quest("Laolu's Water Ghoul", (), 0, 5, "", {}, {}, {1:()}, {})
 
 # random events:
 

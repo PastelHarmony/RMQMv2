@@ -197,13 +197,17 @@ class Util():
     def updateframe(player):
         # random event chance
         # debuff effects (bleeding, poison, disease, etc)
-        enemies = Util.getenemies(player)
-        if enemies != []:
-            player.incombat = True
-            for creature in enemies:
-                print(creature.attack(player))
-        else:
-            player.incombat = False
+        if player.incombat == True:
+            enemies = Util.getenemies(player)
+            if enemies != []:
+                for creature in enemies:
+                    print(creature.attack(player))
+            else:
+                player.incombat = False
+        if player.quests != []:
+            for quest in player.quests:
+                for task in quest.completionreq:
+                    if task == True
         Util.growplants(player)
         print(Util.skilllvl(player))
         return
