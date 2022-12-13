@@ -1,4 +1,6 @@
 from util import Util
+from dialogue import Dialogue
+from dialogue import QuestConditions
 
 class Item:
  def __init__(self, itemname, pluralitemname, itemdesc, type, canTake, canPush, isRegenerative, amount, isContainer, contents, isLocked, inoron, isLiquid, isFood, restores, isIngredient, isCrafter, isTool, isWet, isFrozen ,isFlammable, canPlant, growtime, harvestamnt):

@@ -10,7 +10,7 @@ class Story(Event):
         super().__init__(name, conditions)
 
 class Quest(Event):
-    def __int__(self, name, conditions, currentstep, stepamnt, overalldesc, stepname, stepdesc, completionreq, rewards, isFinished):
+    def __int__(self, name, conditions, currentstep, stepamnt, overalldesc, stepname, stepdesc, completionreq, rewards):
         super().__init__(name, conditions)
         self.qcurrentstep = currentstep
         self.qstepamnt = stepamnt
@@ -19,8 +19,17 @@ class Quest(Event):
         self.qstepdesc = stepdesc
         self.qcompreq = completionreq # requirements for completion
         self.qrewards = rewards
+        self.qisActive = False
         self.qisFinished = False
-    def startquest(self):
+    def startquest(quest):
+        quest.qcurrentstep = 1
+        msg = f'You unlocked a new quest.' \
+               f'{quest.eventname}' \
+               f'{quest.qoveralldesc}' \
+               f'Part {quest.qcurrentstep} - {quest.qstepname[quest.qcurrentstep]}' \
+               f'{quest.qstepdesc[quest.qcurrentstep]}'
+        for requirement in quest.qcompreq[quest.qcurrentstep]:
+            msg += f'_ {requirement}'
         return
     def updatequest(self):
         msg = f'You completed \'{self.qstepname}\', step {self.qcurrentstep} out of {self.qstepamnt} in \'{self.qstepname}\''
@@ -28,9 +37,11 @@ class Quest(Event):
         if self.qcurrentstep == self.qstepamnt:
             self.completequest()
         else:
-            msg += f'\n'
-            # list new requirements
-            return
+            msg += f'Part {self.qcurrentstep} - {self.qstepname[self.qcurrentstep]}' \
+               f'{self.qstepdesc[self.qcurrentstep]}'
+        for requirement in self.qcompreq[self.qcurrentstep]:
+            msg += f'_ {requirement}'
+        return
     def completequest(self):
         self.qisFinished = True
         msg = f'You completed \'{self.qstepname}\'.'

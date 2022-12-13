@@ -1,4 +1,6 @@
 from util import Util
+from dialogue import Dialogue
+from dialogue import QuestConditions
 
 class Player:
  def __init__(self):
@@ -303,7 +305,8 @@ class Player:
                  creature.stats["health"] = creature.stats["max health"]
                  if creature.isPassive == True:
                      creature.isHostile = False
-
+             if newroom.quests != {}:
+                 QuestConditions.checkquests(newroom, self)
              return [newroom.getdescription(self), newroom]
          else:
              return ["Where are you trying to go?", self.playloc]

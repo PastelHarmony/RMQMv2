@@ -1,5 +1,6 @@
 from random import randint
-
+from dialogue import Dialogue
+from dialogue import QuestConditions
 
 class Util():
     @staticmethod
@@ -204,10 +205,6 @@ class Util():
                     print(creature.attack(player))
             else:
                 player.incombat = False
-        if player.quests != []:
-            for quest in player.quests:
-                for task in quest.completionreq:
-                    if task == True
         Util.growplants(player)
         print(Util.skilllvl(player))
         return

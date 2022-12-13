@@ -1,10 +1,12 @@
 from util import Util
+from dialogue import Dialogue
+from dialogue import QuestConditions
 from npc import NPC
 from npc import Creature
 from npc import Character
 
 class Room:
- def __init__(self, loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs, connects):
+ def __init__(self, loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs, quests, connects):
      self.loc = loc
      self.subloc = subloc
      self.daydesc = daydesc
@@ -16,6 +18,7 @@ class Room:
      self.hidden_items = hiddenitems
      self.npcs = npcs
      self.hidden_npcs = hiddennpcs
+     self.quests = quests
      self.connects = connects
  def getdescription(self, player):
      description = f'{self.loc} > {self.subloc} \n\n {self.getweatherdesc(player)} {self.gendesc}'

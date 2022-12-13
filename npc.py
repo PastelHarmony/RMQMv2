@@ -1,13 +1,16 @@
 from util import Util
+from dialogue import Dialogue
+from dialogue import QuestConditions
 
 class NPC():
-    def __init__(self, name, desc):
+    def __init__(self, name, desc, quests):
         self.name = name
         self.desc = desc
+        self.quests = quests
         
 class Creature(NPC):
-    def __init__(self, name, desc, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid):
-        super().__init__(name, desc)
+    def __init__(self, name, desc, quests, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid):
+        super().__init__(name, desc, quests)
         self.drops = drops
         self.killxp = killxp
         self.isPassive = isPassive
@@ -48,8 +51,8 @@ class Creature(NPC):
         return msg
 
 class Character(NPC):
-    def __init__(self, desc, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship):
-        super().__init__(f'{surname} {courtname}', desc)
+    def __init__(self, desc, quests, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship):
+        super().__init__(f'{surname} {courtname}', desc, quests)
         self.npcsurname = surname
         self.npcbirthname = birthname
         self.npccourtname = courtname

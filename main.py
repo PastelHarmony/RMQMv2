@@ -9,6 +9,8 @@ from event import Event
 from event import Quest
 from event import Story
 from event import Random
+from dialogue import Dialogue
+from dialogue import QuestConditions
 
 # TODO (in no particular order):
 # talk (dialogue trees)
@@ -38,25 +40,25 @@ qk_pouch = Item("Qiankun pouch", "Qiankun pouches",
                 f'A small {player.sectcolors} bag made of thick silk. It is secured with a silver drawstring and embroidered with intricate {player.sectsym}s. It can hold an unlimited amount of objects.',
                 "container", True, True, False, {}, True, {}, False, "in", False, False, None, False, False, False, False, False, False, False, False, False)
 
-# rooms: loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs, connects
+# rooms: loc, subloc, daydesc, nightdesc, raindesc, snowdesc, gendesc, items, hiddenitems, npcs, hiddennpcs, quests, connects
 
 start_room = Room("Laolu Inn", "Your Room", "Golden sunlight filters softly through the windows.",
                   "Silver moonlight gently brushes along the walls.",
                   "The pattering of the rain echoes loudly through the dim room.",
                   "Snow twirls outside the window, blowing wildly in the wind.",
                   "The room is fairly small, made of long planks of old cedar wood. There is a bed in the far left corner and a desk in the far right. At your sides are two large shelves. A small window lies to your north. To your south is the door to the hallway.",
-                  {qk_pouch.itemname:qk_pouch}, {}, {}, {}, {})
+                  {qk_pouch.itemname:qk_pouch}, {}, {}, {}, {}, {})
 qk_pouch.amount[start_room] = 1
 player.playloc = start_room
-ll_hall_north = Room("Laolu Inn", "North Hall", "Sunshine bathes the hall in bright rays.", "The hall is dark except for twinkling speckles of starlight.", "", "", "The walls are worn with old stains and scuffs. To the west and east are two rooms, while your own room is to the north. There is a rickety spiral staircase leading down. On the other side of the staircase, to your south, is the south hall.", {}, {}, {}, {}, {"north":(start_room, "active")})
-ll_hall_south = Room("Laolu Inn", "South Hall", "Sunshine bathes the hall in bright rays.", "The hall is dark except for twinkling speckles of starlight.", "", "", "The walls are worn with old stains and scuffs. To the west, east, and south are three rooms. There is a rickety spiral staircase leading down. On the other side of the staircase, to your north, is the north hall.", {}, {}, {}, {}, {})
-ll_room_northwest = Room("Laolu Inn", "Northwest Room", "", "", "", "", "", {}, {}, {}, {}, {})
-ll_room_northeast = Room("Laolu Inn", "Northeast Room", "", "", "", "", "", {}, {}, {}, {}, {})
-ll_room_southwest = Room("Laolu Inn", "Southwest Room", "", "", "", "", "", {}, {}, {}, {}, {})
-ll_room_southeast = Room("Laolu Inn", "Southeast Room", "", "", "", "", "", {}, {}, {}, {}, {})
-ll_room_south = Room("Laolu Inn", "South Room", "", "", "", "", "", {}, {}, {}, {}, {})
-ll_lobby = Room("Laolu Inn", "Lobby", "", "", "", "", "", {}, {}, {}, {}, {})
-ll_gardens = Room("Laolu Inn", "Gardens", "Birds chirp on sprightly boughs that hang low over your head. Dappled sunlight shines through the bushy leaves.", "The sound of crickets fill the air, accompanied by the occasional owl's bold hoot.", "Rain pours down, pooling up in the soil. The scent of petrichor hangs rich in the air.", "Snow has piled up, fresh flakes bouncing off the tree branches and landing on the ground.", "The garden is a small plot of land with colorful flowers between cobbled paths.", {}, {}, {}, {}, {})
+ll_hall_north = Room("Laolu Inn", "North Hall", "Sunshine bathes the hall in bright rays.", "The hall is dark except for twinkling speckles of starlight.", "", "", "The walls are worn with old stains and scuffs. To the west and east are two rooms, while your own room is to the north. There is a rickety spiral staircase leading down. On the other side of the staircase, to your south, is the south hall.", {}, {}, {}, {}, {}, {"north":(start_room, "active")})
+ll_hall_south = Room("Laolu Inn", "South Hall", "Sunshine bathes the hall in bright rays.", "The hall is dark except for twinkling speckles of starlight.", "", "", "The walls are worn with old stains and scuffs. To the west, east, and south are three rooms. There is a rickety spiral staircase leading down. On the other side of the staircase, to your north, is the north hall.", {}, {}, {}, {}, {}, {})
+ll_room_northwest = Room("Laolu Inn", "Northwest Room", "", "", "", "", "", {}, {}, {}, {}, {}, {})
+ll_room_northeast = Room("Laolu Inn", "Northeast Room", "", "", "", "", "", {}, {}, {}, {}, {}, {})
+ll_room_southwest = Room("Laolu Inn", "Southwest Room", "", "", "", "", "", {}, {}, {}, {}, {}, {})
+ll_room_southeast = Room("Laolu Inn", "Southeast Room", "", "", "", "", "", {}, {}, {}, {}, {}, {})
+ll_room_south = Room("Laolu Inn", "South Room", "", "", "", "", "", {}, {}, {}, {}, {}, {})
+ll_lobby = Room("Laolu Inn", "Lobby", "", "", "", "", "", {}, {}, {}, {}, {}, {})
+ll_gardens = Room("Laolu Inn", "Gardens", "Birds chirp on sprightly boughs that hang low over your head. Dappled sunlight shines through the bushy leaves.", "The sound of crickets fill the air, accompanied by the occasional owl's bold hoot.", "Rain pours down, pooling up in the soil. The scent of petrichor hangs rich in the air.", "Snow has piled up, fresh flakes bouncing off the tree branches and landing on the ground.", "The garden is a small plot of land with colorful flowers between cobbled paths.", {}, {}, {}, {}, {}, {})
 start_room.connects["south"] = (ll_hall_north, "active")
 start_room.connects["north"] = (ll_gardens, "inactive")
 ll_gardens.connects["south"] = (start_room, "inactive")
@@ -110,21 +112,24 @@ min_wodao = Item("Min wodao", None, f'A long, slender wodao in a lilac sheath.',
 
 # creatures: name, desc, drops, killxp, isPassive, isHostile, stats, afflictions, isLiquid
 
-# npcs: desc, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship
+# npcs: desc, quests, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship
 # dictionary copy-paste: -2:f'', -1:f'', 0:f'', 1:f'', 2:f'', 3:f'', 4:f'', 5:f'', 6:f'', 7:f'', 8:f'', 9:f'', 10:f''
 zhanjiuke = Character("",
+                      {},
                       "Zhan", "Mei", "Jiuke", "Kushao-jun", "Yandi Zhan",
                       {-2:"Kushao-jun", -1:"Kushao-jun", 0:"Kushao-jun", 1:"Kushao-jun", 2:"Zhan-zhongzhu", 3:"Zhan-qianbei", 4:"Zhan-dage", 5:"Jiu-dage", 6:"Jiu-dage", 7:"Mei-gege", 8:"Mei-gege", 9:"A-Mei", 10:"A-Mei"},
                       {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:player.courtname, 2:player.courtname, 3:f'{player.surname}-xiao{player.meiordi}', 4:f'{player.surname}-xiao{player.meiordi}', 5:f'{player.courtname1}-xiao{player.meiordi}', 6:f'{player.courtname1}-xiao{player.meiordi}', 7:f'{player.courtname1}-xiao{player.meiordi}', 8:f'{player.birthname}-xiao{player.meiordi}', 9:f'{player.birthname}-xiao{player.meiordi}', 10:f'A-{player.birthname}'},
                       {-2:-50, -1:-25, 0:0, 1:50, 2:100, 3:150, 4:200, 5:300, 6:400, 7:500, 8:600, 9:750, 10:900},
                       {-2:"Enemy", -1:"Annoyance", 0:"Stranger", 1:"Acquaintance", 2:"Associate", 3:"Colleague", 4:"Companion", 5:"Friend", 6:"Ally", 7:"Confidant", 8:"Dear", 9:"Beloved", 10:"Soulmate"})
 # zhanjiumai = Character("",
+#                        {},
 #                        "Zhan", "Xiu", "Jiumai", "", "Yandi Zhan",
 #                        {},
 #                        {},
 #                        {},
 #                        {})
 yongwenshi = Character("",
+                       {},
                        "Yong", "Yan", "Wenshi", "Qinfen-jun", "Jingnong Yong",
                        {-2:"Qinfen-jun", -1:"Qinfen-jun", 0:"Qinfen-jun", 1:"Yong-zhongzhu", 2:"Yong-dajie", 3:"Wenshi-dajie", 4:"Wenshi-dajie", 5:"Wen-jiejie", 6:"Wen-jiejie", 7:"Yan-jie", 8:"Yan-jie", 9:"Yong Yan", 10:"A-Yan"},
                        {-2:f'{player.surname} {player.courtname}', -1:f'{player.surname} {player.courtname}', 0:f'{player.surname} {player.courtname}', 1:f'{player.courtname}', 2:f'{player.courtname}', 3:f'{player.courtname1}-{player.meiordi}', 4:f'{player.courtname1}-{player.meiordi}', 5:f'{player.surname} {player.birthname}', 6:f'{player.surname} {player.birthname}', 7:f'Xiao-{player.birthname}', 8:f'Xiao-{player.birthname}', 9:f'A-{player.birthname}', 10:f'A-{player.birthname}'},
@@ -132,43 +137,45 @@ yongwenshi = Character("",
                        {-2:"Enemy", -1:"Adversary", 0:"Stranger", 1:"Acquaintance", 2:"Colleague", 3:"Friend", 4:"Comrade", 5:"Ally", 6:"Confidant", 7:"Best Friend", 8:"Kindred Spirit", 9:"Lover", 10:"Soulmate"})
 #yong wenshi's brother
 shengsulian = Character("",
+                        {},
                         "Sheng", "Biao", "Sulian", "Xingrong-jun", "Huangliang Sheng",
                         {-2:"Xingrong-jun", -1:"Xingrong-jun", 0:"Xingrong-jun", 1:"Xingrong-jun", 2:"Sheng-zhongzhu", 3:"Sheng-qianbei", 4:"Sheng-xiansheng", 5:"Sheng-xiansheng", 6:"Sulian-xiong", 7:"Sheng Sulian", 8:"Sulian", 9:"Sheng Biao", 10:"A-Biao"},
                         {-2:"", -1:"", 0:"", 1:"", 2:"", 3:"", 4:"", 5:"", 6:"", 7:"", 8:"", 9:"", 10:""},
                         {-2:-150, -1:-100, 0:0, 1:50, 2:75, 3:200, 4:300, 5:450, 6:525, 7:625, 8:750, 9:900, 10:1000},
                         {-2:"Threat", -1:"Hazard", 0:"Pest", 1:"Nuisance", 2:"Pawn", 3:"Puppet", 4:"Tool", 5:"Acquaintance", 6:"Colleague", 7:"Friend", 8:"Ally", 9:"Confidant", 10:"Soulmate"})
 # yizunxiao = Character("",
+#                        {},
 #                        "Yi", "Shi", "Zunxiao", "", "Antian Yi",
 #                        {},
 #                        {},
 #                        {},
 #                        {})
-# yifanzai = Character("",
+# yifanzai = Character("", {},
 #                        "Yi", "Xian", "Fanzai", "", "Antian Yi",
 #                        {},
 #                        {},
 #                        {},
 #                        {})
 # #hai yi?
-# minguangjian = Character("",
+# minguangjian = Character("", {},
 #                        "Min", "Lan", "Guangjian", "", "Liangzi Min",
 #                        {},
 #                        {},
 #                        {},
 #                        {})
-# wulueyuan = Character("",
+# wulueyuan = Character("", {},
 #                        "Wu", "Yin", "Lueyuan", "", "Qiaoxue Wu",
 #                        {},
 #                        {},
 #                        {},
 #                        {})
-# wuquanya = Character("",
+# wuquanya = Character("", {},
 #                        "Wu", "Yang", "Quanya", "", "Qiaoxue Wu",
 #                        {},
 #                        {},
 #                        {},
 #                        {})
-# chihukuai = Character("",
+# chihukuai = Character("", {},
 #                        "Chi", "Shao", "Hukuai", "", "Rogue",
 #                        {},
 #                        {},
@@ -177,7 +184,7 @@ shengsulian = Character("",
 #fox girl character
 
 # quests: name, conditions, currentstep, stepamnt, overalldesc, stepname, stepdesc, completionreq, rewards
-ll_hunt_water = Quest("Laolu's Water Ghoul", (), 0, 5, "", {}, {}, {1:()}, {})
+# ll_hunt_water = Quest("Laolu's Water Ghoul", (), 0, 5, "", {}, {}, {}, {})
 
 # random events:
 
