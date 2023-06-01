@@ -1,6 +1,4 @@
 from util import Util
-from dialogue import Dialogue
-from dialogue import QuestConditions
 from npc import NPC
 from npc import Creature
 from npc import Character

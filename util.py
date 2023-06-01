@@ -1,6 +1,4 @@
 from random import randint
-from dialogue import Dialogue
-from dialogue import QuestConditions
 
 class Util():
     @staticmethod

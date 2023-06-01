@@ -1,6 +1,4 @@
 from util import Util
-from dialogue import Dialogue
-from dialogue import QuestConditions
 
 class NPC():
     def __init__(self, name, desc, quests):

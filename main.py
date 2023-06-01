@@ -9,8 +9,6 @@ from event import Event
 from event import Quest
 from event import Story
 from event import Random
-from dialogue import Dialogue
-from dialogue import QuestConditions
 
 # TODO (in no particular order):
 # talk (dialogue trees)

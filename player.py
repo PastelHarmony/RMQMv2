@@ -1,7 +1,4 @@
 from util import Util
-from dialogue import Dialogue
-from dialogue import QuestConditions
-
 class Player:
  def __init__(self):
      self.playloc = None
