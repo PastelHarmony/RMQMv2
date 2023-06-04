@@ -1,6 +1,6 @@
 from util import Util
 
-class NPC():
+class NPC:
     def __init__(self, name, desc, quests):
         self.name = name
         self.desc = desc
@@ -49,7 +49,7 @@ class Creature(NPC):
         return msg
 
 class Character(NPC):
-    def __init__(self, desc, quests, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship):
+    def __init__(self, desc, quests, surname, birthname, courtname, npctitle, npcsect, npcnamelist, yournamelist, intlvls, relationship, relkind):
         super().__init__(f'{surname} {courtname}', desc, quests)
         self.npcsurname = surname
         self.npcbirthname = birthname
@@ -71,6 +71,8 @@ class Character(NPC):
         self.intimacy = 0
         self.intlvls = intlvls
         self.relationship = relationship
+        self.relkind = relkind
+        # relkind = kind of relationship (familial, platonic, romantic, hostile)
     def getintimacy(self, amnt):
         pre = self.intimacy
         self.intpoints += amnt
@@ -78,10 +80,12 @@ class Character(NPC):
             self.intimacy = -2
             self.npccalled = self.npcnamelist[-2]
             self.callsyou = self.yournamelist[-2]
+            self.relkind = hostile
         elif self.intpoints <= self.intlvls[-1]:
             self.intimacy = -1
             self.npccalled = self.npcnamelist[-1]
             self.callsyou = self.yournamelist[-1]
+            self.relkind = hostile
         for i in range(-2, 10):
             if self.intpoints >= self.intlvls[i]:
                 self.intimacy = i
