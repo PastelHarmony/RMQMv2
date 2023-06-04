@@ -20,6 +20,7 @@ from event import Random
 # regeneration and time-based regeneration (time = days = how many times slept)
 # npcs (wip)
 # relationship types
+# reputation system (wip)
 # fans (items)
 # food (wip)
 # drink (wip)
@@ -30,7 +31,6 @@ from event import Random
 # make talismans?? (hard)
 # saving (how.)
 # shopping
-# consider reputation system?
 # cheats
 
 player = Player()

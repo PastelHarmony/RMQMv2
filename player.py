@@ -37,6 +37,7 @@ class Player:
      self.hairpins = {}
      self.bracelets = {}
      self.sectstatus = "disciple"
+     self.reputation = {"Yandi Zhan":0, "Huangling Sheng":0, "Antian Yi":0, "Jingnong Yong":0, "Liangzi Min":0, "Qiaoxue Wu":0, "commoners":0}
      self.quests = {}
      # social score = charisma + answer + status
      self.stats = {"max health":100, "health":100, "strength":0, "cultivation":0, "physical defense":0, "spiritual defense":0, "fire resistance":0, "poison resistance":0, "dexterity":0, "charisma":0, "intelligence":0}
